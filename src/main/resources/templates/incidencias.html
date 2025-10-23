@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incidencias - Servicios Moroni SCRL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" th:href="@{/img/logo.png}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+
+<body class="bg-light">
+
+    <div th:replace="reusables :: header-usuario"></div>
+
+    <div class="container mt-5">
+        <h2 class="mb-4 text-primary fw-bold">
+            <i class="bi bi-exclamation-triangle"></i> Incidencias de Proyectos
+        </h2>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5 class="fw-bold mb-3">Historial de Incidencias</h5>
+                <div class="scroll-hint">
+                    👉 Desliza la tabla para ver toda la información
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Proyecto</th>
+                                <th>Descripción</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>INC-001</td>
+                                <td>Servicio de limpieza mensual</td>
+                                <td>Retraso por falta de insumos</td>
+                                <td>20/09/2025</td>
+                                <td><span class="badge bg-warning text-dark">Pendiente</span></td>
+                            </tr>
+                            <tr>
+                                <td>INC-002</td>
+                                <td>Mantenimiento de oficinas</td>
+                                <td>Equipo de limpieza dañado</td>
+                                <td>22/09/2025</td>
+                                <td><span class="badge bg-info">En revisión</span></td>
+                            </tr>
+                            <tr>
+                                <td>INC-003</td>
+                                <td>Desinfección</td>
+                                <td>Incidencia resuelta</td>
+                                <td>25/09/2025</td>
+                                <td><span class="badge bg-success">Resuelto</span></td>
+                            </tr>
+                            <tr>
+                                <td>INC-004</td>
+                                <td>Pintura de almacén</td>
+                                <td>Falta de acceso al área designada</td>
+                                <td>26/09/2025</td>
+                                <td><span class="badge bg-warning text-dark">Pendiente</span></td>
+                            </tr>
+                            <tr>
+                                <td>INC-005</td>
+                                <td>Servicio de fumigación</td>
+                                <td>Reprogramación solicitada por el cliente</td>
+                                <td>27/09/2025</td>
+                                <td><span class="badge bg-info">En revisión</span></td>
+                            </tr>
+                            <tr>
+                                <td>INC-006</td>
+                                <td>Limpieza de vidrios</td>
+                                <td>Personal asignado reemplazado</td>
+                                <td>27/09/2025</td>
+                                <td><span class="badge bg-success">Resuelto</span></td>
+                            </tr>
+                            <tr>
+                                <td>INC-007</td>
+                                <td>Mantenimiento de áreas verdes</td>
+                                <td>Falta de insumos de jardinería</td>
+                                <td>28/09/2025</td>
+                                <td><span class="badge bg-warning text-dark">Pendiente</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-5 text-center">
+            <a th:href="@{/proyectos}" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left"></i> Volver a Mis Proyectos
+            </a>
+        </div>
+    </div>
+
+    <div th:replace="reusables :: footer_usuario"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios - Servicios Moroni SCRL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="../img/logo.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+</head>
+
+<body>
+    <div th:replace="reusables :: header"></div>
+
+    <section class="bg-primary text-white py-5 text-center">
+        <div class="container">
+            <h1 class="display-5 fw-bold">Nuestros Servicios</h1>
+            <p class="lead">Soluciones integrales de limpieza y mantenimiento para instituciones públicas y privadas</p>
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-down">
+                <h2 class="fw-bold text-primary">Nuestros Servicios</h2>
+                <p class="lead text-muted">Soluciones integrales en construcción, mantenimiento y proyectos
+                    especializados</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6" data-aos="zoom-in" data-aos-duration="900">
+                    <div class="card h-100 shadow-sm text-center">
+                        <img src="../img/Servicios/Construccion.png" class="card-img-top"
+                            alt="Construcción y Mantenimiento" height="300px" width="100px">
+                        <div class="card-body">
+                            <h5 class="fw-bold">Construcción y Mantenimiento</h5>
+                            <ul class="list-unstyled text-muted">
+                                <li>Construcción de edificaciones</li>
+                                <li>Mantenimiento integral</li>
+                                <li>Ejecución de proyectos en general</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6" data-aos="flip-left" data-aos-duration="1000">
+                    <div class="card h-100 shadow-sm text-center">
+                        <img src="../img/Servicios/Mantenimiento.png" class="card-img-top" alt="Climatización y Pintura"
+                            height="300px" width="100px">
+                        <div class="card-body">
+                            <h5 class="fw-bold">Climatización y Pintura</h5>
+                            <ul class="list-unstyled text-muted">
+                                <li>Climatización</li>
+                                <li>Pintura interior y exterior</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6" data-aos="fade-up-right" data-aos-duration="1100">
+                    <div class="card h-100 shadow-sm text-center">
+                        <img src="../img/Servicios/Paisajismo.png" class="card-img-top" alt="Carpintería y Áreas verdes"
+                            height="300px" width="100px">
+                        <div class="card-body">
+                            <h5 class="fw-bold">Acabados y Espacios Verdes</h5>
+                            <ul class="list-unstyled text-muted">
+                                <li>Carpintería y acabados</li>
+                                <li>Paisajismo y áreas verdes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6" data-aos="fade-up-left" data-aos-duration="1200">
+                    <div class="card h-100 shadow-sm text-center">
+                        <img src="../img/Servicios/Minera.png" class="card-img-top" alt="Servicios Especiales"
+                            height="300px" width="100px">
+                        <div class="card-body">
+                            <h5 class="fw-bold">Servicios Especiales</h5>
+                            <ul class="list-unstyled text-muted">
+                                <li>Servicios en minería</li>
+                                <li>Fabricación de mangas de viento</li>
+                                <li>Alquiler de equipos y grúas</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-down">
+                <h2 class="fw-bold">Nuestro Proceso de Trabajo</h2>
+                <p class="lead text-muted">Cómo llevamos a cabo nuestros servicios</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-6 col-md-3" data-aos="zoom-in" data-aos-duration="900">
+                    <div class="text-center">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                            style="width: 80px; height: 80px;">
+                            <i class="bi bi-clipboard-check fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold text-primary">1. Evaluación</h5>
+                        <p class="text-muted">Analizamos sus necesidades y realizamos un diagnóstico completo del
+                            espacio.</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3" data-aos="fade-up" data-aos-duration="1000">
+                    <div class="text-center">
+                        <div class="bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                            style="width: 80px; height: 80px;">
+                            <i class="bi bi-file-text fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold text-danger">2. Cotización</h5>
+                        <p class="text-muted">Elaboramos una propuesta detallada con servicios y costos transparentes.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3" data-aos="flip-left" data-aos-duration="1100">
+                    <div class="text-center">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                            style="width: 80px; height: 80px;">
+                            <i class="bi bi-tools fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold text-primary">3. Ejecución</h5>
+                        <p class="text-muted">Nuestro equipo capacitado realiza el trabajo con los más altos estándares
+                            de calidad.</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3" data-aos="fade-up-left" data-aos-duration="1200">
+                    <div class="text-center">
+                        <div class="bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                            style="width: 80px; height: 80px;">
+                            <i class="bi bi-shield-check fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold text-danger">4. Garantía</h5>
+                        <p class="text-muted">Supervisamos los resultados y ofrecemos garantía en todos nuestros
+                            servicios.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 text-center">
+        <div class="container text-center">
+            <h2 class="fw-bold mb-4 text-primary" data-aos="fade-down" data-aos-duration="900">
+                ¿Necesita nuestros servicios?
+            </h2>
+            <p class="lead mb-4 text-muted" data-aos="fade-up" data-aos-duration="1000">
+                Contáctenos para una evaluación sin costo y una cotización personalizada
+            </p>
+            <a th:href="@{/contacto}" class="btn btn-primary btn-lg me-2" data-aos="zoom-in-right"
+                data-aos-duration="1100">
+                Solicitar Cotización
+            </a>
+            <a href="tel:924353323" class="btn btn-danger btn-lg" data-aos="zoom-in-left" data-aos-duration="1200">
+                <i class="bi bi-telephone"></i> Llamar Ahora
+            </a>
+        </div>
+    </section>
+
+    <div th:replace="reusables :: flechita"></div>
+
+    <div th:replace="reusables :: footer_general"></div>
+
+    <script src="../js/main.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+
+    <script th:src="@{/js/aos-init.js}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

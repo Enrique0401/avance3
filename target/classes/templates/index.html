@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios Moroni SCRL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" th:href="@{/img/logo.png}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+</head>
+
+<body>
+
+    <div th:replace="reusables :: header"></div>
+
+
+    <section class="bg-primary text-light text-center d-flex align-items-center py-5">
+        <div class="container py-5">
+            <h1 class="display-5 fw-bold mb-4">Limpieza Profesional y Mantenimiento Integral</h1>
+            <p class="lead mb-4">Servicios especializados para instituciones públicas y privadas</p>
+            <div class="d-flex flex-column flex-md-row justify-content-center gap-3">
+                <a href="#contacto" class="btn btn-danger btn-lg w-100 w-md-auto">Solicitar Cotización</a>
+                <a href="#servicios" class="btn btn-outline-light btn-lg w-100 w-md-auto">Nuestros Servicios</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5" id="servicios">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="fw-bold text-primary">Nuestros Servicios</h2>
+                <p class="lead text-muted">Soluciones integrales de limpieza y mantenimiento</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-sm-12 col-md-6 col-lg-4" data-aos="zoom-in">
+                    <div class="card h-100 border-0 shadow-sm text-center">
+                        <div class="card-body p-4">
+                            <i class="bi bi-bucket display-4 text-primary mb-3"></i>
+                            <h5 class="fw-bold">Limpieza Profesional</h5>
+                            <p>Servicios de limpieza especializada para oficinas, instituciones y espacios corporativos.
+                            </p>
+                            <a th:href="@{/servicios}" class="btn btn-outline-primary mt-3 w-100 w-md-auto">Más
+                                información</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-6 col-lg-4" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="card h-100 border-0 shadow-sm text-center">
+                        <div class="card-body p-4">
+                            <i class="bi bi-tools display-4 text-danger mb-3"></i>
+                            <h5 class="fw-bold">Mantenimiento Integral</h5>
+                            <p>Soluciones completas en mantenimiento preventivo y correctivo para edificios e
+                                instalaciones.</p>
+                            <a th:href="@{/servicios}" class="btn btn-outline-danger mt-3 w-100 w-md-auto">Más
+                                información</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-6 col-lg-4" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="card h-100 border-0 shadow-sm text-center">
+                        <div class="card-body p-4">
+                            <i class="bi bi-building display-4 text-primary mb-3"></i>
+                            <h5 class="fw-bold">Servicios Especializados</h5>
+                            <p>Atención personalizada en proyectos de limpieza y construcción adaptados a cada
+                                necesidad.</p>
+                            <a th:href="@{/servicios}" class="btn btn-outline-primary mt-3 w-100 w-md-auto">Más
+                                información</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="fw-bold text-danger">Nuestros Valores</h2>
+                <p class="lead text-muted">Principios que guían nuestro trabajo</p>
+            </div>
+
+            <div class="row g-4 text-center">
+                <div class="col-6 col-md-3" data-aos="zoom-in" data-aos-delay="0">
+                    <i class="bi bi-award display-4 text-primary mb-3"></i>
+                    <h5 class="fw-bold">Calidad</h5>
+                    <p class="text-muted">Altos estándares de calidad en cada proyecto.</p>
+                </div>
+
+                <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="100">
+                    <i class="bi bi-clock-history display-4 text-danger mb-3"></i>
+                    <h5 class="fw-bold">Puntualidad</h5>
+                    <p class="text-muted">Cumplimos con los plazos establecidos.</p>
+                </div>
+
+                <div class="col-6 col-md-3" data-aos="fade-down" data-aos-delay="200">
+                    <i class="bi bi-people display-4 text-primary mb-3"></i>
+                    <h5 class="fw-bold">Profesionalismo</h5>
+                    <p class="text-muted">Personal capacitado en cada área.</p>
+                </div>
+
+                <div class="col-6 col-md-3" data-aos="flip-left" data-aos-delay="300">
+                    <i class="bi bi-shield-check display-4 text-danger mb-3"></i>
+                    <h5 class="fw-bold">Seguridad</h5>
+                    <p class="text-muted">Priorizamos medidas de seguridad.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-light" id="contacto">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="fw-bold">Contáctenos</h2>
+                <p class="lead text-muted">Estamos listos para atender sus necesidades</p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8 mx-auto" data-aos="zoom-in">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="row text-center">
+                                <div class="col-sm-12 col-md-6 mb-4" data-aos="fade-right" data-aos-delay="100">
+                                    <i class="bi bi-geo-alt display-4 text-primary mb-3"></i>
+                                    <h5 class="fw-bold">Ubicación</h5>
+                                    <p class="text-muted">CALLE. 21 DE OCTUBRE #1349<br>FLORENCIA DE MORA - TRUJILLO</p>
+                                </div>
+
+                                <div class="col-sm-12 col-md-6 mb-4" data-aos="fade-left" data-aos-delay="200">
+                                    <i class="bi bi-telephone display-4 text-primary mb-3"></i>
+                                    <h5 class="fw-bold">Teléfono</h5>
+                                    <p class="text-muted">924 353 323</p>
+                                </div>
+                            </div>
+
+                            <div class="d-flex flex-column flex-md-row justify-content-center gap-3 mt-3"
+                                data-aos="fade-up" data-aos-delay="300">
+                                <a href="tel:950515954" class="btn btn-primary btn-lg w-100 w-md-auto">
+                                    <i class="bi bi-telephone"></i> Llamar ahora
+                                </a>
+                                <a href="https://wa.me/51924353323" class="btn btn-success btn-lg w-100 w-md-auto"
+                                    target="_blank">
+                                    <i class="bi bi-whatsapp"></i> WhatsApp
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div th:replace="reusables :: flechita"></div>
+
+    <div th:replace="reusables :: footer_general"></div>
+
+    <script src="../js/main.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+
+    <script th:src="@{/js/aos-init.js}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

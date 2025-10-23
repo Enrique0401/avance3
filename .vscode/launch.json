@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ServiciosmoroniApplication<serviciosmoroni>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "pe.edu.utp.grupo01.serviciosmoroni.ServiciosmoroniApplication",
+            "projectName": "serviciosmoroni",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

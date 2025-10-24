@@ -3,7 +3,7 @@ package pe.edu.utp.grupo01.serviciosmoroni.Servicios;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pe.edu.utp.grupo01.serviciosmoroni.Models.Incidencia;
-import pe.edu.utp.grupo01.serviciosmoroni.Repositories.IncidenciaRepositorio;
+import pe.edu.utp.grupo01.serviciosmoroni.Repositories.IncidenciaRepository;
 
 import java.util.List;
 
@@ -11,21 +11,21 @@ import java.util.List;
 public class IncidenciaService {
 
     @Autowired
-    private IncidenciaRepositorio incidenciaRepositorio;
-
-    public List<Incidencia> listarTodas() {
-        return incidenciaRepositorio.findAll();
-    }
+    private IncidenciaRepository incidenciaRepository;
 
     public List<Incidencia> listarPorProyecto(Integer idProyecto) {
-        return incidenciaRepositorio.findByProyectoId(idProyecto);
+        return incidenciaRepository.findByProyectoId(idProyecto);
     }
 
-    public void guardar(Incidencia incidencia) {
-        incidenciaRepositorio.save(incidencia);
+    public List<Incidencia> listarPorCliente(Integer idCliente) {
+        return incidenciaRepository.findByClienteId(idCliente);
+    }
+
+    public Incidencia guardar(Incidencia incidencia) {
+        return incidenciaRepository.save(incidencia);
     }
 
     public void eliminar(Integer id) {
-        incidenciaRepositorio.deleteById(id);
+        incidenciaRepository.deleteById(id);
     }
 }

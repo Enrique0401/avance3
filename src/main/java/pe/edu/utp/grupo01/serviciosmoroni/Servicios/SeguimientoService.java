@@ -3,7 +3,7 @@ package pe.edu.utp.grupo01.serviciosmoroni.Servicios;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pe.edu.utp.grupo01.serviciosmoroni.Models.Seguimiento;
-import pe.edu.utp.grupo01.serviciosmoroni.Repositories.SeguimientoRepositorio;
+import pe.edu.utp.grupo01.serviciosmoroni.Repositories.SeguimientoRepository;
 
 import java.util.List;
 
@@ -11,17 +11,13 @@ import java.util.List;
 public class SeguimientoService {
 
     @Autowired
-    private SeguimientoRepositorio seguimientoRepositorio;
+    private SeguimientoRepository seguimientoRepository;
 
     public List<Seguimiento> listarPorProyecto(Integer idProyecto) {
-        return seguimientoRepositorio.findByProyecto_Id(idProyecto);
+        return seguimientoRepository.findByProyectoId(idProyecto);
     }
 
-    public Seguimiento guardar(Seguimiento seguimiento) {
-        return seguimientoRepositorio.save(seguimiento);
-    }
-
-    public void eliminar(Integer id) {
-        seguimientoRepositorio.deleteById(id);
+    public List<Seguimiento> listarPorCliente(Integer idCliente) {
+        return seguimientoRepository.findByClienteId(idCliente);
     }
 }

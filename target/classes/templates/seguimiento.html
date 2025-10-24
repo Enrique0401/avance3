@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seguimiento de Proyecto - Servicios Moroni SCRL</title>
+    <title>Seguimientos - Servicios Moroni SCRL</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="icon" href="/img/logo.png">
@@ -17,59 +17,29 @@
     <!-- 🔝 Header -->
     <div th:replace="~{reusables :: header-usuario}"></div>
 
-    <!-- ✅ Si el proyecto existe -->
-    <div class="container mt-5" th:if="${proyecto != null}">
+    <div class="container mt-5">
         <h2 class="mb-4 text-primary fw-bold text-center">
-            <i class="bi bi-clipboard-data"></i> Seguimiento del Proyecto
+            <i class="bi bi-clipboard-data"></i> Seguimientos de tus Proyectos
         </h2>
 
-        <!-- 🧾 Datos generales -->
-        <div class="card shadow-sm mb-4">
+        <!-- ✅ Si hay seguimientos -->
+        <div class="card shadow-sm mb-4" th:if="${seguimientos != null and !seguimientos.isEmpty()}">
             <div class="card-body">
-                <h5 class="fw-bold">
-                    Proyecto: <span class="text-primary" th:text="${proyecto.nombre}">Nombre del proyecto</span>
-                </h5>
-                <p><strong>ID:</strong> <span th:text="${proyecto.id}">001</span></p>
-                <p><strong>Estado:</strong>
-                    <span class="badge bg-success" th:text="${proyecto.estado}">En Progreso</span>
-                </p>
-                <p th:if="${proyecto.fechaEntrega != null}">
-                    <strong>Fecha de Entrega:</strong>
-                    <span th:text="${#temporals.format(proyecto.fechaEntrega, 'dd/MM/yyyy')}">2025-10-15</span>
-                </p>
-                <p th:unless="${proyecto.fechaEntrega != null}">
-                    <strong>Fecha de Entrega:</strong> No asignada
-                </p>
-                <div class="mb-3">
-                    <label class="fw-semibold">Progreso general:</label>
-                    <div class="progress" style="height: 25px;">
-                        <div class="progress-bar bg-success" role="progressbar"
-                            th:style="'width:' + ${proyecto.progreso} + '%;'" th:text="${proyecto.progreso + '%'}">
-                            0%
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 🧱 Avances registrados -->
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
-                <h5 class="fw-bold mb-3"><i class="bi bi-clock-history"></i> Avances e Incidencias</h5>
-
-                <div th:if="${seguimientos != null and !seguimientos.isEmpty()}">
-                    <table class="table table-striped align-middle text-center">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle text-center">
                         <thead class="table-primary">
                             <tr>
-                                <th>Fecha</th>
+                                <th>Proyecto</th>
+                                <th>Fecha del Avance</th>
                                 <th>Descripción</th>
                                 <th>Porcentaje de Avance</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr th:each="s : ${seguimientos}">
+                                <td th:text="${s.proyecto.nombre}">Proyecto A</td>
                                 <td th:text="${#temporals.format(s.fechaAvance, 'dd/MM/yyyy')}">10/10/2025</td>
-                                <td th:text="${s.descripcion}">Actualización general</td>
+                                <td th:text="${s.descripcion}">Avance general</td>
                                 <td>
                                     <span class="badge bg-success" th:text="${s.porcentajeAvance + '%'}">20%</span>
                                 </td>
@@ -77,59 +47,16 @@
                         </tbody>
                     </table>
                 </div>
-
-                <div th:if="${seguimientos == null or seguimientos.isEmpty()}" class="text-center text-muted">
-                    <p>No hay avances registrados todavía.</p>
-                </div>
             </div>
         </div>
 
-        <!-- ✍️ Formulario para agregar nuevo avance -->
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
-                <h5 class="fw-bold mb-3"><i class="bi bi-plus-circle"></i> Registrar nuevo avance</h5>
-                <form th:action="@{/seguimiento/guardar}" method="post">
-                    <input type="hidden" name="idProyecto" th:value="${proyecto.id}">
-
-                    <div class="mb-3">
-                        <label class="form-label">Fecha del avance</label>
-                        <input type="date" class="form-control" name="fechaAvance" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Descripción</label>
-                        <textarea class="form-control" name="descripcion" rows="3" required></textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Porcentaje de avance</label>
-                        <input type="number" class="form-control" name="porcentajeAvance" min="0" max="100" required>
-                    </div>
-
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-save"></i> Guardar Avance
-                        </button>
-                    </div>
-                </form>
-            </div>
+        <!-- 🚨 Si no hay seguimientos -->
+        <div th:if="${seguimientos == null or seguimientos.isEmpty()}" class="text-center text-muted">
+            <p>No hay seguimientos registrados todavía.</p>
         </div>
 
         <!-- 🔙 Botón regresar -->
         <div class="text-center mb-5">
-            <a th:href="@{/proyectos}" class="btn btn-outline-primary">
-                <i class="bi bi-arrow-left"></i> Volver a Mis Proyectos
-            </a>
-        </div>
-    </div>
-
-    <!-- 🚨 Si no se encuentra el proyecto -->
-    <div class="container mt-5 my-5" th:if="${proyecto == null}">
-        <div class="alert alert-danger text-center shadow-sm">
-            <i class="bi bi-exclamation-triangle"></i>
-            No se pudo cargar la información del proyecto.
-        </div>
-        <div class="text-center">
             <a th:href="@{/proyectos}" class="btn btn-outline-primary">
                 <i class="bi bi-arrow-left"></i> Volver a Mis Proyectos
             </a>

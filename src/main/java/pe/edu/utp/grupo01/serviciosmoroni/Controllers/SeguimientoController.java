@@ -2,6 +2,7 @@ package pe.edu.utp.grupo01.serviciosmoroni.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.utp.grupo01.serviciosmoroni.Servicios.*;
@@ -25,45 +26,46 @@ public class SeguimientoController {
     private ClienteServicio clienteService;
 
     /**
-     * Redirige al seguimiento del primer proyecto del cliente logueado
+     * 📊 Muestra todos los seguimientos de los proyectos del cliente logueado
      */
     @GetMapping
-    public String redirigirPrimerProyecto(Principal principal) {
+    @Transactional(readOnly = true)
+    public String verTodosLosSeguimientos(Principal principal, Model model) {
         if (principal == null) {
-            // Si no hay usuario logueado, redirigimos al login
             return "redirect:/login";
         }
 
-        // Obtenemos el cliente logueado a partir del email
+        // Buscar cliente por email
         Optional<Cliente> clienteOpt = clienteService.buscarPorEmail(principal.getName());
-
         if (clienteOpt.isEmpty()) {
             return "redirect:/login";
         }
 
         Cliente cliente = clienteOpt.get();
 
-        // Si el cliente no tiene proyectos aún, enviamos a la página de proyectos
-        if (cliente.getProyectos().isEmpty()) {
-            return "redirect:/proyectos";
-        }
+        // ✅ Filtrar seguimientos por el cliente logueado
+        List<Seguimiento> seguimientos = seguimientoService.listarPorCliente(cliente.getIdCliente());
 
-        // Tomamos el primer proyecto (o podrías aplicar otra lógica)
-        Integer idProyecto = cliente.getProyectos().get(0).getId();
+        // Depuración opcional (puedes borrar esto luego)
+        System.out.println("Cliente logueado: " + cliente.getNombreCliente());
+        System.out.println("Total seguimientos cargados: " + seguimientos.size());
 
-        // Redirigimos al seguimiento de ese proyecto
-        return "redirect:/seguimiento/" + idProyecto;
+        model.addAttribute("cliente", cliente);
+        model.addAttribute("seguimientos", seguimientos);
+        model.addAttribute("currentPage", "seguimiento");
+
+        return "seguimiento";
     }
 
     /**
-     * Muestra el seguimiento de un proyecto específico
+     * 🔍 Muestra los seguimientos de un proyecto específico
      */
     @GetMapping("/{idProyecto}")
-    public String verSeguimiento(@PathVariable Integer idProyecto, Model model) {
+    @Transactional(readOnly = true)
+    public String verSeguimientoDeProyecto(@PathVariable Integer idProyecto, Model model) {
         Optional<Proyecto> proyectoOpt = proyectoService.buscarPorId(idProyecto);
 
         if (proyectoOpt.isEmpty()) {
-            model.addAttribute("proyecto", null);
             model.addAttribute("seguimientos", List.of());
             model.addAttribute("mensaje", "No se encontró el proyecto especificado.");
             return "seguimiento";
@@ -77,29 +79,5 @@ public class SeguimientoController {
         model.addAttribute("currentPage", "seguimiento");
 
         return "seguimiento";
-    }
-
-    /**
-     * Guarda un nuevo seguimiento asociado a un proyecto
-     */
-    @PostMapping("/guardar")
-    public String guardarSeguimiento(@ModelAttribute Seguimiento seguimiento,
-            @RequestParam Integer idProyecto) {
-
-        Proyecto proyecto = new Proyecto();
-        proyecto.setId(idProyecto);
-        seguimiento.setProyecto(proyecto);
-
-        seguimientoService.guardar(seguimiento);
-        return "redirect:/seguimiento/" + idProyecto;
-    }
-
-    /**
-     * Elimina un seguimiento por ID
-     */
-    @GetMapping("/eliminar/{id}")
-    public String eliminarSeguimiento(@PathVariable Integer id) {
-        seguimientoService.eliminar(id);
-        return "redirect:/proyectos";
     }
 }

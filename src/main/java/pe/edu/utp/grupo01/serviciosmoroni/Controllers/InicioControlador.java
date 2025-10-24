@@ -42,18 +42,4 @@ public class InicioControlador {
         model.addAttribute("currentPage", "login");
         return "login";
     }
-    /*
-     * @GetMapping("/seguimiento")
-     * public String seguimiento(Model model) {
-     * model.addAttribute("currentPage", "seguimiento");
-     * return "seguimiento";
-     * }
-     */
-
-    @GetMapping("/incidencias")
-    public String incidencias(Model model) {
-        model.addAttribute("currentPage", "incidencias");
-        return "incidencias";
-    }
-
 }

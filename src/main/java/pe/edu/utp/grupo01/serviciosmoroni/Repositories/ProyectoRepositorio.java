@@ -15,4 +15,6 @@ public interface ProyectoRepositorio extends JpaRepository<Proyecto, Integer> {
 
     // 🔹 Buscar por el ID del cliente (usando el nombre real de la FK)
     List<Proyecto> findByCliente_IdCliente(Integer idCliente);
+
+    
 }

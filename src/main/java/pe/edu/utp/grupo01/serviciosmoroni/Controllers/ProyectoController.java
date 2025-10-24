@@ -32,6 +32,7 @@ public class ProyectoController {
     @Autowired
     private ClienteRepositorio clienteRepositorio;
 
+
     // 📋 Mostrar lista de proyectos del cliente autenticado
     @GetMapping
     public String listarProyectos(Model model, Authentication auth) {
@@ -175,4 +176,5 @@ public class ProyectoController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
 }

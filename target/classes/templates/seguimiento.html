@@ -1,97 +1,143 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seguimiento de Proyecto - Servicios Moroni SCRL</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="icon" href="../img/logo.png">
+    <link rel="icon" href="/img/logo.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 
 <body class="bg-light">
 
-    <div th:replace="reusables :: header-usuario"></div>
+    <!-- 🔝 Header -->
+    <div th:replace="~{reusables :: header-usuario}"></div>
 
-    <div class="container mt-5">
-        <h2 class="mb-4 text-primary fw-bold">
+    <!-- ✅ Si el proyecto existe -->
+    <div class="container mt-5" th:if="${proyecto != null}">
+        <h2 class="mb-4 text-primary fw-bold text-center">
             <i class="bi bi-clipboard-data"></i> Seguimiento del Proyecto
         </h2>
 
+        <!-- 🧾 Datos generales -->
         <div class="card shadow-sm mb-4">
             <div class="card-body">
                 <h5 class="fw-bold">
-                    Proyecto: <span class="text-primary">Servicio de limpieza mensual</span>
+                    Proyecto: <span class="text-primary" th:text="${proyecto.nombre}">Nombre del proyecto</span>
                 </h5>
-                <p><strong>ID:</strong> 001</p>
-                <p>
-                    <strong>Estado:</strong>
-                    <span class="badge bg-success">En Progreso</span>
+                <p><strong>ID:</strong> <span th:text="${proyecto.id}">001</span></p>
+                <p><strong>Estado:</strong>
+                    <span class="badge bg-success" th:text="${proyecto.estado}">En Progreso</span>
                 </p>
-                <p><strong>Fecha de Entrega:</strong> 15/10/2025</p>
-
+                <p th:if="${proyecto.fechaEntrega != null}">
+                    <strong>Fecha de Entrega:</strong>
+                    <span th:text="${#temporals.format(proyecto.fechaEntrega, 'dd/MM/yyyy')}">2025-10-15</span>
+                </p>
+                <p th:unless="${proyecto.fechaEntrega != null}">
+                    <strong>Fecha de Entrega:</strong> No asignada
+                </p>
                 <div class="mb-3">
-                    <label class="fw-semibold">Progreso:</label>
+                    <label class="fw-semibold">Progreso general:</label>
                     <div class="progress" style="height: 25px;">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 60%;">
-                            60%
+                        <div class="progress-bar bg-success" role="progressbar"
+                            th:style="'width:' + ${proyecto.progreso} + '%;'" th:text="${proyecto.progreso + '%'}">
+                            0%
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- 🧱 Avances registrados -->
         <div class="card shadow-sm mb-4">
             <div class="card-body">
                 <h5 class="fw-bold mb-3"><i class="bi bi-clock-history"></i> Avances e Incidencias</h5>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                        <i class="bi bi-check-circle text-success"></i> Proyecto iniciado - 01/09/2025
-                    </li>
-                    <li class="list-group-item">
-                        <i class="bi bi-gear text-primary"></i> En proceso de ejecución - 10/09/2025
-                    </li>
-                    <li class="list-group-item">
-                        <i class="bi bi-exclamation-triangle text-warning"></i> Incidencia: Retraso por falta de
-                        materiales - 18/09/2025
-                    </li>
-                    <li class="list-group-item">
-                        <i class="bi bi-image text-info"></i> Fotos de avance subidas - 20/09/2025
-                    </li>
-                </ul>
-            </div>
-        </div>
 
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
-                <h5 class="fw-bold mb-3"><i class="bi bi-images"></i> Fotos del Avance</h5>
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <img src="../img/Seguimiento/Limpieza1.png" class="img-fluid rounded shadow-sm"
-                            alt="Avance 1">
-                    </div>
-                    <div class="col-md-4">
-                        <img src="../img/Seguimiento/Limpia2.png" class="img-fluid rounded shadow-sm"
-                            alt="Avance 2">
-                    </div>
-                    <div class="col-md-4">
-                        <img src="../img/Seguimiento/Limpieza3.png" class="img-fluid rounded shadow-sm"
-                            alt="Avance 3">
-                    </div>
+                <div th:if="${seguimientos != null and !seguimientos.isEmpty()}">
+                    <table class="table table-striped align-middle text-center">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Descripción</th>
+                                <th>Porcentaje de Avance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="s : ${seguimientos}">
+                                <td th:text="${#temporals.format(s.fechaAvance, 'dd/MM/yyyy')}">10/10/2025</td>
+                                <td th:text="${s.descripcion}">Actualización general</td>
+                                <td>
+                                    <span class="badge bg-success" th:text="${s.porcentajeAvance + '%'}">20%</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div th:if="${seguimientos == null or seguimientos.isEmpty()}" class="text-center text-muted">
+                    <p>No hay avances registrados todavía.</p>
                 </div>
             </div>
         </div>
 
-        <div class="mb-5 text-center">
+        <!-- ✍️ Formulario para agregar nuevo avance -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5 class="fw-bold mb-3"><i class="bi bi-plus-circle"></i> Registrar nuevo avance</h5>
+                <form th:action="@{/seguimiento/guardar}" method="post">
+                    <input type="hidden" name="idProyecto" th:value="${proyecto.id}">
+
+                    <div class="mb-3">
+                        <label class="form-label">Fecha del avance</label>
+                        <input type="date" class="form-control" name="fechaAvance" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Descripción</label>
+                        <textarea class="form-control" name="descripcion" rows="3" required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Porcentaje de avance</label>
+                        <input type="number" class="form-control" name="porcentajeAvance" min="0" max="100" required>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> Guardar Avance
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 🔙 Botón regresar -->
+        <div class="text-center mb-5">
             <a th:href="@{/proyectos}" class="btn btn-outline-primary">
                 <i class="bi bi-arrow-left"></i> Volver a Mis Proyectos
             </a>
         </div>
     </div>
-    
-    <div th:replace="reusables :: footer_usuario"></div>
+
+    <!-- 🚨 Si no se encuentra el proyecto -->
+    <div class="container mt-5 my-5" th:if="${proyecto == null}">
+        <div class="alert alert-danger text-center shadow-sm">
+            <i class="bi bi-exclamation-triangle"></i>
+            No se pudo cargar la información del proyecto.
+        </div>
+        <div class="text-center">
+            <a th:href="@{/proyectos}" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left"></i> Volver a Mis Proyectos
+            </a>
+        </div>
+    </div>
+
+    <!-- 🔻 Footer -->
+    <div th:replace="~{reusables :: footer_usuario}"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

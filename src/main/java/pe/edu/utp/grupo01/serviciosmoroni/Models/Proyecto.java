@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
 import org.springframework.web.multipart.MultipartFile;
+import java.util.*;
 
 @Entity
 @Table(name = "proyecto")
@@ -47,4 +48,7 @@ public class Proyecto {
     // Campo temporal (no se guarda en BD)
     @Transient
     private MultipartFile[] archivos;
+
+    @OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Seguimiento> seguimientos = new ArrayList<>();
 }

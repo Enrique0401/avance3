@@ -66,50 +66,66 @@
 
 <!-- Header para usuarios logueados -->
 <div th:fragment="header-usuario">
-    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
         <div class="container">
+            <!-- Logo y nombre -->
             <a class="navbar-brand d-flex align-items-center fw-bold text-primary" th:href="@{/perfil}">
                 <img th:src="@{/img/logo.png}" alt="Logo" class="me-2"
                     style="height: 40px; width: auto; object-fit: contain;">
-                Servicios Moroni SCRL
+                Servicios Moroni S.C.R.L.
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarUserNav">
+
+            <!-- Botón responsive -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarUserNav"
+                aria-controls="navbarUserNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
+            <!-- Menú de navegación -->
             <div class="collapse navbar-collapse" id="navbarUserNav">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 text-left">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/perfil}"
-                            th:classappend="${currentPage == 'perfil' ? 'active text-danger fw-bold' : 'text-primary'}">
-                            Mi Perfil
+                            th:classappend="${currentPage == 'perfil'} ? 'active text-danger fw-bold' : 'text-primary'">
+                            <i class="bi bi-person-circle"></i> Mi Perfil
                         </a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/proyectos}"
-                            th:classappend="${currentPage == 'proyectos' ? 'active text-danger fw-bold' : 'text-primary'}">
-                            Mis Proyectos
+                            th:classappend="${currentPage == 'proyectos'} ? 'active text-danger fw-bold' : 'text-primary'">
+                            <i class="bi bi-folder2-open"></i> Mis Proyectos
                         </a>
                     </li>
+
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/solicitar}"
-                            th:classappend="${currentPage == 'solicitar' ? 'active text-danger fw-bold' : 'text-primary'}">
-                            Solicitar Proyecto
+                        <a class="nav-link" th:href="@{/proyectos/solicitar }"
+                            th:classappend="${currentPage == 'solicitar'} ? 'active text-danger fw-bold' : 'text-primary'">
+                            <i class="bi bi-plus-circle"></i> Solicitar Proyecto
                         </a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/seguimiento}"
-                            th:classappend="${currentPage == 'seguimiento' ? 'active text-danger fw-bold' : 'text-primary'}">
-                            Seguimiento
+                            th:classappend="${currentPage == 'seguimiento'} ? 'active text-danger fw-bold' : 'text-primary'">
+                            <i class="bi bi-graph-up"></i> Seguimiento
                         </a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/incidencias}"
-                            th:classappend="${currentPage == 'incidencias' ? 'active text-danger fw-bold' : 'text-primary'}">
-                            Incidencias
+                            th:classappend="${currentPage == 'incidencias'} ? 'active text-danger fw-bold' : 'text-primary'">
+                            <i class="bi bi-exclamation-triangle"></i> Incidencias
                         </a>
                     </li>
                 </ul>
-                <a th:href="@{/inicio}" class="ms-lg-2 btn btn-primary btn-sm">Cerrar Sesión</a>
+
+                <!-- Botón cerrar sesión -->
+                <div class="ms-lg-3 mt-2 mt-lg-0">
+                    <a th:href="@{/logout}" class="btn btn-outline-danger btn-sm">
+                        <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                    </a>
+                </div>
             </div>
         </div>
     </nav>

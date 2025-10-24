@@ -27,7 +27,8 @@ public class SecurityConfig {
                                                                 "/", "/inicio", "/galeria", "/empresa", "/servicios",
                                                                 "/contacto",
                                                                 "/login", "/clientes/register", "/css/**", "/js/**",
-                                                                "/img/**")
+                                                                "/img/**",
+                                                                "/proyectos/**")
                                                 .permitAll()
                                                 .anyRequest().authenticated())
                                 .formLogin(form -> form

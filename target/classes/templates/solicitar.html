@@ -15,7 +15,7 @@
 <body class="bg-light">
 
     <!-- Header de usuario logueado -->
-    <div th:replace="reusables :: header-usuario"></div>
+    <div th:replace="~{reusables :: header-usuario}"></div>
 
     <div class="container mt-5 my-4">
         <h2 class="mb-4 text-primary fw-bold">
@@ -24,44 +24,48 @@
 
         <div class="card shadow-sm border-0">
             <div class="card-body">
-                <form th:action="@{/solicitar}" th:object="${proyecto}" method="post" enctype="multipart/form-data">
+                <!-- ✅ Apunta correctamente al controlador -->
+                <form th:action="@{/proyectos/solicitar}" th:object="${proyecto}" method="post"
+                    enctype="multipart/form-data">
 
                     <!-- Nombre del proyecto -->
                     <div class="mb-3">
                         <label for="nombre" class="form-label fw-semibold">Nombre del Proyecto</label>
-                        <input type="text" th:field="*{nombre}" class="form-control" id="nombre"
+                        <input type="text" th:field="*{nombre}" id="nombre" class="form-control"
                             placeholder="Ej: Mantenimiento de oficinas" required>
                     </div>
 
                     <!-- Descripción -->
                     <div class="mb-3">
                         <label for="descripcion" class="form-label fw-semibold">Descripción</label>
-                        <textarea th:field="*{descripcion}" class="form-control" id="descripcion" rows="4"
+                        <textarea th:field="*{descripcion}" id="descripcion" rows="4" class="form-control"
                             placeholder="Describe brevemente el proyecto que deseas solicitar..." required></textarea>
-                    </div>
-
-                    <!-- Fecha de entrega -->
-                    <div class="mb-3">
-                        <label for="fechaEntrega" class="form-label fw-semibold">Fecha Estimada de Entrega</label>
-                        <input type="date" th:field="*{fechaEntrega}" class="form-control" id="fechaEntrega" required>
                     </div>
 
                     <!-- Categoría -->
                     <div class="mb-3">
                         <label for="categoria" class="form-label fw-semibold">Categoría</label>
-                        <select th:field="*{categoria}" class="form-select" id="categoria" required>
+                        <select th:field="*{categoria}" id="categoria" class="form-select" required>
                             <option value="" disabled selected>Selecciona una categoría</option>
-                            <option value="limpieza">Limpieza</option>
-                            <option value="mantenimiento">Mantenimiento</option>
-                            <option value="pintura">Pintura</option>
-                            <option value="otros">Otros</option>
+                            <option value="Limpieza">Limpieza</option>
+                            <option value="Mantenimiento">Mantenimiento</option>
+                            <option value="Pintura">Pintura</option>
+                            <option value="Otros">Otros</option>
                         </select>
                     </div>
 
-                    <!-- Subir archivos -->
+                    <!-- Fecha de entrega -->
+                    <div class="mb-3">
+                        <label for="fechaEntrega" class="form-label fw-semibold">Fecha Estimada de Entrega</label>
+                        <input type="date" th:field="*{fechaEntrega}" id="fechaEntrega" class="form-control">
+                        <div class="form-text">Si no seleccionas una fecha, se asignará automáticamente dentro de 2
+                            semanas.</div>
+                    </div>
+
+                    <!-- Archivos opcionales -->
                     <div class="mb-3">
                         <label for="archivos" class="form-label fw-semibold">Subir Archivos (Opcional)</label>
-                        <input type="file" name="archivos" class="form-control" id="archivos" multiple>
+                        <input type="file" name="archivos" id="archivos" class="form-control" multiple>
                         <div class="form-text">Puedes adjuntar imágenes, planos o documentos relacionados.</div>
                     </div>
 
@@ -72,7 +76,7 @@
                         </button>
                     </div>
 
-                    <!-- Mensajes de éxito o error -->
+                    <!-- Mensajes -->
                     <div th:if="${mensajeExito}" class="mt-3 text-success fw-semibold">
                         ✅ <span th:text="${mensajeExito}"></span>
                     </div>
@@ -86,7 +90,7 @@
     </div>
 
     <!-- Footer -->
-    <div th:replace="reusables :: footer_usuario"></div>
+    <div th:replace="~{reusables :: footer_usuario}"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

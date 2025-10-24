@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.User;
 
 import pe.edu.utp.grupo01.serviciosmoroni.Models.Cliente;
 import pe.edu.utp.grupo01.serviciosmoroni.Repositories.ClienteRepositorio;
+import pe.edu.utp.grupo01.serviciosmoroni.Repositories.ProyectoRepositorio;
 
 @Controller
 @RequestMapping("/clientes")
@@ -17,6 +18,9 @@ public class ClienteController {
 
     @Autowired
     private ClienteRepositorio clienteRepositorio;
+
+    @Autowired
+    private ProyectoRepositorio proyectoRepositorio;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -31,18 +35,19 @@ public class ClienteController {
     @PostMapping("/register")
     public String registerCliente(@ModelAttribute("usuario") Cliente cliente, Model model) {
 
-        // Validar unicidad de email, RUC y teléfono
-        if (clienteRepositorio.existsByEmailCliente(cliente.getEmailCliente()) ||
-                clienteRepositorio.existsByRucCliente(cliente.getRucCliente()) ||
-                clienteRepositorio.existsByTelefonoCliente(cliente.getTelefonoCliente())) {
+        // 🔍 Validar unicidad de email, RUC y teléfono
+        if (clienteRepositorio.existsByEmailCliente(cliente.getEmailCliente())
+                || clienteRepositorio.existsByRucCliente(cliente.getRucCliente())
+                || clienteRepositorio.existsByTelefonoCliente(cliente.getTelefonoCliente())) {
+
             model.addAttribute("error", true);
             return "register";
         }
 
-        // Codificar la contraseña
+        // 🔒 Codificar la contraseña
         cliente.setContrasenaCliente(passwordEncoder.encode(cliente.getContrasenaCliente()));
 
-        // Guardar cliente en BD
+        // 💾 Guardar cliente en BD
         clienteRepositorio.save(cliente);
 
         return "redirect:/login?registrado";
@@ -63,12 +68,12 @@ public class ClienteController {
     @GetMapping("/mis-proyectos")
     public String mostrarMisProyectos(@AuthenticationPrincipal User user, Model model) {
 
-        // Buscar cliente logueado por email
+        // 📧 Buscar cliente logueado por su email
         Cliente cliente = clienteRepositorio.findByEmailCliente(user.getUsername())
                 .orElseThrow(() -> new IllegalStateException("Cliente no encontrado"));
 
-        // Pasar lista de proyectos al modelo
-        model.addAttribute("proyectos", cliente.getProyectos());
+        // 📋 Obtener proyectos del cliente
+        model.addAttribute("proyectos", proyectoRepositorio.findByCliente_IdCliente(cliente.getIdCliente()));
 
         return "mis-proyectos"; // templates/mis-proyectos.html
     }

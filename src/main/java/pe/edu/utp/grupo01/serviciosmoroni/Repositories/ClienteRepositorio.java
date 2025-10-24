@@ -9,18 +9,16 @@ import java.util.Optional;
 @Repository
 public interface ClienteRepositorio extends JpaRepository<Cliente, Integer> {
 
-    // Buscar cliente por correo electrónico (devuelve Optional)
+    // Buscar cliente por correo (usado en login y perfil)
     Optional<Cliente> findByEmailCliente(String emailCliente);
 
-    // Buscar cliente por correo electrónico directamente (devuelve Cliente o null)
-    Cliente findByEmailClienteAndContrasenaCliente(String emailCliente, String contrasenaCliente);
+    // Buscar cliente por correo y contraseña (si no se usa Spring Security)
+    Optional<Cliente> findByEmailClienteAndContrasenaCliente(String emailCliente, String contrasenaCliente);
 
-    // Validar si existe un cliente con el mismo correo electrónico
+    // Validaciones de unicidad
     boolean existsByEmailCliente(String emailCliente);
 
-    // Validar si existe un cliente con el mismo RUC
     boolean existsByRucCliente(String rucCliente);
 
-    // Validar si existe un cliente con el mismo teléfono
     boolean existsByTelefonoCliente(String telefonoCliente);
 }

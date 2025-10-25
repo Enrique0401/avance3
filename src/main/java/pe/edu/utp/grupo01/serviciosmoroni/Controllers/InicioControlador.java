@@ -13,12 +13,6 @@ public class InicioControlador {
         return "index";
     }
 
-    @GetMapping("/contacto")
-    public String contacto(Model model) {
-        model.addAttribute("currentPage", "contacto");
-        return "contacto";
-    }
-
     @GetMapping("/empresa")
     public String empresa(Model model) {
         model.addAttribute("currentPage", "empresa");
@@ -42,4 +36,5 @@ public class InicioControlador {
         model.addAttribute("currentPage", "login");
         return "login";
     }
+
 }

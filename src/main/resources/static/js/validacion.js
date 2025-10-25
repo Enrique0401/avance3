@@ -1,31 +1,40 @@
-// static/js/validacion.js
-(() => {
-    'use strict'
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("contactoForm");
+    form.addEventListener("submit", function (e) {
+        e.preventDefault(); // evita recarga
+        if (!form.checkValidity()) {
+            form.classList.add("was-validated");
+            return;
+        }
 
-    const forms = document.querySelectorAll('.needs-validation')
+        // Preparar datos
+        const data = {
+            nombre: form.nombre.value,
+            empresa: form.empresa.value,
+            email: form.email.value,
+            telefono: form.telefono.value,
+            servicio: form.servicio.value,
+            mensaje: form.mensaje.value
+        };
 
-    Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-            if (!form.checkValidity()) {
-                // Si NO es válido, se bloquea el envío
-                event.preventDefault()
-                event.stopPropagation()
-            } else {
-                // Si es válido, mostramos mensaje y prevenimos envío real
-                event.preventDefault()
-                const success = document.getElementById("successMessage");
-                success.style.display = "block";
-
-                // Ocultar después de 5s
-                setTimeout(() => {
-                    success.style.display = "none";
-                }, 5000);
-
-                form.reset()
-                form.classList.remove('was-validated');
-            }
-
-            form.classList.add('was-validated')
-        }, false)
-    })
-})()
+        fetch("/contacto/enviar", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        })
+            .then(res => res.json())
+            .then(res => {
+                const alerta = document.getElementById("alerta");
+                alerta.style.display = "block";
+                alerta.innerHTML = `<div class="alert alert-success">${res.mensaje}</div>`;
+                form.reset();
+                form.classList.remove("was-validated");
+                refrescarAOS(); // actualiza animaciones
+            })
+            .catch(err => {
+                const alerta = document.getElementById("alerta");
+                alerta.style.display = "block";
+                alerta.innerHTML = `<div class="alert alert-danger">Ocurrió un error, intente nuevamente.</div>`;
+            });
+    });
+});

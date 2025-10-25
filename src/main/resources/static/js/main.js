@@ -2,6 +2,8 @@
 function togglePassword(inputId, iconId) {
     const input = document.getElementById(inputId);
     const icon = document.getElementById(iconId);
+    if (!input || !icon) return;
+
     if (input.type === "password") {
         input.type = "text";
         icon.classList.remove("bi-eye");
@@ -13,52 +15,19 @@ function togglePassword(inputId, iconId) {
     }
 }
 
-// 🔹 Inicialización: aplicar validación al formulario de registro
-document.addEventListener("DOMContentLoaded", function () {
-    validarRegistro("registerForm", "contrasenaCliente", "confirmPassword");
-});
-
-//flechita
-const scrollToTopBtn = document.getElementById('scrollToTopBtn');
-
-window.onscroll = function () {
-    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-        scrollToTopBtn.classList.remove('d-none');
-    } else {
-        scrollToTopBtn.classList.add('d-none');
-    }
-};
-
-scrollToTopBtn.addEventListener('click', function () {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-});
-
-//Contacto mensaje
-document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('contactForm');
-    const successMessage = document.getElementById('successMessage');
+// 🔹 Función opcional para validar registro de contraseñas
+function validarRegistro(formId, passId, confirmId) {
+    const form = document.getElementById(formId);
+    if (!form) return;
 
     form.addEventListener('submit', function (event) {
-        event.preventDefault(); // evita recarga SIEMPRE
+        const password = document.getElementById(passId);
+        const confirm = document.getElementById(confirmId);
 
-        if (!form.checkValidity()) {
-            // Si el formulario es inválido -> mostrar errores Bootstrap
-            event.stopPropagation();
-            form.classList.add('was-validated');
-        } else {
-            // Si es válido -> mostrar mensaje, resetear, ocultar en 5s
-            successMessage.style.display = 'block';
-
-            setTimeout(function () {
-                successMessage.style.display = 'none';
-            }, 5000);
-
-            form.reset();
-            form.classList.remove('was-validated');
+        if (password && confirm && password.value !== confirm.value) {
+            confirm.setCustomValidity("Las contraseñas no coinciden");
+        } else if (confirm) {
+            confirm.setCustomValidity("");
         }
     });
-});
-
+}

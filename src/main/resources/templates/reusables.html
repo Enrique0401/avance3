@@ -8,9 +8,9 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center fw-bold text-primary" th:href="@{/inicio}">
-                <img th:src="@{/img/logo.png}" alt="Logo de la empresa" class="me-2"
+                <img th:src="@{${logoPath}}" alt="Logo" class="me-2"
                     style="height: 40px; width: auto; object-fit: contain;">
-                Servicios Moroni SCRL
+                <span th:text="${siteName}">Servicios Moroni SCRL</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -19,24 +19,24 @@
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 text-left">
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/inicio}"
-                            th:classappend="${currentPage == 'inicio' ? 'active text-danger fw-bold' : 'text-primary'}">Inicio</a>
+                            th:classappend="${currentPage == 'inicio'} ? 'active text-danger fw-bold' : 'text-primary'">Inicio</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/galeria}"
-                            th:classappend="${currentPage == 'galeria' ? 'active text-danger fw-bold' : 'text-primary'}">Galería</a>
+                            th:classappend="${currentPage == 'galeria'} ? 'active text-danger fw-bold' : 'text-primary'">Galería</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/empresa}"
-                            th:classappend="${currentPage == 'empresa' ? 'active text-danger fw-bold' : 'text-primary'}">La
+                            th:classappend="${currentPage == 'empresa'} ? 'active text-danger fw-bold' : 'text-primary'">La
                             Empresa</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/servicios}"
-                            th:classappend="${currentPage == 'servicios' ? 'active text-danger fw-bold' : 'text-primary'}">Servicios</a>
+                            th:classappend="${currentPage == 'servicios'} ? 'active text-danger fw-bold' : 'text-primary'">Servicios</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/contacto}"
-                            th:classappend="${currentPage == 'contacto' ? 'active text-danger fw-bold' : 'text-primary'}">Contacto</a>
+                            th:classappend="${currentPage == 'contacto'} ? 'active text-danger fw-bold' : 'text-primary'">Contacto</a>
                     </li>
                 </ul>
                 <div class="dropdown ms-lg-3 mt-2 mt-lg-0 text-center text-lg-start d-flex justify-content-start">
@@ -46,22 +46,17 @@
                     </button>
                     <ul class="dropdown-menu dropdown-menu-start text-center justify-content-start"
                         aria-labelledby="dropdownMenuButton">
-                        <li>
-                            <a class="dropdown-item" th:href="@{/login}"
-                                th:classappend="${currentPage == 'login' ? 'active text-danger fw-bold' : ''}">Iniciar
-                                Sesión</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" th:href="@{/clientes/register}"
-                                th:classappend="${currentPage == 'register' ? 'active text-danger fw-bold' : ''}">Registrarse</a>
+                        <li><a class="dropdown-item" th:href="@{/login}"
+                                th:classappend="${currentPage == 'login'} ? 'active text-danger fw-bold' : ''">Iniciar
+                                Sesión</a></li>
+                        <li><a class="dropdown-item" th:href="@{/clientes/register}"
+                                th:classappend="${currentPage == 'register'} ? 'active text-danger fw-bold' : ''">Registrarse</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
     </nav>
-    <!-- Espacio para navbar fija -->
-    <div style="height: 50px;"></div>
 </div>
 
 <!-- Header para usuarios logueados -->

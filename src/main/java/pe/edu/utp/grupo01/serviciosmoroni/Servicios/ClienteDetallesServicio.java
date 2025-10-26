@@ -23,7 +23,7 @@ public class ClienteDetallesServicio implements UserDetailsService {
         return User.builder()
                 .username(cliente.getEmailCliente())
                 .password(cliente.getContrasenaCliente())
-                .roles("CLIENTE") // o ADMIN, si agregas roles después
+                .roles(cliente.getRol().replace("ROLE_", ""))
                 .build();
     }
 }

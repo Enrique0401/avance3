@@ -40,18 +40,19 @@ public class Proyecto {
     @Column(name = "fecha_entrega")
     private LocalDate fechaEntrega;
 
-    // Relación con cliente (Lazy evita sobrecarga al listar proyectos)
+    // Relación con cliente
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
-    // Campo temporal (no se guarda en BD)
+    // Campo temporal (no se guarda en la BD)
     @Transient
     private MultipartFile[] archivos;
 
+    // Relaciones
     @OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Seguimiento> seguimientos = new ArrayList<>();
 
     @OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Incidencia> incidencias;
+    private List<Incidencia> incidencias = new ArrayList<>();
 }

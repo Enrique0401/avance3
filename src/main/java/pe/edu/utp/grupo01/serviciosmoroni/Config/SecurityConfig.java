@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+
 import pe.edu.utp.grupo01.serviciosmoroni.Servicios.ClienteDetallesServicio;
 
 @Configuration
@@ -24,32 +25,44 @@ public class SecurityConfig {
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http
+                                // 🔓 Configuración de acceso por URL
                                 .authorizeHttpRequests(auth -> auth
-                                                // URLs públicas
+                                                // Rutas públicas accesibles para todos
                                                 .requestMatchers(
                                                                 "/", "/inicio", "/galeria", "/empresa", "/servicios",
                                                                 "/contacto", "/contacto/enviar", "/login",
                                                                 "/clientes/register",
                                                                 "/css/**", "/js/**", "/img/**", "/proyectos/**")
                                                 .permitAll()
-                                                // Todas las demás requieren login
+
+                                                // 🔒 Rutas exclusivas para ADMIN
+                                                .requestMatchers("/admin/**").hasRole("ADMIN")
+
+                                                // 🔐 Rutas exclusivas para CLIENTE (USER) y ADMIN
+                                                .requestMatchers("/clientes/**").hasAnyRole("USER", "ADMIN")
+
+                                                // ⚙️ Cualquier otra ruta requiere autenticación
                                                 .anyRequest().authenticated())
-                                // Configuración de login
+
+                                // 🔑 Configuración del formulario de login
                                 .formLogin(form -> form
                                                 .loginPage("/login")
-                                                .usernameParameter("emailCliente")
-                                                .passwordParameter("contrasenaCliente")
-                                                .successHandler(loginSuccessHandler)
+                                                .usernameParameter("emailCliente") // campo del email en tu formulario
+                                                .passwordParameter("contrasenaCliente") // campo de contraseña
+                                                .successHandler(loginSuccessHandler) // redirige según rol
                                                 .permitAll())
-                                // Configuración de logout
+
+                                // 🚪 Configuración del logout
                                 .logout(logout -> logout
                                                 .logoutUrl("/logout")
                                                 .logoutSuccessUrl("/inicio")
                                                 .permitAll())
-                                // UserDetailsService
+
+                                // 👤 Servicio de detalles de usuario personalizado
                                 .userDetailsService(clienteDetallesServicio)
-                                .csrf(csrf -> csrf.ignoringRequestMatchers("/contacto/enviar")); // Ignora CSRF para
-                                                                                                 // AJAX
+
+                                // 🧾 Deshabilita CSRF solo para la ruta de envío de contacto
+                                .csrf(csrf -> csrf.ignoringRequestMatchers("/contacto/enviar"));
 
                 return http.build();
         }

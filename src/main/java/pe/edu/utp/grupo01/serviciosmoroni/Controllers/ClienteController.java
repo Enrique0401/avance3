@@ -34,8 +34,7 @@ public class ClienteController {
 
     @PostMapping("/register")
     public String registerCliente(@ModelAttribute("usuario") Cliente cliente, Model model) {
-
-        // 🔍 Validar unicidad de email, RUC y teléfono
+        // Validar unicidad de email, RUC y teléfono
         if (clienteRepositorio.existsByEmailCliente(cliente.getEmailCliente())
                 || clienteRepositorio.existsByRucCliente(cliente.getRucCliente())
                 || clienteRepositorio.existsByTelefonoCliente(cliente.getTelefonoCliente())) {
@@ -44,37 +43,66 @@ public class ClienteController {
             return "register";
         }
 
-        // 🔒 Codificar la contraseña
+        // Codificar la contraseña y asignar rol USER
         cliente.setContrasenaCliente(passwordEncoder.encode(cliente.getContrasenaCliente()));
+        cliente.setRol("ROLE_USER");
 
-        // 💾 Guardar cliente en BD
+        // Guardar en la base de datos
         clienteRepositorio.save(cliente);
 
         return "redirect:/login?registrado";
     }
 
-    // ================= Perfil del Cliente =================
-    @GetMapping("/perfil/{id}")
-    public String verPerfil(@PathVariable Integer id, Model model) {
-        Cliente cliente = clienteRepositorio.findById(id).orElse(null);
-        if (cliente == null) {
-            return "redirect:/clientes/register";
-        }
+    // ================= Ver perfil propio =================
+    @GetMapping("/perfil")
+    public String verMiPerfil(@AuthenticationPrincipal User user, Model model) {
+        Cliente cliente = clienteRepositorio.findByEmailCliente(user.getUsername())
+                .orElseThrow(() -> new IllegalStateException("Cliente no encontrado"));
         model.addAttribute("cliente", cliente);
+        model.addAttribute("currentPage", "perfil");
         return "perfil"; // templates/perfil.html
     }
 
-    // ================= Mis Proyectos =================
+    // ================= Mis proyectos =================
     @GetMapping("/mis-proyectos")
     public String mostrarMisProyectos(@AuthenticationPrincipal User user, Model model) {
-
-        // 📧 Buscar cliente logueado por su email
         Cliente cliente = clienteRepositorio.findByEmailCliente(user.getUsername())
                 .orElseThrow(() -> new IllegalStateException("Cliente no encontrado"));
 
-        // 📋 Obtener proyectos del cliente
         model.addAttribute("proyectos", proyectoRepositorio.findByCliente_IdCliente(cliente.getIdCliente()));
-
         return "mis-proyectos"; // templates/mis-proyectos.html
+    }
+
+    // ================= Editar perfil propio =================
+    @GetMapping("/editarPerfil")
+    public String mostrarFormularioEditarPerfil(@AuthenticationPrincipal User user, Model model) {
+        Cliente cliente = clienteRepositorio.findByEmailCliente(user.getUsername())
+                .orElseThrow(() -> new IllegalStateException("Cliente no encontrado"));
+
+        model.addAttribute("cliente", cliente);
+        model.addAttribute("currentPage", "perfil");
+        return "editarPerfil"; // templates/editarPerfil.html
+    }
+
+    @PostMapping("/editarPerfil")
+    public String actualizarPerfil(@AuthenticationPrincipal User user,
+            @ModelAttribute("cliente") Cliente clienteForm) {
+        Cliente clienteExistente = clienteRepositorio.findByEmailCliente(user.getUsername())
+                .orElseThrow(() -> new IllegalStateException("Cliente no encontrado"));
+
+        // Actualizar campos editables
+        clienteExistente.setNombreCliente(clienteForm.getNombreCliente());
+        clienteExistente.setEmailCliente(clienteForm.getEmailCliente());
+        clienteExistente.setTelefonoCliente(clienteForm.getTelefonoCliente());
+        clienteExistente.setDireccionCliente(clienteForm.getDireccionCliente());
+
+        // Actualizar contraseña si se ingresó una nueva
+        if (clienteForm.getContrasenaCliente() != null && !clienteForm.getContrasenaCliente().isBlank()) {
+            clienteExistente.setContrasenaCliente(passwordEncoder.encode(clienteForm.getContrasenaCliente()));
+        }
+
+        // Guardar cambios en BD
+        clienteRepositorio.save(clienteExistente);
+        return "redirect:/clientes/perfil";
     }
 }

@@ -4,7 +4,7 @@
 <!-- Fragmentos reutilizables -->
 
 <!-- Header para visitantes -->
-<div th:fragment="header">
+<div th:fragment="header_general">
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center fw-bold text-primary" th:href="@{/inicio}">
@@ -141,7 +141,8 @@
                         <li class="mb-2"><a th:href="@{/perfil}" class="text-light text-decoration-none">Perfil</a></li>
                         <li class="mb-2"><a th:href="@{/proyectos}" class="text-light text-decoration-none">Mis
                                 Proyectos</a></li>
-                        <li class="mb-2"><a th:href="@{/solicitar}" class="text-light text-decoration-none">Solicitar
+                        <li class="mb-2"><a th:href="@{/proyectos/solicitar}"
+                                class="text-light text-decoration-none">Solicitar
                                 Proyecto</a></li>
                         <li class="mb-2"><a th:href="@{/seguimiento}"
                                 class="text-light text-decoration-none">Seguimiento</a></li>
@@ -237,3 +238,162 @@
         <i class="bi bi-arrow-up-circle-fill"></i>
     </button>
 </div>
+
+<header th:fragment="header-admin">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+        <div class="container-fluid px-4">
+            <!-- Logo -->
+            <a class="navbar-brand d-flex align-items-center fw-bold text-primary" th:href="@{/admin/dashboard}">
+                <img th:src="@{/img/logo.png}" alt="Logo" class="me-2"
+                    style="height: 40px; width: auto; object-fit: contain;">
+                Panel de Administración
+            </a>
+
+            <!-- Botón hamburguesa -->
+            <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#mobileSidebar" aria-controls="mobileSidebar" aria-label="Menú">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Botón cerrar sesión -->
+            <div class="d-none d-lg-flex align-items-center ms-auto">
+                <a th:href="@{/inicio}" class="btn btn-outline-danger">
+                    <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 🔹 Sidebar Móvil dentro del header -->
+    <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="mobileSidebar"
+        aria-labelledby="mobileSidebarLabel">
+        <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title fw-semibold" id="mobileSidebarLabel">Gestión</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="nav flex-column w-100">
+                <li class="nav-item mb-2">
+                    <a class="nav-link fw-bold text-primary" th:href="@{/admin/perfil}">
+                        <i class="bi bi-person-fill me-2 fs-5"></i> Mi Perfil
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link fw-bold text-success" th:href="@{/admin/clientes}">
+                        <i class="bi bi-people-fill me-2 fs-5"></i> Clientes
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link fw-bold text-warning" th:href="@{/admin/proyectos}">
+                        <i class="bi bi-folder-fill me-2 fs-5"></i> Proyectos
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link fw-bold text-info" th:href="@{/admin/seguimientos}">
+                        <i class="bi bi-arrow-repeat me-2 fs-5"></i> Seguimientos
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link fw-bold text-danger" th:href="@{/admin/incidencias}">
+                        <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i> Incidencias
+                    </a>
+                </li>
+                <li class="nav-item mt-3 border-top pt-2">
+                    <a class="nav-link fw-bold text-secondary" th:href="@{/inicio}">
+                        <i class="bi bi-box-arrow-right me-2 fs-5"></i> Salir
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<!-- 🔹 SIDEBAR DESKTOP -->
+<aside th:fragment="sidebar-admin" class="d-none d-lg-flex flex-column bg-white border-end shadow-sm sidebar-admin">
+    <h5 class="fw-semibold text-secondary text-center mb-3 mt-3">Gestión</h5>
+    <ul class="nav flex-column w-100">
+        <li class="nav-item mb-2">
+            <a class="nav-link fw-bold text-primary" th:href="@{/admin/perfil}">
+                <i class="bi bi-person-fill me-2 fs-5"></i> Mi Perfil
+            </a>
+        </li>
+        <li class="nav-item mb-2">
+            <a class="nav-link fw-bold text-success" th:href="@{/admin/clientes}">
+                <i class="bi bi-people-fill me-2 fs-5"></i> Clientes
+            </a>
+        </li>
+        <li class="nav-item mb-2">
+            <a class="nav-link fw-bold text-warning" th:href="@{/admin/proyectos}">
+                <i class="bi bi-folder-fill me-2 fs-5"></i> Proyectos
+            </a>
+        </li>
+        <li class="nav-item mb-2">
+            <a class="nav-link fw-bold text-info" th:href="@{/admin/seguimientos}">
+                <i class="bi bi-arrow-repeat me-2 fs-5"></i> Seguimientos
+            </a>
+        </li>
+        <li class="nav-item mb-2">
+            <a class="nav-link fw-bold text-danger" th:href="@{/admin/incidencias}">
+                <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i> Incidencias
+            </a>
+        </li>
+        <li class="nav-item mt-3 border-top pt-2">
+            <a class="nav-link fw-bold text-secondary" th:href="@{/inicio}">
+                <i class="bi bi-box-arrow-right me-2 fs-5"></i> Salir
+            </a>
+        </li>
+    </ul>
+</aside>
+
+
+
+<!-- 🔹 FOOTER DEL PANEL ADMIN -->
+<footer th:fragment="footer-admin" class="bg-dark text-light border-top mt-5 py-4 shadow-sm">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-4 mb-lg-0">
+                <h5 class="fw-bold mb-3">Panel de Administración</h5>
+                <p>Gestiona clientes, proyectos, seguimientos e incidencias de manera eficiente desde este panel.</p>
+            </div>
+            <div class="col-lg-4 mb-4 mb-lg-0">
+                <h5 class="fw-bold mb-3">Secciones</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a th:href="@{/admin/perfil}" class="text-light text-decoration-none">Mis Datos</a>
+                    </li>
+                    <li class="mb-2"><a th:href="@{/admin/clientes}"
+                            class="text-light text-decoration-none">Clientes</a></li>
+                    <li class="mb-2"><a th:href="@{/admin/proyectos}"
+                            class="text-light text-decoration-none">Proyectos</a></li>
+                    <li class="mb-2"><a th:href="@{/admin/seguimientos}"
+                            class="text-light text-decoration-none">Seguimientos</a></li>
+                    <li class="mb-2"><a th:href="@{/admin/incidencias}"
+                            class="text-light text-decoration-none">Incidencias</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-4">
+                <h5 class="fw-bold mb-3">Soporte</h5>
+                <p><i class="bi bi-envelope me-2"></i> soporte@serviciosmoroni.com</p>
+                <h5 class="fw-bold mb-3">Contáctenos</h5>
+                <p><i class="bi bi-telephone me-2"></i> 924 353 323</p>
+                <div class="d-flex social-icons mt-3">
+                    <a href="https://www.facebook.com/profile.php?id=61555686907576" target="_blank"
+                        rel="noopener noreferrer" class="text-light me-3">
+                        <i class="bi bi-facebook fs-4"></i>
+                    </a>
+                    <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer"
+                        class="text-light me-3">
+                        <i class="bi bi-instagram fs-4"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/julio-nunja-alfaro-b2905b1b9/" target="_blank"
+                        rel="noopener noreferrer" class="text-light">
+                        <i class="bi bi-linkedin fs-4"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <hr class="my-4 border-light">
+        <div class="text-center">
+            <p class="mb-0">Servicios Moroni SCRL - Todos los derechos reservados &copy; 2025</p>
+        </div>
+    </div>
+</footer>

@@ -39,6 +39,9 @@ public class Cliente {
     @Column(name = "contrasena_cliente", nullable = false, length = 255)
     private String contrasenaCliente;
 
+    @Column(name = "rol", nullable = false, length = 20)
+    private String rol;
+
     @Transient
     private String confirmPassword;
 

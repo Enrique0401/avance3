@@ -11,7 +11,6 @@ import pe.edu.utp.grupo01.serviciosmoroni.Models.Cliente;
 import pe.edu.utp.grupo01.serviciosmoroni.Models.Proyecto;
 import pe.edu.utp.grupo01.serviciosmoroni.Repositories.ClienteRepositorio;
 import pe.edu.utp.grupo01.serviciosmoroni.Repositories.ProyectoRepositorio;
-import pe.edu.utp.grupo01.serviciosmoroni.Servicios.ProyectoService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,12 +25,7 @@ public class ProyectoController {
     @Autowired
     private ClienteRepositorio clienteRepositorio;
 
-    @Autowired
-    private ProyectoService proyectoService;
 
-    // ============================================================
-    // 📋 CLIENTE: Mostrar lista de proyectos del cliente autenticado
-    // ============================================================
     @GetMapping("/proyectos")
     public String listarProyectos(Model model, Authentication auth) {
         if (auth == null || !(auth.getPrincipal() instanceof User userDetails)) {
@@ -53,9 +47,7 @@ public class ProyectoController {
         return "proyectos";
     }
 
-    // ============================================================
-    // 🧾 CLIENTE: Mostrar formulario de solicitud
-    // ============================================================
+
     @GetMapping("/proyectos/solicitar")
     public String mostrarFormulario(Model model) {
         model.addAttribute("proyecto", new Proyecto());
@@ -63,9 +55,7 @@ public class ProyectoController {
         return "solicitar";
     }
 
-    // ============================================================
-    // 🚀 CLIENTE: Procesar formulario de solicitud
-    // ============================================================
+
     @PostMapping("/proyectos/solicitar")
     public String registrarProyecto(
             @ModelAttribute Proyecto proyecto,

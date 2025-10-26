@@ -25,9 +25,7 @@ public class SeguimientoController {
     @Autowired
     private ClienteServicio clienteService;
 
-    /**
-     * 📊 Muestra todos los seguimientos de los proyectos del cliente logueado
-     */
+
     @GetMapping
     @Transactional(readOnly = true)
     public String verTodosLosSeguimientos(Principal principal, Model model) {
@@ -43,10 +41,10 @@ public class SeguimientoController {
 
         Cliente cliente = clienteOpt.get();
 
-        // ✅ Filtrar seguimientos por el cliente logueado
+
         List<Seguimiento> seguimientos = seguimientoService.listarPorCliente(cliente.getIdCliente());
 
-        // Depuración opcional (puedes borrar esto luego)
+
         System.out.println("Cliente logueado: " + cliente.getNombreCliente());
         System.out.println("Total seguimientos cargados: " + seguimientos.size());
 
@@ -57,9 +55,7 @@ public class SeguimientoController {
         return "seguimiento";
     }
 
-    /**
-     * 🔍 Muestra los seguimientos de un proyecto específico
-     */
+
     @GetMapping("/{idProyecto}")
     @Transactional(readOnly = true)
     public String verSeguimientoDeProyecto(@PathVariable Integer idProyecto, Model model) {

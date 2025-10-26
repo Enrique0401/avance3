@@ -53,7 +53,6 @@ public class Cliente {
         this.fechaRegistro = LocalDateTime.now();
     }
 
-    // Inicializamos la lista para evitar NullPointerException
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Proyecto> proyectos = new ArrayList<>();
 }

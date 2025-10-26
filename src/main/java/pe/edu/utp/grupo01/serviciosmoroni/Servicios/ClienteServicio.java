@@ -30,7 +30,6 @@ public class ClienteServicio {
         clienteRepositorio.deleteById(id);
     }
 
-    // 🔹 Nuevo método: buscar cliente por email (para autenticación o sesión)
     public Optional<Cliente> buscarPorEmail(String email) {
         return clienteRepositorio.findByEmailCliente(email);
     }

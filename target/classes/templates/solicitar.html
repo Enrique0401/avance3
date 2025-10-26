@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solicitar Proyecto - Servicios Moroni SCRL</title>
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="icon" th:href="@{/img/logo.png}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
@@ -24,7 +23,6 @@
 
         <div class="card shadow-sm border-0">
             <div class="card-body">
-                <!-- ✅ Apunta correctamente al controlador -->
                 <form th:action="@{/proyectos/solicitar}" th:object="${proyecto}" method="post"
                     enctype="multipart/form-data">
 

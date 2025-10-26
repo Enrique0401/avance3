@@ -31,25 +31,22 @@ public class Proyecto {
 
     @Column(nullable = false, length = 50)
     @Builder.Default
-    private String estado = "Pendiente"; // Valor por defecto
+    private String estado = "Pendiente";
 
     @Column(nullable = false)
     @Builder.Default
-    private Integer progreso = 0; // Valor por defecto
+    private Integer progreso = 0; 
 
     @Column(name = "fecha_entrega")
     private LocalDate fechaEntrega;
 
-    // Relación con cliente
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
-    // Campo temporal (no se guarda en la BD)
     @Transient
     private MultipartFile[] archivos;
 
-    // Relaciones
     @OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Seguimiento> seguimientos = new ArrayList<>();
 

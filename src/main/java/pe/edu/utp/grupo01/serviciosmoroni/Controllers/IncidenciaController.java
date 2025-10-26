@@ -29,9 +29,6 @@ public class IncidenciaController {
     @Autowired
     private ClienteServicio clienteService;
 
-    /**
-     * 📋 Muestra las incidencias de los proyectos del cliente logueado
-     */
     @GetMapping
     @Transactional(readOnly = true)
     public String verIncidencias(Principal principal, Model model) {
@@ -39,7 +36,6 @@ public class IncidenciaController {
             return "redirect:/login";
         }
 
-        // Buscar cliente por email
         Optional<Cliente> clienteOpt = clienteService.buscarPorEmail(principal.getName());
         if (clienteOpt.isEmpty()) {
             return "redirect:/login";
@@ -47,7 +43,6 @@ public class IncidenciaController {
 
         Cliente cliente = clienteOpt.get();
 
-        // ✅ Filtrar incidencias por el cliente logueado
         List<Incidencia> incidencias = incidenciaService.listarPorCliente(cliente.getIdCliente());
 
         model.addAttribute("cliente", cliente);
@@ -57,9 +52,6 @@ public class IncidenciaController {
         return "incidencias";
     }
 
-    /**
-     * 🔍 Muestra las incidencias de un proyecto específico
-     */
     @GetMapping("/{idProyecto}")
     @Transactional(readOnly = true)
     public String verIncidenciasPorProyecto(@PathVariable Integer idProyecto, Model model) {

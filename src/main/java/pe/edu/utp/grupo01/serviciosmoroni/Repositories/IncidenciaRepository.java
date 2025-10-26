@@ -10,10 +10,8 @@ import java.util.List;
 @Repository
 public interface IncidenciaRepository extends JpaRepository<Incidencia, Integer> {
 
-    // 🔍 Filtrar incidencias por ID de proyecto
     List<Incidencia> findByProyectoId(Integer proyectoId);
 
-    // 🔍 Filtrar incidencias por ID de cliente (a través del proyecto)
     @Query("SELECT i FROM Incidencia i WHERE i.proyecto.cliente.idCliente = :clienteId")
     List<Incidencia> findByClienteId(Integer clienteId);
 }

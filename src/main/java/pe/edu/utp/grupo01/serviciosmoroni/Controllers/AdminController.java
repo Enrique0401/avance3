@@ -155,7 +155,6 @@ public class AdminController {
         return "redirect:/admin/seguimientos";
     }
 
-    // =================== ⚠️ Gestión de incidencias ===================
     @GetMapping("/incidencias")
     public String listarIncidencias(@RequestParam(required = false) Integer proyectoId, Model model) {
         List<Proyecto> proyectos = proyectoRepositorio.findAll();

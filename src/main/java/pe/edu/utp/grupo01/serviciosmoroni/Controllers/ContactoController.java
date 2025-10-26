@@ -15,7 +15,6 @@ public class ContactoController {
     @Autowired
     private ContactoService contactoService;
 
-    // Mostrar formulario
     @GetMapping
     public String mostrarFormulario(Model model) {
         model.addAttribute("currentPage", "contacto");
@@ -23,7 +22,6 @@ public class ContactoController {
         return "contacto";
     }
 
-    // Enviar formulario vía AJAX
     @PostMapping("/enviar")
     @ResponseBody
     public ResponseEntity<?> enviarFormulario(@RequestBody Contacto contacto) {

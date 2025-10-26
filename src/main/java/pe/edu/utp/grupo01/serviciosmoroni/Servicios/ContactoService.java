@@ -15,7 +15,6 @@ public class ContactoService {
     private ContactoRepository contactoRepository;
 
     public Contacto guardar(Contacto contacto) {
-        // Fecha de envío actual
         contacto.setFechaEnvio(LocalDateTime.now());
         return contactoRepository.save(contacto);
     }

@@ -1,4 +1,4 @@
-// 🔹 Alternar visibilidad de la contraseña
+
 function togglePassword(inputId, iconId) {
     const input = document.getElementById(inputId);
     const icon = document.getElementById(iconId);
@@ -15,24 +15,82 @@ function togglePassword(inputId, iconId) {
     }
 }
 
-// 🔹 Función opcional para validar registro de contraseñas
-function validarRegistro(formId, passId, confirmId) {
-    const form = document.getElementById(formId);
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector('form[th\\:action="@{/clientes/register}"]') || document.querySelector("form");
     if (!form) return;
 
-    form.addEventListener('submit', function (event) {
-        const password = document.getElementById(passId);
-        const confirm = document.getElementById(confirmId);
+    const nombre = document.getElementById("nombreCliente");
+    const ruc = document.getElementById("rucCliente");
+    const telefono = document.getElementById("telefonoCliente");
+    const email = document.getElementById("emailCliente");
+    const direccion = document.getElementById("direccionCliente");
+    const pass = document.getElementById("contrasenaCliente");
+    const confirm = document.getElementById("confirmPassword");
 
-        if (password && confirm && password.value !== confirm.value) {
+    form.addEventListener("submit", function (e) {
+        let valido = true;
+
+        const limpiar = (v) => v.trim();
+
+        [nombre, ruc, telefono, email, direccion, pass, confirm].forEach(campo => {
+            campo.value = limpiar(campo.value);
+            if (!campo.value) {
+                campo.classList.add("is-invalid");
+                valido = false;
+            } else {
+                campo.classList.remove("is-invalid");
+            }
+        });
+
+        if (!/^\d{11}$/.test(ruc.value)) {
+            ruc.classList.add("is-invalid");
+            valido = false;
+        } else {
+            ruc.classList.remove("is-invalid");
+        }
+
+        if (!/^9\d{8}$/.test(telefono.value)) {
+            telefono.classList.add("is-invalid");
+            valido = false;
+        } else {
+            telefono.classList.remove("is-invalid");
+        }
+
+        const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value);
+        if (!emailValido) {
+            email.classList.add("is-invalid");
+            valido = false;
+        } else {
+            email.classList.remove("is-invalid");
+        }
+
+        if (pass.value !== confirm.value) {
+            confirm.classList.add("is-invalid");
             confirm.setCustomValidity("Las contraseñas no coinciden");
-        } else if (confirm) {
+            valido = false;
+        } else {
+            confirm.classList.remove("is-invalid");
             confirm.setCustomValidity("");
         }
-    });
-}
 
-// 🟩 Actualiza el estado del proyecto según el progreso
+        if (!valido) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    });
+
+    [ruc, telefono].forEach(input => {
+        input.addEventListener("input", function () {
+            this.value = this.value.replace(/\D/g, ""); // Solo números
+            if (this.id === "telefonoCliente" && this.value.length > 9)
+                this.value = this.value.slice(0, 9);
+            if (this.id === "rucCliente" && this.value.length > 11)
+                this.value = this.value.slice(0, 11);
+        });
+    });
+});
+
+
 document.addEventListener("DOMContentLoaded", () => {
     const progresoInputs = document.querySelectorAll(".progreso-input");
 
@@ -56,10 +114,10 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         };
 
-        // 🟢 Aplica el estado inicial al cargar la página
+
         actualizarEstado(input.value);
 
-        // 🟡 Cambia dinámicamente cuando el usuario edita el progreso
+
         input.addEventListener("input", e => actualizarEstado(e.target.value));
     });
 });
@@ -73,27 +131,27 @@ document.addEventListener("DOMContentLoaded", () => {
         barra.classList.remove("bg-danger", "bg-warning", "bg-info", "bg-success");
 
         if (porcentaje === 100) {
-            barra.classList.add("bg-success"); // verde
+            barra.classList.add("bg-success");
         } else if (porcentaje >= 70) {
-            barra.classList.add("bg-info"); // celeste
+            barra.classList.add("bg-info");
         } else if (porcentaje >= 40) {
-            barra.classList.add("bg-warning"); // amarillo
+            barra.classList.add("bg-warning");
         } else {
-            barra.classList.add("bg-danger"); // rojo
+            barra.classList.add("bg-danger");
         }
     });
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Añadir sombra a los select
+
     document.querySelectorAll("select").forEach(sel => sel.classList.add("shadow-sm"));
 
-    // Confirmación de eliminación
+
     window.confirmarEliminacion = function () {
         return confirm("¿Estás seguro de que deseas eliminar esta incidencia?");
     };
 
-    // Configurar sidebar móvil
+
     const mobileSidebar = document.getElementById("mobileSidebar");
     if (mobileSidebar) {
         const offcanvasInstance = bootstrap.Offcanvas.getOrCreateInstance(mobileSidebar, {
@@ -102,9 +160,31 @@ document.addEventListener("DOMContentLoaded", () => {
             keyboard: true
         });
 
-        // Cerrar menú al hacer clic en enlace
+        
         mobileSidebar.querySelectorAll(".nav-link").forEach(link => {
             link.addEventListener("click", () => offcanvasInstance.hide());
         });
     }
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+    if (!scrollToTopBtn) return;
+
+    window.addEventListener("scroll", function () {
+        if (window.scrollY > 200) {
+            scrollToTopBtn.classList.remove("d-none");
+        } else {
+            scrollToTopBtn.classList.add("d-none");
+        }
+    });
+
+    scrollToTopBtn.addEventListener("click", function () {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    });
 });

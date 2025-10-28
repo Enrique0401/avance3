@@ -45,13 +45,13 @@ public class ProyectoService {
             existente.setNombre(proyecto.getNombre());
             existente.setProgreso(proyecto.getProgreso());
 
-            // 🟢 Mantener los campos no editados
+            
             existente.setDescripcion(existente.getDescripcion());
             existente.setCategoria(existente.getCategoria());
             existente.setCliente(existente.getCliente());
             existente.setFechaEntrega(existente.getFechaEntrega());
 
-            // 🟩 Actualiza el estado automáticamente
+            
             if (proyecto.getProgreso() == 100) {
                 existente.setEstado("Finalizado");
             } else if (proyecto.getProgreso() > 0) {

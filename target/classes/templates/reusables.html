@@ -70,53 +70,53 @@
                 aria-controls="navbarUserNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
-
             <div class="collapse navbar-collapse" id="navbarUserNav">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/perfil}"
                             th:classappend="${currentPage == 'perfil'} ? 'active text-danger fw-bold' : 'text-primary'">
-                            <i class="bi bi-person-circle"></i> Mi Perfil
+                            Mi Perfil
                         </a>
                     </li>
-
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/proyectos}"
                             th:classappend="${currentPage == 'proyectos'} ? 'active text-danger fw-bold' : 'text-primary'">
-                            <i class="bi bi-folder2-open"></i> Mis Proyectos
+                            Mis Proyectos
                         </a>
                     </li>
-
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/proyectos/solicitar }"
+                        <a class="nav-link" th:href="@{/proyectos/solicitar}"
                             th:classappend="${currentPage == 'solicitar'} ? 'active text-danger fw-bold' : 'text-primary'">
-                            <i class="bi bi-plus-circle"></i> Solicitar Proyecto
+                            Solicitar Proyecto
                         </a>
                     </li>
-
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/seguimiento}"
                             th:classappend="${currentPage == 'seguimiento'} ? 'active text-danger fw-bold' : 'text-primary'">
-                            <i class="bi bi-graph-up"></i> Seguimiento
+                            Seguimiento
                         </a>
                     </li>
-
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/incidencias}"
                             th:classappend="${currentPage == 'incidencias'} ? 'active text-danger fw-bold' : 'text-primary'">
-                            <i class="bi bi-exclamation-triangle"></i> Incidencias
+                            </i> Incidencias
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/contactoCliente}"
+                            th:classappend="${currentPage == 'contactoCliente'} ? 'active text-danger fw-bold' : 'text-primary'">
+                            </i> Contacto
                         </a>
                     </li>
                 </ul>
-
-                <div class="ms-lg-3 mt-2 mt-lg-0">
-                    <a th:href="@{/inicio}" class="btn btn-outline-danger btn-sm">
-                        <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
-                    </a>
+                <div class="ms-lg-3 mt-2 mt-lg-0 d-flex align-items-center">
+                    <div class="ms-lg-3 mt-2 mt-lg-0">
+                        <a th:href="@{/inicio}" class="btn btn-outline-danger btn-sm">
+                            Cerrar Sesión
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
     </nav>
 </div>
 
@@ -142,6 +142,8 @@
                                 class="text-light text-decoration-none">Seguimiento</a></li>
                         <li class="mb-2"><a th:href="@{/incidencias}"
                                 class="text-light text-decoration-none">Incidencias</a></li>
+                        <li class="mb-2"><a th:href="@{/contactoCliente}"
+                                class="text-light text-decoration-none">Contacto</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-4">

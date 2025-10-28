@@ -33,7 +33,7 @@ public class SeguimientoController {
             return "redirect:/login";
         }
 
-        // Buscar cliente por email
+        
         Optional<Cliente> clienteOpt = clienteService.buscarPorEmail(principal.getName());
         if (clienteOpt.isEmpty()) {
             return "redirect:/login";

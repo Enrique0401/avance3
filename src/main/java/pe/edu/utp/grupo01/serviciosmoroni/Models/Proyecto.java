@@ -35,7 +35,7 @@ public class Proyecto {
 
     @Column(nullable = false)
     @Builder.Default
-    private Integer progreso = 0; 
+    private Integer progreso = 0;
 
     @Column(name = "fecha_entrega")
     private LocalDate fechaEntrega;

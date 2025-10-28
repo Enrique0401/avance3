@@ -16,7 +16,7 @@ public class PerfilController {
 
     @GetMapping("/perfil")
     public String perfil(Model model, Authentication authentication) {
-        String email = authentication.getName(); // correo del usuario logueado
+        String email = authentication.getName();
 
         Cliente cliente = clienteRepositorio.findByEmailCliente(email)
                 .orElse(null);

@@ -1,13 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("contactoForm");
     form.addEventListener("submit", function (e) {
-        e.preventDefault(); // evita recarga
+        e.preventDefault();
         if (!form.checkValidity()) {
             form.classList.add("was-validated");
             return;
         }
 
-        // Preparar datos
+
         const data = {
             nombre: form.nombre.value,
             empresa: form.empresa.value,
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 alerta.innerHTML = `<div class="alert alert-success">${res.mensaje}</div>`;
                 form.reset();
                 form.classList.remove("was-validated");
-                refrescarAOS(); // actualiza animaciones
+                refrescarAOS();
             })
             .catch(err => {
                 const alerta = document.getElementById("alerta");

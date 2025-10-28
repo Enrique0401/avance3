@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (form) {
         form.addEventListener("submit", function (event) {
-            event.preventDefault(); // Evita recarga
+            event.preventDefault();
 
             mensajeExito.style.display = "block";
 

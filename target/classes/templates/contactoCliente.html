@@ -13,9 +13,7 @@
 </head>
 
 <body>
-
-    <div th:replace="~{reusables :: header_general(currentPage='contacto')}"></div>
-
+    <div th:replace="~{reusables :: header-usuario(currentPage='contactoCliente')}"></div>
 
     <section class="bg-primary text-white py-5 text-center">
         <div class="container">
@@ -25,7 +23,6 @@
             </p>
         </div>
     </section>
-
 
     <section class="py-5">
         <div class="container">
@@ -79,7 +76,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="col-lg-4">
                     <div class="card shadow-sm mb-4 text-center p-4" data-aos="fade-left">
                         <i class="bi bi-geo-alt display-4 text-primary mb-3"></i>
@@ -102,8 +98,6 @@
             </div>
         </div>
     </section>
-
-    
     <section class="py-5 bg-light">
         <div class="container">
             <div class="text-center mb-4">
@@ -137,17 +131,14 @@
         </div>
     </section>
 
-
     <div th:replace="~{reusables :: flechita}"></div>
 
-    <div th:replace="~{reusables :: footer_general}"></div>
+    <div th:replace="~{reusables :: footer_usuario}"></div>
 
     <script th:src="@{/js/main.js}"></script>
 
     <script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js}"></script>
-
     <script th:src="@{https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js}"></script>
-
     <script th:src="@{/js/contacto.js}"></script>
 </body>
 

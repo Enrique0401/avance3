@@ -79,7 +79,7 @@ public class ProyectoController {
             Cliente cliente = clienteOpt.get();
             proyecto.setCliente(cliente);
 
-            // Valores por defecto
+
             if (proyecto.getEstado() == null || proyecto.getEstado().isBlank()) {
                 proyecto.setEstado("Pendiente");
             }
@@ -92,7 +92,7 @@ public class ProyectoController {
 
             proyectoRepositorio.save(proyecto);
 
-            // Archivos subidos (solo registro en consola)
+            
             if (archivos != null) {
                 for (MultipartFile archivo : archivos) {
                     if (!archivo.isEmpty()) {

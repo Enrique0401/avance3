@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// Si actualizas el DOM dinámicamente, refresca AOS
+
 function refrescarAOS() {
     AOS.refresh();
 }

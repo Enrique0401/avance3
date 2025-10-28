@@ -37,7 +37,7 @@ public class AdminController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    // =================== 🏠 Dashboard ===================
+    
     @GetMapping("/dashboard")
     public String mostrarPanelAdmin(Model model) {
         model.addAttribute("titulo", "Panel de Administración");
@@ -45,7 +45,7 @@ public class AdminController {
         return "admin/dashboard";
     }
 
-    // =================== 👥 Ver clientes ===================
+    
     @GetMapping("/clientes")
     public String listarClientes(Model model) {
         model.addAttribute("titulo", "Gestión de Clientes");
@@ -54,7 +54,7 @@ public class AdminController {
         return "admin/clientes";
     }
 
-    // =================== 🧑‍💼 Editar perfil propio ===================
+    
     @GetMapping("/perfil")
     public String mostrarPerfil(@AuthenticationPrincipal User user, Model model) {
         Cliente cliente = clienteRepositorio.findByEmailCliente(user.getUsername())
@@ -82,7 +82,7 @@ public class AdminController {
         return "redirect:/admin/dashboard";
     }
 
-    // =================== 📁 Ver y filtrar proyectos ===================
+    
     @GetMapping("/proyectos")
     public String listarProyectos(@RequestParam(required = false) Integer clienteId, Model model) {
         List<Cliente> clientesUser = clienteRepositorio.findByRol("ROLE_USER");
@@ -106,14 +106,14 @@ public class AdminController {
         return "admin/proyectos";
     }
 
-    // =================== ✏️ Actualizar proyecto ===================
+    
     @PostMapping("/proyectos/actualizar")
     public String actualizarProyecto(@ModelAttribute Proyecto proyecto) {
         proyectoService.actualizarProyecto(proyecto);
         return "redirect:/admin/proyectos";
     }
 
-    // =================== 📊 Seguimientos de proyectos ===================
+    
     @GetMapping("/seguimientos")
     public String listarSeguimientos(Model model) {
         model.addAttribute("titulo", "Seguimientos de Proyectos");

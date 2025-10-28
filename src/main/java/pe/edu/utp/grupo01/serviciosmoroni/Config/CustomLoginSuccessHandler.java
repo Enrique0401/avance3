@@ -35,10 +35,8 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
         if (optionalCliente.isPresent()) {
 
-            // 🔍 Obtener los roles del usuario autenticado
             Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
 
-            // 🔁 Redirección según el rol
             if (roles.contains("ROLE_ADMIN")) {
                 response.sendRedirect("/admin/dashboard");
             } else {
@@ -46,7 +44,6 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
             }
 
         } else {
-            // Si no se encuentra el cliente, redirigir a inicio
             response.sendRedirect("/inicio");
         }
     }

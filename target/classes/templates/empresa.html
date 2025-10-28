@@ -13,7 +13,7 @@
 </head>
 
 <body>
-    <div th:replace="reusables :: header_general"></div>
+    <div th:replace="~{reusables :: header_general}"></div>
 
     <section class="bg-primary text-white py-5 text-center">
         <div class="container">
@@ -25,7 +25,7 @@
     <section class="py-5">
         <div class="container">
             <div class="row align-items-center">
-                <!-- Texto con animaciones de entrada -->
+
                 <div class="col-lg-6 mb-4 mb-lg-0">
                     <h2 class="fw-bold mb-4" data-aos="fade-right" data-aos-delay="100">
                         Nuestra Historia
@@ -46,7 +46,7 @@
                     </p>
                 </div>
 
-                <!-- Imagen con animación distinta -->
+
                 <div class="col-lg-6 text-center">
                     <img src="../img/Empresa/Historia.png" class="img-fluid rounded shadow"
                         alt="Nuestro equipo de trabajo" data-aos="zoom-in-up" data-aos-delay="300">
@@ -58,7 +58,7 @@
     <section class="py-5 bg-light">
         <div class="container">
             <div class="row g-4">
-                <!-- Misión -->
+
                 <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
                     <div class="card h-100 border-0 shadow-sm text-center p-4">
                         <i class="bi bi-bullseye display-4 text-primary mb-3" data-aos="zoom-in"
@@ -72,7 +72,7 @@
                     </div>
                 </div>
 
-                <!-- Visión -->
+
                 <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
                     <div class="card h-100 border-0 shadow-sm text-center p-4">
                         <i class="bi bi-eye display-4 text-primary mb-3" data-aos="zoom-in" data-aos-delay="300"></i>
@@ -97,42 +97,42 @@
                 </p>
             </div>
             <div class="row g-4 text-center">
-                <!-- Calidad -->
+
                 <div class="col-6 col-md-4" data-aos="fade-right" data-aos-delay="100">
                     <i class="bi bi-award display-4 text-primary mb-3"></i>
                     <h5 class="fw-bold text-primary">Calidad</h5>
                     <p class="text-muted">Buscamos la excelencia en cada servicio que brindamos, cumpliendo con los más
                         altos estándares del sector.</p>
                 </div>
-                <!-- Responsabilidad -->
+
                 <div class="col-6 col-md-4" data-aos="zoom-in" data-aos-delay="200">
                     <i class="bi bi-people display-4 text-danger mb-3"></i>
                     <h5 class="fw-bold text-danger">Responsabilidad</h5>
                     <p class="text-muted">Cumplimos con nuestros compromisos y nos hacemos cargo de nuestros actos,
                         garantizando un servicio confiable.</p>
                 </div>
-                <!-- Integridad -->
+
                 <div class="col-6 col-md-4" data-aos="fade-left" data-aos-delay="300">
                     <i class="bi bi-shield-check display-4 text-primary mb-3"></i>
                     <h5 class="fw-bold text-primary">Integridad</h5>
                     <p class="text-muted">Actuamos con honestidad y transparencia en todas nuestras relaciones
                         comerciales y laborales.</p>
                 </div>
-                <!-- Innovación -->
+
                 <div class="col-6 col-md-4" data-aos="flip-left" data-aos-delay="400">
                     <i class="bi bi-lightbulb display-4 text-danger mb-3"></i>
                     <h5 class="fw-bold text-danger">Innovación</h5>
                     <p class="text-muted">Buscamos constantemente nuevas y mejores formas de servir a nuestros clientes,
                         incorporando tecnología y mejores prácticas.</p>
                 </div>
-                <!-- Compromiso -->
+
                 <div class="col-6 col-md-4" data-aos="flip-up" data-aos-delay="500">
                     <i class="bi bi-heart display-4 text-primary mb-3"></i>
                     <h5 class="fw-bold text-primary">Compromiso</h5>
                     <p class="text-muted">Nos dedicamos por completo a satisfacer las necesidades de nuestros clientes,
                         yendo más allá de lo esperado.</p>
                 </div>
-                <!-- Sostenibilidad -->
+
                 <div class="col-6 col-md-4" data-aos="fade-up" data-aos-delay="600">
                     <i class="bi bi-tree display-4 text-danger mb-3"></i>
                     <h5 class="fw-bold text-danger">Sostenibilidad</h5>
@@ -152,7 +152,7 @@
                 </p>
             </div>
             <div class="row g-4">
-                <!-- Gerente General -->
+
                 <div class="col-md-4" data-aos="fade-right" data-aos-delay="100">
                     <div class="card h-100 border-0 shadow-sm">
                         <img src="../img/Empresa/Directivo.png" class="card-img-top" alt="Personal directivo"
@@ -170,7 +170,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- Personal Operativo -->
+                
                 <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
                     <div class="card h-100 border-0 shadow-sm">
                         <img src="../img/Empresa/Personal.png" class="card-img-top" alt="Personal operativo"
@@ -185,7 +185,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- Personal Administrativo -->
+
                 <div class="col-md-4" data-aos="fade-left" data-aos-delay="300">
                     <div class="card h-100 border-0 shadow-sm">
                         <img src="../img/Empresa/Admin.png" class="card-img-top" alt="Personal administrativo"
@@ -245,11 +245,11 @@
 
 
 
-    <div th:replace="reusables :: flechita"></div>
+    <div th:replace="~{reusables :: flechita}"></div>
 
     <div th:replace="reusables :: footer_general"></div>
 
-    <script src="../js/main.js"></script>
+    <script th:src="@{/js/main.js}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 

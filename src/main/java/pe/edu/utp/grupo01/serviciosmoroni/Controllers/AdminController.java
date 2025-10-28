@@ -11,6 +11,9 @@ import pe.edu.utp.grupo01.serviciosmoroni.Models.*;
 import pe.edu.utp.grupo01.serviciosmoroni.Repositories.*;
 import pe.edu.utp.grupo01.serviciosmoroni.Servicios.ProyectoService;
 
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,7 +40,6 @@ public class AdminController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    
     @GetMapping("/dashboard")
     public String mostrarPanelAdmin(Model model) {
         model.addAttribute("titulo", "Panel de Administración");
@@ -45,7 +47,6 @@ public class AdminController {
         return "admin/dashboard";
     }
 
-    
     @GetMapping("/clientes")
     public String listarClientes(Model model) {
         model.addAttribute("titulo", "Gestión de Clientes");
@@ -54,7 +55,6 @@ public class AdminController {
         return "admin/clientes";
     }
 
-    
     @GetMapping("/perfil")
     public String mostrarPerfil(@AuthenticationPrincipal User user, Model model) {
         Cliente cliente = clienteRepositorio.findByEmailCliente(user.getUsername())
@@ -65,7 +65,12 @@ public class AdminController {
     }
 
     @PostMapping("/perfil")
-    public String editarPerfil(@AuthenticationPrincipal User user, @ModelAttribute("cliente") Cliente clienteForm) {
+    public String editarPerfil(@AuthenticationPrincipal User user,
+            @Valid @ModelAttribute("cliente") Cliente clienteForm, BindingResult result) {
+        if (result.hasErrors()) {
+            return "admin/editarPerfil";
+        }
+
         Cliente clienteExistente = clienteRepositorio.findByEmailCliente(user.getUsername())
                 .orElseThrow(() -> new IllegalStateException("Cliente no encontrado"));
 
@@ -82,7 +87,6 @@ public class AdminController {
         return "redirect:/admin/dashboard";
     }
 
-    
     @GetMapping("/proyectos")
     public String listarProyectos(@RequestParam(required = false) Integer clienteId, Model model) {
         List<Cliente> clientesUser = clienteRepositorio.findByRol("ROLE_USER");
@@ -106,14 +110,15 @@ public class AdminController {
         return "admin/proyectos";
     }
 
-    
     @PostMapping("/proyectos/actualizar")
-    public String actualizarProyecto(@ModelAttribute Proyecto proyecto) {
+    public String actualizarProyecto(@Valid @ModelAttribute Proyecto proyecto, BindingResult result) {
+        if (result.hasErrors()) {
+            return "admin/proyectos";
+        }
         proyectoService.actualizarProyecto(proyecto);
         return "redirect:/admin/proyectos";
     }
 
-    
     @GetMapping("/seguimientos")
     public String listarSeguimientos(Model model) {
         model.addAttribute("titulo", "Seguimientos de Proyectos");
@@ -124,34 +129,25 @@ public class AdminController {
     }
 
     @PostMapping("/seguimientos")
-    public String guardarSeguimiento(
-            @RequestParam Integer proyectoId,
-            @RequestParam String descripcion,
-            @RequestParam Integer porcentajeAvance) {
+    public String guardarSeguimiento(@Valid @ModelAttribute Seguimiento seguimiento, BindingResult result) {
+        if (result.hasErrors()) {
+            return "admin/seguimientos";
+        }
 
-        Proyecto proyecto = proyectoRepositorio.findById(proyectoId).orElse(null);
+        Proyecto proyecto = proyectoRepositorio.findById(seguimiento.getProyecto().getId())
+                .orElse(null);
 
         if (proyecto != null) {
-            if (porcentajeAvance < 0)
-                porcentajeAvance = 0;
-            if (porcentajeAvance > 100)
-                porcentajeAvance = 100;
+            if (seguimiento.getPorcentajeAvance() < 0)
+                seguimiento.setPorcentajeAvance(0);
+            if (seguimiento.getPorcentajeAvance() > 100)
+                seguimiento.setPorcentajeAvance(100);
 
-            Seguimiento seguimiento = new Seguimiento();
             seguimiento.setProyecto(proyecto);
-            seguimiento.setDescripcion(descripcion);
-            seguimiento.setPorcentajeAvance(porcentajeAvance);
             seguimiento.setFechaAvance(LocalDate.now());
-
             seguimientoRepositorio.save(seguimiento);
         }
 
-        return "redirect:/admin/seguimientos";
-    }
-
-    @PostMapping("/seguimientos/agregar")
-    public String agregarSeguimiento(@ModelAttribute Seguimiento nuevoSeguimiento) {
-        seguimientoRepositorio.save(nuevoSeguimiento);
         return "redirect:/admin/seguimientos";
     }
 
@@ -193,7 +189,11 @@ public class AdminController {
     }
 
     @PostMapping("/incidencias/guardar")
-    public String guardarIncidencia(@ModelAttribute Incidencia incidencia) {
+    public String guardarIncidencia(@Valid @ModelAttribute Incidencia incidencia, BindingResult result) {
+        if (result.hasErrors()) {
+            return "admin/formIncidencia";
+        }
+
         if (incidencia.getFecha() == null) {
             incidencia.setFecha(LocalDate.now());
         }

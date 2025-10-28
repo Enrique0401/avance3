@@ -5,7 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 import pe.edu.utp.grupo01.serviciosmoroni.Models.Contacto;
 import pe.edu.utp.grupo01.serviciosmoroni.Servicios.ContactoClienteService;
 
@@ -25,7 +26,11 @@ public class ContactoClienteController {
 
     @PostMapping("/enviar")
     @ResponseBody
-    public ResponseEntity<?> enviarFormulario(@RequestBody Contacto contactoCliente) {
+    public ResponseEntity<?> enviarFormulario(@Valid @RequestBody Contacto contactoCliente, BindingResult result) {
+        if (result.hasErrors()) {
+            return ResponseEntity.badRequest().body("{\"mensaje\":\"Datos inválidos, verifique los campos.\"}");
+        }
+
         try {
             contactoClienteService.guardar(contactoCliente);
             return ResponseEntity.ok().body("{\"mensaje\":\"¡Mensaje enviado correctamente!\"}");

@@ -7,7 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 import pe.edu.utp.grupo01.serviciosmoroni.Models.Cliente;
 import pe.edu.utp.grupo01.serviciosmoroni.Repositories.ClienteRepositorio;
 import pe.edu.utp.grupo01.serviciosmoroni.Repositories.ProyectoRepositorio;
@@ -32,7 +33,12 @@ public class ClienteController {
     }
 
     @PostMapping("/register")
-    public String registerCliente(@ModelAttribute("usuario") Cliente cliente, Model model) {
+    public String registerCliente(@Valid @ModelAttribute("usuario") Cliente cliente, BindingResult result,
+            Model model) {
+        if (result.hasErrors()) {
+            return "register";
+        }
+
         if (clienteRepositorio.existsByEmailCliente(cliente.getEmailCliente())
                 || clienteRepositorio.existsByRucCliente(cliente.getRucCliente())
                 || clienteRepositorio.existsByTelefonoCliente(cliente.getTelefonoCliente())) {
@@ -43,7 +49,6 @@ public class ClienteController {
 
         cliente.setContrasenaCliente(passwordEncoder.encode(cliente.getContrasenaCliente()));
         cliente.setRol("ROLE_USER");
-
         clienteRepositorio.save(cliente);
 
         return "redirect:/login?registrado";
@@ -62,17 +67,14 @@ public class ClienteController {
     public String mostrarMisProyectos(@AuthenticationPrincipal User user, Model model) {
         Cliente cliente = clienteRepositorio.findByEmailCliente(user.getUsername())
                 .orElseThrow(() -> new IllegalStateException("Cliente no encontrado"));
-
         model.addAttribute("proyectos", proyectoRepositorio.findByCliente_IdCliente(cliente.getIdCliente()));
         return "mis-proyectos";
     }
-
 
     @GetMapping("/editarPerfil")
     public String mostrarFormularioEditarPerfil(@AuthenticationPrincipal User user, Model model) {
         Cliente cliente = clienteRepositorio.findByEmailCliente(user.getUsername())
                 .orElseThrow(() -> new IllegalStateException("Cliente no encontrado"));
-
         model.addAttribute("cliente", cliente);
         model.addAttribute("currentPage", "perfil");
         return "editarPerfil";
@@ -80,10 +82,13 @@ public class ClienteController {
 
     @PostMapping("/editarPerfil")
     public String actualizarPerfil(@AuthenticationPrincipal User user,
-            @ModelAttribute("cliente") Cliente clienteForm) {
+            @Valid @ModelAttribute("cliente") Cliente clienteForm, BindingResult result) {
+        if (result.hasErrors()) {
+            return "editarPerfil";
+        }
+
         Cliente clienteExistente = clienteRepositorio.findByEmailCliente(user.getUsername())
                 .orElseThrow(() -> new IllegalStateException("Cliente no encontrado"));
-
 
         clienteExistente.setNombreCliente(clienteForm.getNombreCliente());
         clienteExistente.setEmailCliente(clienteForm.getEmailCliente());

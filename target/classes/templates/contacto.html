@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contacto - Servicios Moroni SCRL</title>
+
+    <!-- 🔗 Estilos -->
     <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css}" rel="stylesheet">
     <link th:href="@{https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css}" rel="stylesheet">
@@ -14,9 +16,10 @@
 
 <body>
 
+    <!-- 🧩 Header -->
     <div th:replace="~{reusables :: header_general(currentPage='contacto')}"></div>
 
-
+    <!-- 🟦 Sección principal -->
     <section class="bg-primary text-white py-5 text-center">
         <div class="container">
             <h1 class="display-5 fw-bold" data-aos="fade-down">Contáctenos</h1>
@@ -26,34 +29,51 @@
         </div>
     </section>
 
-
+    <!-- 📨 Formulario -->
     <section class="py-5">
         <div class="container">
             <div class="row">
+                <!-- FORMULARIO -->
                 <div class="col-lg-8 mb-5">
                     <div class="card shadow-sm" data-aos="fade-up">
                         <div class="card-body p-4">
                             <h3 class="fw-bold mb-4">Envíenos un mensaje</h3>
 
                             <form id="contactoForm" class="row g-3 needs-validation" novalidate>
+                                <!-- Nombre -->
                                 <div class="col-md-6 mb-3">
                                     <label for="nombre" class="form-label">Nombre completo</label>
                                     <input type="text" class="form-control" id="nombre" name="nombre" required>
                                     <div class="invalid-feedback">Por favor ingrese su nombre completo.</div>
                                 </div>
+
+                                <!-- Empresa -->
                                 <div class="col-md-6 mb-3">
                                     <label for="empresa" class="form-label">Empresa / Institución</label>
-                                    <input type="text" class="form-control" id="empresa" name="empresa">
+                                    <input type="text" class="form-control" id="empresa" name="empresa" required>
+                                    <div class="invalid-feedback">
+                                        Por favor ingrese un nombre de empresa o institución válido.
+                                    </div>
                                 </div>
+
+                                <!-- Email -->
                                 <div class="col-md-6 mb-3">
                                     <label for="email" class="form-label">Email</label>
                                     <input type="email" class="form-control" id="email" name="email" required>
                                     <div class="invalid-feedback">Ingrese un correo electrónico válido.</div>
                                 </div>
+
+                                <!-- Teléfono -->
                                 <div class="col-md-6 mb-3">
                                     <label for="telefono" class="form-label">Teléfono</label>
-                                    <input type="tel" class="form-control" id="telefono" name="telefono">
+                                    <input type="tel" class="form-control" id="telefono" name="telefono" required
+                                        maxlength="9">
+                                    <div class="invalid-feedback">
+                                        El teléfono debe iniciar con 9 y tener exactamente 9 dígitos numéricos.
+                                    </div>
                                 </div>
+
+                                <!-- Servicio -->
                                 <div class="col-12 mb-3">
                                     <label for="servicio" class="form-label">Servicio de interés</label>
                                     <select class="form-select" id="servicio" name="servicio" required>
@@ -65,33 +85,44 @@
                                     </select>
                                     <div class="invalid-feedback">Por favor seleccione un servicio.</div>
                                 </div>
+
+                                <!-- Mensaje -->
                                 <div class="col-12 mb-3">
                                     <label for="mensaje" class="form-label">Mensaje</label>
                                     <textarea class="form-control" id="mensaje" name="mensaje" rows="5"
                                         required></textarea>
-                                    <div class="invalid-feedback">Por favor ingrese su mensaje.</div>
+                                    <div class="invalid-feedback">
+                                        Por favor ingrese un mensaje válido (no solo espacios).
+                                    </div>
                                 </div>
+
+                                <!-- Botón -->
                                 <div class="col-12">
                                     <button type="submit" class="btn btn-primary btn-lg">Enviar mensaje</button>
                                 </div>
+
+                                <!-- Alerta -->
                                 <div id="alerta" class="mt-3" style="display:none;"></div>
                             </form>
                         </div>
                     </div>
                 </div>
 
+                <!-- INFORMACIÓN DE CONTACTO -->
                 <div class="col-lg-4">
                     <div class="card shadow-sm mb-4 text-center p-4" data-aos="fade-left">
                         <i class="bi bi-geo-alt display-4 text-primary mb-3"></i>
                         <h5 class="fw-bold">Ubicación</h5>
                         <p class="text-muted">CALLE 21 DE OCTUBRE #1349<br>FLORENCIA DE MORA - TRUJILLO</p>
                     </div>
+
                     <div class="card shadow-sm mb-4 text-center p-4" data-aos="fade-left" data-aos-delay="200">
                         <i class="bi bi-telephone display-4 text-primary mb-3"></i>
                         <h5 class="fw-bold">Teléfono</h5>
                         <p class="text-muted">924 353 323</p>
                         <a href="tel:924353323" class="btn btn-outline-primary">Llamar ahora</a>
                     </div>
+
                     <div class="card shadow-sm text-center p-4" data-aos="fade-left" data-aos-delay="400">
                         <i class="bi bi-envelope display-4 text-primary mb-3"></i>
                         <h5 class="fw-bold">Email</h5>
@@ -103,51 +134,47 @@
         </div>
     </section>
 
-    
+    <!-- 🗺️ MAPA -->
     <section class="py-5 bg-light">
         <div class="container">
             <div class="text-center mb-4">
-                <h2 class="fw-bold" data-aos="fade-down" data-aos-duration="1000">Nuestra Ubicación</h2>
-                <p class="text-muted" data-aos="zoom-in" data-aos-delay="300" data-aos-duration="1000">
+                <h2 class="fw-bold" data-aos="fade-down">Nuestra Ubicación</h2>
+                <p class="text-muted" data-aos="zoom-in" data-aos-delay="300">
                     Encuéntrenos fácilmente en Florencia de Mora - Trujillo
                 </p>
             </div>
-            <div class="card shadow-sm" data-aos="flip-left" data-aos-delay="600" data-aos-duration="1200">
+            <div class="card shadow-sm" data-aos="flip-left" data-aos-once="true">
                 <div class="card-body p-0">
                     <div class="ratio ratio-16x9">
                         <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3950.883365039986!2d-79.0402679250197!3d-8.086391680517366!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91ad3d7b2c8a7c1f%3A0x5e32fa9b5e2c7b0d!2sFlorencia%20de%20Mora%2C%20Trujillo!5e0!3m2!1ses!2spe!4v1699299999999!5m2!1ses!2spe"
-                            style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3950.2008472080597!2d-79.0238561!3d-8.0809883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91ad3df99e2ee75d%3A0xdd52bb8fad6e10f!2s21%20De%20Octubre%201349%2C%20Florencia%20de%20Mora%2013002!5e0!3m2!1ses-419!2spe!4v1761954490251!5m2!1ses-419!2spe"
+                            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="py-5">
-        <div class="container text-center">
-            <h2 class="fw-bold mb-4 text-primary" data-aos="zoom-in" data-aos-duration="800">¿Listo para comenzar?</h2>
-            <p class="lead mb-4 text-muted" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
-                Contáctenos hoy mismo para una evaluación sin costo de sus necesidades
-            </p>
-            <a href="tel:924353323" class="btn btn-primary btn-lg me-2" target="_blank" data-aos="fade-right"
-                data-aos-delay="400" data-aos-duration="1000"><i class="bi bi-telephone"></i> Llamar ahora</a>
-            <a href="https://wa.me/51924353323" class="btn btn-success btn-lg" target="_blank" data-aos="fade-left"
-                data-aos-delay="600" data-aos-duration="1000"><i class="bi bi-whatsapp"></i> WhatsApp</a>
+    <!-- 📞 CTA Final -->
+    <section class="py-5 text-center">
+        <div class="container">
+            <h2 class="fw-bold mb-4 text-primary">¿Listo para comenzar?</h2>
+            <p class="lead mb-4 text-muted">Contáctenos hoy mismo para una evaluación sin costo de sus necesidades</p>
+            <a href="tel:924353323" class="btn btn-primary btn-lg me-2"><i class="bi bi-telephone"></i> Llamar ahora</a>
+            <a href="https://wa.me/51924353323" class="btn btn-success btn-lg"><i class="bi bi-whatsapp"></i>
+                WhatsApp</a>
         </div>
     </section>
 
-
+    <!-- 🧩 Footer -->
     <div th:replace="~{reusables :: flechita}"></div>
-
     <div th:replace="~{reusables :: footer_general}"></div>
 
+    <!-- 🔧 Scripts -->
     <script th:src="@{/js/main.js}"></script>
-
     <script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js}"></script>
-
     <script th:src="@{https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js}"></script>
-
     <script th:src="@{/js/contacto.js}"></script>
 </body>
 

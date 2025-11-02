@@ -37,18 +37,18 @@ public class Cliente {
 
     @NotBlank(message = "La dirección es obligatoria")
     @Size(max = 150, message = "La dirección no debe superar los 150 caracteres")
-    @Column(name = "direccion_cliente", length = 150)
+    @Column(name = "direccion_cliente", nullable = false, length = 150)
     private String direccionCliente;
 
     @NotBlank(message = "El teléfono es obligatorio")
     @Pattern(regexp = "\\d{9}", message = "El teléfono debe tener 9 dígitos")
-    @Column(name = "telefono_cliente", unique = true, length = 9)
+    @Column(name = "telefono_cliente", nullable = false, unique = true, length = 9)
     private String telefonoCliente;
 
     @NotBlank(message = "El correo es obligatorio")
     @Email(message = "Debe ingresar un correo electrónico válido")
     @Size(max = 100, message = "El correo no debe superar los 100 caracteres")
-    @Column(name = "email_cliente", unique = true, length = 100)
+    @Column(name = "email_cliente", nullable = false, unique = true, length = 100)
     private String emailCliente;
 
     @NotBlank(message = "La contraseña es obligatoria")
@@ -56,12 +56,12 @@ public class Cliente {
     @Column(name = "contrasena_cliente", nullable = false, length = 255)
     private String contrasenaCliente;
 
-    @NotBlank(message = "El rol es obligatorio")
+    // 🔹 Rol con valor por defecto
     @Column(name = "rol", nullable = false, length = 20)
-    private String rol;
+    private String rol = "ROLE_USER";
 
+    // 🔹 Campo no persistente para confirmar contraseña
     @Transient
-    @NotBlank(message = "Debe confirmar la contraseña")
     private String confirmPassword;
 
     @Column(name = "fecha_registro", nullable = false, updatable = false)

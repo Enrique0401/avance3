@@ -18,12 +18,11 @@ public class PerfilController {
     public String perfil(Model model, Authentication authentication) {
         String email = authentication.getName();
 
-        Cliente cliente = clienteRepositorio.findByEmailCliente(email)
-                .orElse(null);
+        Cliente cliente = clienteRepositorio.findByEmailCliente(email).orElse(null);
 
         model.addAttribute("cliente", cliente);
         model.addAttribute("currentPage", "perfil");
-
+        
         return "perfil";
     }
 }

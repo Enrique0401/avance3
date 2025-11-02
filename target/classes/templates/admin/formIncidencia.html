@@ -49,7 +49,8 @@
 
                             <div class="mb-3">
                                 <label for="fecha" class="form-label fw-semibold">Fecha:</label>
-                                <input type="date" class="form-control" id="fecha" th:field="*{fecha}" required>
+                                <input type="date" class="form-control" id="fecha" th:value="${fechaFormateada}"
+                                    name="fecha" required>
                             </div>
 
                             <div class="mb-3">

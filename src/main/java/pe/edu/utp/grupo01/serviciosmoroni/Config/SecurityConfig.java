@@ -7,7 +7,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-
 import pe.edu.utp.grupo01.serviciosmoroni.Servicios.ClienteDetallesServicio;
 
 @Configuration
@@ -25,44 +24,30 @@ public class SecurityConfig {
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http
-
                                 .authorizeHttpRequests(auth -> auth
-
-                                                .requestMatchers(
-                                                                "/", "/inicio", "/galeria", "/empresa", "/servicios",
-                                                                "/contacto", "/contacto/enviar",
-                                                                "/contactoCliente", "/contactoCliente/enviar",
-                                                                "/login", "/clientes/register",
+                                                .requestMatchers("/", "/inicio", "/galeria", "/empresa", "/servicios",
+                                                                "/contacto", "/contacto/enviar", "/contactoCliente",
+                                                                "/contactoCliente/enviar",
+                                                                "/login", "/clientes/register", "/clientes/register/**",
                                                                 "/css/**", "/js/**", "/img/**", "/proyectos/**")
                                                 .permitAll()
-
-
                                                 .requestMatchers("/admin/**").hasRole("ADMIN")
-
-
                                                 .requestMatchers("/clientes/**").hasAnyRole("USER", "ADMIN")
-
-
                                                 .anyRequest().authenticated())
-
-
                                 .formLogin(form -> form
                                                 .loginPage("/login")
                                                 .usernameParameter("emailCliente")
                                                 .passwordParameter("contrasenaCliente")
                                                 .successHandler(loginSuccessHandler)
                                                 .permitAll())
-
-                                                
                                 .logout(logout -> logout
                                                 .logoutUrl("/logout")
                                                 .logoutSuccessUrl("/inicio")
                                                 .permitAll())
-                                                
-                                .userDetailsService(clienteDetallesServicio)
                                 .csrf(csrf -> csrf.ignoringRequestMatchers(
                                                 "/contacto/enviar",
-                                                "/contactoCliente/enviar"));
+                                                "/contactoCliente/enviar",
+                                                "/clientes/register"));
 
                 return http.build();
         }

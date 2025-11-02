@@ -60,6 +60,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
         <div class="container">
 
+            <!-- Logo -->
             <a class="navbar-brand d-flex align-items-center fw-bold text-primary" th:href="@{/perfil}">
                 <img th:src="@{/img/logo.png}" alt="Logo" class="me-2"
                     style="height: 40px; width: auto; object-fit: contain;">
@@ -70,46 +71,60 @@
                 aria-controls="navbarUserNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
+            <!-- Menú -->
             <div class="collapse navbar-collapse" id="navbarUserNav">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/perfil}"
                             th:classappend="${currentPage == 'perfil'} ? 'active text-danger fw-bold' : 'text-primary'">
                             Mi Perfil
                         </a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/proyectos}"
                             th:classappend="${currentPage == 'proyectos'} ? 'active text-danger fw-bold' : 'text-primary'">
                             Mis Proyectos
                         </a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/proyectos/solicitar}"
                             th:classappend="${currentPage == 'solicitar'} ? 'active text-danger fw-bold' : 'text-primary'">
                             Solicitar Proyecto
                         </a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/seguimiento}"
                             th:classappend="${currentPage == 'seguimiento'} ? 'active text-danger fw-bold' : 'text-primary'">
                             Seguimiento
                         </a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/incidencias}"
                             th:classappend="${currentPage == 'incidencias'} ? 'active text-danger fw-bold' : 'text-primary'">
-                            </i> Incidencias
+                            Incidencias
                         </a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/contactoCliente}"
                             th:classappend="${currentPage == 'contactoCliente'} ? 'active text-danger fw-bold' : 'text-primary'">
-                            </i> Contacto
+                            Contacto
                         </a>
                     </li>
                 </ul>
+
+                <!-- Usuario y cierre de sesión -->
                 <div class="ms-lg-3 mt-2 mt-lg-0 d-flex align-items-center">
+                    <div th:if="${clienteLogueado != null}" class="me-3">
+                        👋 Hola, <span th:text="${clienteLogueado.nombreCliente}"
+                            class="fw-semibold text-primary"></span>
+                    </div>
                     <div class="ms-lg-3 mt-2 mt-lg-0">
                         <a th:href="@{/inicio}" class="btn btn-outline-danger btn-sm">
                             Cerrar Sesión
@@ -117,8 +132,10 @@
                     </div>
                 </div>
             </div>
+        </div>
     </nav>
 </div>
+
 
 
 <div th:fragment="footer_usuario">

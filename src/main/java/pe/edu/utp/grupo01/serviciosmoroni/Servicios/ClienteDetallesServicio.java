@@ -6,8 +6,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import pe.edu.utp.grupo01.serviciosmoroni.Models.*;
-import pe.edu.utp.grupo01.serviciosmoroni.Repositories.*;
+import pe.edu.utp.grupo01.serviciosmoroni.Models.Cliente;
+import pe.edu.utp.grupo01.serviciosmoroni.Repositories.ClienteRepositorio;
 
 @Service
 public class ClienteDetallesServicio implements UserDetailsService {

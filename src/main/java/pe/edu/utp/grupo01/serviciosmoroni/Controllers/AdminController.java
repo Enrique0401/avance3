@@ -7,6 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import pe.edu.utp.grupo01.serviciosmoroni.Models.*;
 import pe.edu.utp.grupo01.serviciosmoroni.Repositories.*;
 import pe.edu.utp.grupo01.serviciosmoroni.Servicios.ProyectoService;
@@ -41,9 +43,13 @@ public class AdminController {
     private BCryptPasswordEncoder passwordEncoder;
 
     @GetMapping("/dashboard")
-    public String mostrarPanelAdmin(Model model) {
+    public String mostrarPanelAdmin(Model model,
+            @ModelAttribute("mensajeExito") String mensajeExito) {
         model.addAttribute("titulo", "Panel de Administración");
         model.addAttribute("mensaje", "Bienvenido al panel del administrador de Servicios Moroni S.C.R.L.");
+        if (mensajeExito != null && !mensajeExito.isEmpty()) {
+            model.addAttribute("mensajeExito", mensajeExito);
+        }
         return "admin/dashboard";
     }
 
@@ -65,27 +71,44 @@ public class AdminController {
     }
 
     @PostMapping("/perfil")
-    public String editarPerfil(@AuthenticationPrincipal User user,
-            @Valid @ModelAttribute("cliente") Cliente clienteForm, BindingResult result) {
-        if (result.hasErrors()) {
-            return "admin/editarPerfil";
-        }
+    public String editarPerfil(
+            @AuthenticationPrincipal User user,
+            @ModelAttribute("cliente") Cliente clienteForm,
+            RedirectAttributes redirectAttributes,
+            Model model) {
 
+        // Obtener el cliente existente por el email actual
         Cliente clienteExistente = clienteRepositorio.findByEmailCliente(user.getUsername())
                 .orElseThrow(() -> new IllegalStateException("Cliente no encontrado"));
 
+        // ✅ Actualizamos solo los campos que pueden editarse
         clienteExistente.setNombreCliente(clienteForm.getNombreCliente());
-        clienteExistente.setEmailCliente(clienteForm.getEmailCliente());
         clienteExistente.setTelefonoCliente(clienteForm.getTelefonoCliente());
         clienteExistente.setDireccionCliente(clienteForm.getDireccionCliente());
+        clienteExistente.setEmailCliente(clienteForm.getEmailCliente());
 
+        // ✅ Si el usuario escribió una nueva contraseña (opcional)
         if (clienteForm.getContrasenaCliente() != null && !clienteForm.getContrasenaCliente().isBlank()) {
             clienteExistente.setContrasenaCliente(passwordEncoder.encode(clienteForm.getContrasenaCliente()));
         }
 
+        // ✅ Mantener los campos que no aparecen en el formulario
+        if (clienteExistente.getRol() == null) {
+            clienteExistente.setRol("ROLE_ADMIN"); // o ROLE_USER si corresponde
+        }
+        if (clienteExistente.getRucCliente() == null) {
+            clienteExistente.setRucCliente("00000000000"); // Evita error de null si no aplica
+        }
+
         clienteRepositorio.save(clienteExistente);
+
+        redirectAttributes.addFlashAttribute("mensajeExito", "✅ Perfil actualizado correctamente.");
         return "redirect:/admin/dashboard";
     }
+
+    // ==========================
+    // Resto de métodos sin cambios
+    // ==========================
 
     @GetMapping("/proyectos")
     public String listarProyectos(@RequestParam(required = false) Integer clienteId, Model model) {
@@ -111,11 +134,19 @@ public class AdminController {
     }
 
     @PostMapping("/proyectos/actualizar")
-    public String actualizarProyecto(@Valid @ModelAttribute Proyecto proyecto, BindingResult result) {
-        if (result.hasErrors()) {
-            return "admin/proyectos";
-        }
-        proyectoService.actualizarProyecto(proyecto);
+    public String actualizarProyecto(@ModelAttribute Proyecto proyecto, RedirectAttributes redirectAttributes) {
+        // Buscar el proyecto existente
+        Proyecto existente = proyectoRepositorio.findById(proyecto.getId())
+                .orElseThrow(() -> new IllegalStateException("Proyecto no encontrado"));
+
+        // Actualizar solo los campos editables desde la vista
+        existente.setNombre(proyecto.getNombre());
+        existente.setEstado(proyecto.getEstado());
+        existente.setProgreso(proyecto.getProgreso());
+
+        proyectoRepositorio.save(existente);
+
+        redirectAttributes.addFlashAttribute("mensajeExito", "✅ Proyecto actualizado correctamente.");
         return "redirect:/admin/proyectos";
     }
 
@@ -129,25 +160,24 @@ public class AdminController {
     }
 
     @PostMapping("/seguimientos")
-    public String guardarSeguimiento(@Valid @ModelAttribute Seguimiento seguimiento, BindingResult result) {
-        if (result.hasErrors()) {
-            return "admin/seguimientos";
-        }
+    public String guardarSeguimiento(
+            @RequestParam("proyectoId") Integer proyectoId,
+            @RequestParam("descripcion") String descripcion,
+            @RequestParam("porcentajeAvance") Integer porcentajeAvance,
+            RedirectAttributes redirectAttributes) {
 
-        Proyecto proyecto = proyectoRepositorio.findById(seguimiento.getProyecto().getId())
-                .orElse(null);
+        Proyecto proyecto = proyectoRepositorio.findById(proyectoId)
+                .orElseThrow(() -> new IllegalStateException("Proyecto no encontrado"));
 
-        if (proyecto != null) {
-            if (seguimiento.getPorcentajeAvance() < 0)
-                seguimiento.setPorcentajeAvance(0);
-            if (seguimiento.getPorcentajeAvance() > 100)
-                seguimiento.setPorcentajeAvance(100);
+        Seguimiento seguimiento = new Seguimiento();
+        seguimiento.setProyecto(proyecto);
+        seguimiento.setDescripcion(descripcion);
+        seguimiento.setPorcentajeAvance(Math.max(0, Math.min(100, porcentajeAvance)));
+        seguimiento.setFechaAvance(LocalDate.now());
 
-            seguimiento.setProyecto(proyecto);
-            seguimiento.setFechaAvance(LocalDate.now());
-            seguimientoRepositorio.save(seguimiento);
-        }
+        seguimientoRepositorio.save(seguimiento);
 
+        redirectAttributes.addFlashAttribute("mensajeExito", "✅ Seguimiento registrado correctamente.");
         return "redirect:/admin/seguimientos";
     }
 
@@ -182,9 +212,15 @@ public class AdminController {
     public String editarIncidencia(@PathVariable Integer id, Model model) {
         Incidencia incidencia = incidenciaRepositorio.findById(id)
                 .orElseThrow(() -> new IllegalStateException("Incidencia no encontrada"));
+
+        // 🔹 Formatea la fecha (por si necesitas asegurar formato)
+        // aunque realmente no es necesario si usas LocalDate
+        model.addAttribute("fechaFormateada", incidencia.getFecha().toString());
+
         model.addAttribute("incidencia", incidencia);
         model.addAttribute("proyectos", proyectoRepositorio.findAll());
         model.addAttribute("titulo", "Editar Incidencia");
+
         return "admin/formIncidencia";
     }
 

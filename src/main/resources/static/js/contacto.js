@@ -1,109 +1,100 @@
-document.addEventListener("DOMContentLoaded", function () {
-
-    AOS.init({ duration: 1000, once: true });
-
-    const form = document.getElementById('contactoForm');
-
-    form.addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        if (!form.checkValidity()) {
-            form.classList.add('was-validated');
-            return;
-        }
-
-        const data = {
-            nombre: form.nombre.value,
-            empresa: form.empresa.value,
-            email: form.email.value,
-            telefono: form.telefono.value,
-            servicio: form.servicio.value,
-            mensaje: form.mensaje.value
-        };
-
-        fetch('/contacto/enviar', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        })
-            .then(res => res.json())
-            .then(res => {
-                const alerta = document.getElementById('alerta');
-                alerta.style.display = 'block';
-                alerta.innerHTML = `<div class="alert alert-success">${res.mensaje}</div>`;
-                form.reset();
-                form.classList.remove('was-validated');
-                AOS.refresh();
-            })
-            .catch(err => {
-                const alerta = document.getElementById('alerta');
-                alerta.style.display = 'block';
-                alerta.innerHTML = `<div class="alert alert-danger">Ocurrió un error, intente nuevamente.</div>`;
-            });
-    });
-});
-
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("contactoForm");
     const alerta = document.getElementById("alerta");
 
-    form.addEventListener("submit", function (e) {
+    form.addEventListener("submit", async (e) => {
         e.preventDefault();
         alerta.style.display = "none";
 
-        let valido = true;
-        const nombre = document.getElementById("nombre");
-        const email = document.getElementById("email");
-        const servicio = document.getElementById("servicio");
-        const mensaje = document.getElementById("mensaje");
-        const telefono = document.getElementById("telefono");
+        // === OBTENER Y LIMPIAR VALORES ===
+        const nombre = form.nombre.value.trim();
+        const empresa = form.empresa.value.trim();
+        const email = form.email.value.trim();
+        const telefono = form.telefono.value.trim();
+        const servicio = form.servicio.value;
+        const mensaje = form.mensaje.value.trim();
 
-        const limpiar = (valor) => valor.trim();
+        // === VALIDACIONES PERSONALIZADAS ===
+        if (!nombre || nombre.length === 0) return mostrarError("Por favor, ingrese su nombre completo.");
+        if (!empresa || empresa.length === 0) return mostrarError("Por favor, ingrese una empresa o institución válida.");
+        if (!validarEmail(email)) return mostrarError("Ingrese un correo electrónico válido.");
+        if (!/^9\d{8}$/.test(telefono)) return mostrarError("El teléfono debe iniciar con 9 y tener 9 dígitos numéricos.");
+        if (!servicio || servicio === "") return mostrarError("Seleccione un servicio de interés.");
+        if (!mensaje || mensaje.length === 0) return mostrarError("Por favor, ingrese su mensaje.");
 
-        [nombre, email, servicio, mensaje].forEach(campo => {
-            campo.value = limpiar(campo.value);
-            if (!campo.value) {
-                campo.classList.add("is-invalid");
-                valido = false;
+        // === ENVIAR DATOS ===
+        const data = { nombre, empresa, email, telefono, servicio, mensaje };
+
+        try {
+            const response = await fetch("/contacto/enviar", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                mostrarExito(result.mensaje);
+                form.reset();
+
+                // 🔹 Limpiar validaciones visuales
+                form.classList.remove("was-validated");
+                document.querySelectorAll(".is-valid, .is-invalid").forEach(campo => {
+                    campo.classList.remove("is-valid", "is-invalid");
+                });
             } else {
-                campo.classList.remove("is-invalid");
+                mostrarError(result.mensaje || "Ocurrió un error al enviar el mensaje.");
+            }
+        } catch (error) {
+            mostrarError("❌ Error al conectar con el servidor.");
+            console.error("Error:", error);
+        }
+    });
+
+    // === VALIDAR EMAIL ===
+    function validarEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    // === MOSTRAR ERROR ===
+    function mostrarError(mensaje) {
+        alerta.style.display = "block";
+        alerta.className = "alert alert-danger mt-3";
+        alerta.innerText = mensaje;
+        setTimeout(() => (alerta.style.display = "none"), 4000);
+    }
+
+    // === MOSTRAR ÉXITO ===
+    function mostrarExito(mensaje) {
+        alerta.style.display = "block";
+        alerta.className = "alert alert-success mt-3";
+        alerta.innerText = mensaje;
+        setTimeout(() => (alerta.style.display = "none"), 4000);
+    }
+
+    // === SOLO NÚMEROS EN TELÉFONO ===
+    const inputTel = document.getElementById("telefono");
+    inputTel.addEventListener("input", (e) => {
+        e.target.value = e.target.value.replace(/[^0-9]/g, "");
+        if (e.target.value.length > 9) e.target.value = e.target.value.slice(0, 9);
+    });
+
+    // === VALIDACIÓN VISUAL DE CAMPOS DE TEXTO ===
+    const camposTexto = ["nombre", "empresa", "mensaje"];
+    camposTexto.forEach((id) => {
+        const input = document.getElementById(id);
+        input.addEventListener("input", () => {
+            if (input.value.trim().length === 0) {
+                input.classList.add("is-invalid");
+                input.classList.remove("is-valid");
+            } else {
+                input.classList.remove("is-invalid");
+                input.classList.add("is-valid");
             }
         });
-
-        const telVal = limpiar(telefono.value);
-        if (telVal && !/^9\d{8}$/.test(telVal)) {
-            telefono.classList.add("is-invalid");
-            telefono.nextElementSibling.textContent = "El teléfono debe comenzar con 9 y tener exactamente 9 dígitos.";
-            valido = false;
-        } else {
-            telefono.classList.remove("is-invalid");
-        }
-
-        const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value);
-        if (!emailValido) {
-            email.classList.add("is-invalid");
-            valido = false;
-        } else {
-            email.classList.remove("is-invalid");
-        }
-
-        if (!valido) {
-            alerta.style.display = "block";
-            alerta.className = "alert alert-danger";
-            alerta.textContent = "Por favor corrija los campos marcados antes de enviar.";
-            return;
-        }
-
-        alerta.style.display = "block";
-        alerta.className = "alert alert-success";
-        alerta.textContent = "Mensaje enviado correctamente.";
-        form.reset();
     });
 
-    document.getElementById("telefono").addEventListener("input", function () {
-        this.value = this.value.replace(/\D/g, "");
-        if (this.value.length > 9) {
-            this.value = this.value.slice(0, 9);
-        }
-    });
+    // === Inicializar AOS ===
+    AOS.init({ once: true });
 });

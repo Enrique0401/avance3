@@ -1,4 +1,4 @@
-
+// --- Mostrar/Ocultar contraseña ---
 function togglePassword(inputId, iconId) {
     const input = document.getElementById(inputId);
     const icon = document.getElementById(iconId);
@@ -6,97 +6,106 @@ function togglePassword(inputId, iconId) {
 
     if (input.type === "password") {
         input.type = "text";
-        icon.classList.remove("bi-eye");
-        icon.classList.add("bi-eye-slash");
+        icon.classList.replace("bi-eye", "bi-eye-slash");
     } else {
         input.type = "password";
-        icon.classList.remove("bi-eye-slash");
-        icon.classList.add("bi-eye");
+        icon.classList.replace("bi-eye-slash", "bi-eye");
     }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    const form = document.querySelector('form[th\\:action="@{/clientes/register}"]') || document.querySelector("form");
-    if (!form) return;
+// --- Todo el código bajo un único DOMContentLoaded ---
+document.addEventListener("DOMContentLoaded", () => {
 
-    const nombre = document.getElementById("nombreCliente");
-    const ruc = document.getElementById("rucCliente");
-    const telefono = document.getElementById("telefonoCliente");
-    const email = document.getElementById("emailCliente");
-    const direccion = document.getElementById("direccionCliente");
-    const pass = document.getElementById("contrasenaCliente");
-    const confirm = document.getElementById("confirmPassword");
+    /* =======================================================
+       VALIDACIÓN DE FORMULARIO DE REGISTRO (CON RUC)
+    ======================================================= */
+    const form = document.querySelector('form[action*="clientes/register"]');
+    if (form) {
+        const nombre = document.getElementById("nombreCliente");
+        const ruc = document.getElementById("rucCliente");
+        const telefono = document.getElementById("telefonoCliente");
+        const email = document.getElementById("emailCliente");
+        const direccion = document.getElementById("direccionCliente");
+        const pass = document.getElementById("contrasenaCliente");
+        const confirm = document.getElementById("confirmPassword");
 
-    form.addEventListener("submit", function (e) {
-        let valido = true;
+        // Solo números para RUC y Teléfono
+        const soloNumeros = (input, maxLength) => {
+            if (!input) return;
+            input.addEventListener("input", function () {
+                this.value = this.value.replace(/\D/g, "").slice(0, maxLength);
+            });
+        };
+        soloNumeros(ruc, 11);
+        soloNumeros(telefono, 9);
 
-        const limpiar = (v) => v.trim();
+        // Validación al enviar formulario
+        form.addEventListener("submit", (e) => {
+            let valido = true;
+            const limpiar = (v) => v.trim();
 
-        [nombre, ruc, telefono, email, direccion, pass, confirm].forEach(campo => {
-            campo.value = limpiar(campo.value);
-            if (!campo.value) {
-                campo.classList.add("is-invalid");
+            // Validar campos vacíos
+            [nombre, ruc, telefono, email, direccion, pass, confirm].forEach(campo => {
+                if (!campo) return;
+                campo.value = limpiar(campo.value);
+                if (!campo.value) {
+                    campo.classList.add("is-invalid");
+                    valido = false;
+                } else {
+                    campo.classList.remove("is-invalid");
+                }
+            });
+
+            // Validar RUC: 11 dígitos
+            if (ruc && !/^\d{11}$/.test(ruc.value)) {
+                ruc.classList.add("is-invalid");
                 valido = false;
-            } else {
-                campo.classList.remove("is-invalid");
+            } else if (ruc) {
+                ruc.classList.remove("is-invalid");
+            }
+
+            // Validar teléfono: 9 dígitos y empieza con 9
+            if (telefono && !/^9\d{8}$/.test(telefono.value)) {
+                telefono.classList.add("is-invalid");
+                valido = false;
+            } else if (telefono) {
+                telefono.classList.remove("is-invalid");
+            }
+
+            // Validar email
+            if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+                email.classList.add("is-invalid");
+                valido = false;
+            } else if (email) {
+                email.classList.remove("is-invalid");
+            }
+
+            // Validar contraseñas
+            if (pass && confirm) {
+                if (pass.value !== confirm.value) {
+                    confirm.classList.add("is-invalid");
+                    confirm.setCustomValidity("Las contraseñas no coinciden");
+                    valido = false;
+                } else {
+                    confirm.classList.remove("is-invalid");
+                    confirm.setCustomValidity("");
+                }
+            }
+
+            if (!valido) {
+                e.preventDefault();
+                e.stopPropagation();
             }
         });
+    }
 
-        if (!/^\d{11}$/.test(ruc.value)) {
-            ruc.classList.add("is-invalid");
-            valido = false;
-        } else {
-            ruc.classList.remove("is-invalid");
-        }
-
-        if (!/^9\d{8}$/.test(telefono.value)) {
-            telefono.classList.add("is-invalid");
-            valido = false;
-        } else {
-            telefono.classList.remove("is-invalid");
-        }
-
-        const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value);
-        if (!emailValido) {
-            email.classList.add("is-invalid");
-            valido = false;
-        } else {
-            email.classList.remove("is-invalid");
-        }
-
-        if (pass.value !== confirm.value) {
-            confirm.classList.add("is-invalid");
-            confirm.setCustomValidity("Las contraseñas no coinciden");
-            valido = false;
-        } else {
-            confirm.classList.remove("is-invalid");
-            confirm.setCustomValidity("");
-        }
-
-        if (!valido) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-    });
-
-    [ruc, telefono].forEach(input => {
-        input.addEventListener("input", function () {
-            this.value = this.value.replace(/\D/g, ""); // Solo números
-            if (this.id === "telefonoCliente" && this.value.length > 9)
-                this.value = this.value.slice(0, 9);
-            if (this.id === "rucCliente" && this.value.length > 11)
-                this.value = this.value.slice(0, 11);
-        });
-    });
-});
-
-
-document.addEventListener("DOMContentLoaded", () => {
-    const progresoInputs = document.querySelectorAll(".progreso-input");
-
-    progresoInputs.forEach(input => {
+    /* =======================================================
+       ESTADO DE PROGRESO EN TABLAS
+    ======================================================= */
+    document.querySelectorAll(".progreso-input").forEach(input => {
         const fila = input.closest("tr");
-        const estadoInput = fila.querySelector(".estado-input");
+        const estadoInput = fila?.querySelector(".estado-input");
+        if (!estadoInput) return;
 
         const actualizarEstado = (valor) => {
             const progreso = parseInt(valor) || 0;
@@ -114,43 +123,29 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         };
 
-
         actualizarEstado(input.value);
-
-
         input.addEventListener("input", e => actualizarEstado(e.target.value));
     });
-});
 
-
-document.addEventListener("DOMContentLoaded", () => {
-    const barras = document.querySelectorAll(".progress-bar");
-
-    barras.forEach(barra => {
+    /* =======================================================
+       COLORES DINÁMICOS EN BARRAS DE PROGRESO
+    ======================================================= */
+    document.querySelectorAll(".progress-bar").forEach(barra => {
         const porcentaje = parseInt(barra.textContent) || 0;
         barra.classList.remove("bg-danger", "bg-warning", "bg-info", "bg-success");
 
-        if (porcentaje === 100) {
-            barra.classList.add("bg-success");
-        } else if (porcentaje >= 70) {
-            barra.classList.add("bg-info");
-        } else if (porcentaje >= 40) {
-            barra.classList.add("bg-warning");
-        } else {
-            barra.classList.add("bg-danger");
-        }
+        if (porcentaje === 100) barra.classList.add("bg-success");
+        else if (porcentaje >= 70) barra.classList.add("bg-info");
+        else if (porcentaje >= 40) barra.classList.add("bg-warning");
+        else barra.classList.add("bg-danger");
     });
-});
 
-document.addEventListener("DOMContentLoaded", () => {
-
+    /* =======================================================
+       SIDEBAR MÓVIL Y SELECTS
+    ======================================================= */
     document.querySelectorAll("select").forEach(sel => sel.classList.add("shadow-sm"));
 
-
-    window.confirmarEliminacion = function () {
-        return confirm("¿Estás seguro de que deseas eliminar esta incidencia?");
-    };
-
+    window.confirmarEliminacion = () => confirm("¿Estás seguro de que deseas eliminar esta incidencia?");
 
     const mobileSidebar = document.getElementById("mobileSidebar");
     if (mobileSidebar) {
@@ -159,32 +154,22 @@ document.addEventListener("DOMContentLoaded", () => {
             scroll: false,
             keyboard: true
         });
-
-        
         mobileSidebar.querySelectorAll(".nav-link").forEach(link => {
             link.addEventListener("click", () => offcanvasInstance.hide());
         });
     }
-});
 
-
-document.addEventListener("DOMContentLoaded", function () {
+    /* =======================================================
+       BOTÓN "VOLVER ARRIBA"
+    ======================================================= */
     const scrollToTopBtn = document.getElementById("scrollToTopBtn");
-
-    if (!scrollToTopBtn) return;
-
-    window.addEventListener("scroll", function () {
-        if (window.scrollY > 200) {
-            scrollToTopBtn.classList.remove("d-none");
-        } else {
-            scrollToTopBtn.classList.add("d-none");
-        }
-    });
-
-    scrollToTopBtn.addEventListener("click", function () {
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
+    if (scrollToTopBtn) {
+        window.addEventListener("scroll", () => {
+            scrollToTopBtn.classList.toggle("d-none", window.scrollY <= 200);
         });
-    });
+
+        scrollToTopBtn.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    }
 });

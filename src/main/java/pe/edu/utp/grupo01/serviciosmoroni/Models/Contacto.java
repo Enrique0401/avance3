@@ -28,6 +28,7 @@ public class Contacto {
     private String nombre;
 
     @NotBlank(message = "El nombre de la empresa es obligatorio")
+    @Pattern(regexp = "^(?!\\s*$).+", message = "La empresa o institución no puede estar vacía o contener solo espacios")
     @Size(max = 100, message = "El nombre de la empresa no debe superar los 100 caracteres")
     @Column(nullable = false, length = 100)
     private String empresa;
@@ -39,7 +40,7 @@ public class Contacto {
     private String email;
 
     @NotBlank(message = "El teléfono es obligatorio")
-    @Pattern(regexp = "\\d{9}", message = "El teléfono debe tener 9 dígitos")
+    @Pattern(regexp = "^9\\d{8}$", message = "El teléfono debe iniciar con 9 y tener 9 dígitos numéricos")
     @Column(nullable = false, length = 9)
     private String telefono;
 
@@ -49,6 +50,7 @@ public class Contacto {
     private String servicio;
 
     @NotBlank(message = "El mensaje es obligatorio")
+    @Pattern(regexp = "^(?!\\s*$).+", message = "El mensaje no puede estar vacío o contener solo espacios")
     @Size(max = 500, message = "El mensaje no debe superar los 500 caracteres")
     @Column(nullable = false, length = 500)
     private String mensaje;

@@ -61,7 +61,7 @@ public class ClienteController {
         return "redirect:/login?registrado";
     }
 
-    // 🔹 Ver perfil del cliente logueado
+    // Ver perfil del cliente logueado
     @GetMapping("/perfil")
     public String verMiPerfil(@AuthenticationPrincipal User user, Model model) {
         Cliente cliente = clienteRepositorio.findByEmailCliente(user.getUsername())
@@ -71,7 +71,7 @@ public class ClienteController {
         return "perfil";
     }
 
-    // 🔹 Ver proyectos del cliente
+    // Ver proyectos del cliente
     @GetMapping("/mis-proyectos")
     public String mostrarMisProyectos(@AuthenticationPrincipal User user, Model model) {
         Cliente cliente = clienteRepositorio.findByEmailCliente(user.getUsername())
@@ -80,7 +80,7 @@ public class ClienteController {
         return "mis-proyectos";
     }
 
-    // 🔹 Mostrar formulario para editar perfil
+    // Mostrar formulario para editar perfil
     @GetMapping("/editarPerfil")
     public String mostrarFormularioEditarPerfil(@AuthenticationPrincipal User user, Model model) {
         Cliente cliente = clienteRepositorio.findByEmailCliente(user.getUsername())
@@ -90,7 +90,7 @@ public class ClienteController {
         return "editarPerfil";
     }
 
-    // 🔹 Procesar actualización de perfil
+    // Procesar actualización de perfil
     @PostMapping("/editarPerfil")
     public String actualizarPerfil(@AuthenticationPrincipal User user,
             @ModelAttribute("cliente") Cliente clienteForm, Model model) {
@@ -98,7 +98,7 @@ public class ClienteController {
         Cliente clienteExistente = clienteRepositorio.findByEmailCliente(user.getUsername())
                 .orElseThrow(() -> new IllegalStateException("Cliente no encontrado"));
 
-        // ✅ Actualizar solo campos editables
+        // Actualizar solo campos editables
         clienteExistente.setNombreCliente(clienteForm.getNombreCliente());
         clienteExistente.setTelefonoCliente(clienteForm.getTelefonoCliente());
         clienteExistente.setDireccionCliente(clienteForm.getDireccionCliente());

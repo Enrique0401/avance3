@@ -1,28 +1,37 @@
 package pe.edu.utp.grupo01.serviciosmoroni.Controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import pe.edu.utp.grupo01.serviciosmoroni.Models.*;
-import pe.edu.utp.grupo01.serviciosmoroni.Repositories.*;
-
-import jakarta.validation.Valid;
-import org.springframework.validation.BindingResult;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Controller
-@RequestMapping("/admin")
-public class AdminController {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.validation.Valid;
+import pe.edu.utp.grupo01.serviciosmoroni.Models.Cliente;
+import pe.edu.utp.grupo01.serviciosmoroni.Models.Incidencia;
+import pe.edu.utp.grupo01.serviciosmoroni.Models.Proyecto;
+import pe.edu.utp.grupo01.serviciosmoroni.Models.Seguimiento;
+import pe.edu.utp.grupo01.serviciosmoroni.Repositories.ClienteRepositorio;
+import pe.edu.utp.grupo01.serviciosmoroni.Repositories.IncidenciaRepository;
+import pe.edu.utp.grupo01.serviciosmoroni.Repositories.ProyectoRepositorio;
+import pe.edu.utp.grupo01.serviciosmoroni.Repositories.SeguimientoRepository;
+
+@Controller
+@RequestMapping("/supervisor")
+public class SupervisorController {
     @Autowired
     private ClienteRepositorio clienteRepositorio;
 
@@ -46,7 +55,7 @@ public class AdminController {
         if (mensajeExito != null && !mensajeExito.isEmpty()) {
             model.addAttribute("mensajeExito", mensajeExito);
         }
-        return "admin/dashboard";
+        return "supervisor/dashboard";
     }
 
     @GetMapping("/clientes")
@@ -54,15 +63,7 @@ public class AdminController {
         model.addAttribute("titulo", "Gestión de Clientes");
         model.addAttribute("currentPage", "clientes");
         model.addAttribute("clientes", clienteRepositorio.findByRol("ROLE_USER"));
-        return "admin/clientes";
-    }
-
-    @GetMapping("/supervisores")
-    public String listarSupervisores(Model model) {
-        model.addAttribute("titulo", "Gestión de Clientes");
-        model.addAttribute("currentPage", "clientes");
-        model.addAttribute("clientes", clienteRepositorio.findByRol("ROLE_VISOR"));
-        return "admin/supervisores";
+        return "supervisor/clientes";
     }
 
     @GetMapping("/perfil")
@@ -71,7 +72,7 @@ public class AdminController {
                 .orElseThrow(() -> new IllegalStateException("Cliente no encontrado"));
         model.addAttribute("cliente", cliente);
         model.addAttribute("titulo", "Editar Perfil");
-        return "admin/editarPerfil";
+        return "supervisor/editarPerfil";
     }
 
     @PostMapping("/perfil")
@@ -98,7 +99,7 @@ public class AdminController {
 
         // Mantener los campos que no aparecen en el formulario
         if (clienteExistente.getRol() == null) {
-            clienteExistente.setRol("ROLE_ADMIN"); // o ROLE_USER si corresponde
+            clienteExistente.setRol("ROLE_VISOR"); // o ROLE_USER si corresponde
         }
         if (clienteExistente.getRucCliente() == null) {
             clienteExistente.setRucCliente("00000000000"); // Evita error de null si no aplica
@@ -107,7 +108,7 @@ public class AdminController {
         clienteRepositorio.save(clienteExistente);
 
         redirectAttributes.addFlashAttribute("mensajeExito", "✅ Perfil actualizado correctamente.");
-        return "redirect:/admin/dashboard";
+        return "redirect:/supervisor/dashboard";
     }
 
     // ==========================
@@ -132,9 +133,9 @@ public class AdminController {
         model.addAttribute("clientesUser", clientesUser);
         model.addAttribute("proyectos", proyectos);
         model.addAttribute("selectedClienteId", clienteId);
-        model.addAttribute("currentPage", "adminProyectos");
+        model.addAttribute("currentPage", "supervisorProyectos");
 
-        return "admin/proyectos";
+        return "supervisor/proyectos";
     }
 
     @PostMapping("/proyectos/actualizar")
@@ -151,7 +152,7 @@ public class AdminController {
         proyectoRepositorio.save(existente);
 
         redirectAttributes.addFlashAttribute("mensajeExito", "✅ Proyecto actualizado correctamente.");
-        return "redirect:/admin/proyectos";
+        return "redirect:/supervisor/proyectos";
     }
 
     @GetMapping("/seguimientos")
@@ -160,7 +161,7 @@ public class AdminController {
         model.addAttribute("currentPage", "seguimientos");
         model.addAttribute("proyectos", proyectoRepositorio.findAll());
         model.addAttribute("seguimientos", seguimientoRepositorio.findAll());
-        return "admin/seguimientos";
+        return "supervisor/seguimientos";
     }
 
     @PostMapping("/seguimientos")
@@ -182,7 +183,7 @@ public class AdminController {
         seguimientoRepositorio.save(seguimiento);
 
         redirectAttributes.addFlashAttribute("mensajeExito", "✅ Seguimiento registrado correctamente.");
-        return "redirect:/admin/seguimientos";
+        return "redirect:/supervisor/seguimientos";
     }
 
     @GetMapping("/incidencias")
@@ -201,7 +202,7 @@ public class AdminController {
         model.addAttribute("incidencias", incidencias);
         model.addAttribute("proyectoSeleccionado", proyectoId);
         model.addAttribute("currentPage", "incidencias");
-        return "admin/incidencias";
+        return "supervisor/incidencias";
     }
 
     @GetMapping("/incidencias/nueva")
@@ -209,7 +210,7 @@ public class AdminController {
         model.addAttribute("incidencia", new Incidencia());
         model.addAttribute("proyectos", proyectoRepositorio.findAll());
         model.addAttribute("titulo", "Registrar Incidencia");
-        return "admin/formIncidencia";
+        return "supervisor/formIncidencia";
     }
 
     @GetMapping("/incidencias/editar/{id}")
@@ -225,19 +226,19 @@ public class AdminController {
         model.addAttribute("proyectos", proyectoRepositorio.findAll());
         model.addAttribute("titulo", "Editar Incidencia");
 
-        return "admin/formIncidencia";
+        return "supervisor/formIncidencia";
     }
 
     @PostMapping("/incidencias/guardar")
     public String guardarIncidencia(@Valid @ModelAttribute Incidencia incidencia, BindingResult result) {
         if (result.hasErrors()) {
-            return "admin/formIncidencia";
+            return "supervisor/formIncidencia";
         }
 
         if (incidencia.getFecha() == null) {
             incidencia.setFecha(LocalDate.now());
         }
         incidenciaRepositorio.save(incidencia);
-        return "redirect:/admin/incidencias";
+        return "redirect:/supervisor/incidencias";
     }
 }

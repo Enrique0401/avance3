@@ -250,6 +250,7 @@ footer .d-flex a {
 @media (max-width: 991px) {
     .admin-layout {
         flex-direction: column;
+        align-items: center;
     }
 
     .sidebar-container {
@@ -263,6 +264,11 @@ footer .d-flex a {
 
     .main-content {
         padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        width: 100%;
     }
 
     footer {

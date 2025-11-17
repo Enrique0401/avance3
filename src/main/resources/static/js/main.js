@@ -100,27 +100,35 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* =======================================================
-       ESTADO DE PROGRESO EN TABLAS
+           ESTADO DE PROGRESO EN TABLAS CON COLOR DINÁMICO
     ======================================================= */
     document.querySelectorAll(".progreso-input").forEach(input => {
         const fila = input.closest("tr");
         const estadoInput = fila?.querySelector(".estado-input");
-        if (!estadoInput) return;
+        const progressBar = fila?.querySelector(".progress-bar");
+
+        if (!estadoInput || !progressBar) return;
 
         const actualizarEstado = (valor) => {
             const progreso = parseInt(valor) || 0;
             estadoInput.classList.remove("text-success", "text-warning", "text-info");
+            progressBar.classList.remove("bg-danger", "bg-warning", "bg-success", "bg-secondary");
 
             if (progreso === 100) {
                 estadoInput.value = "Finalizado";
                 estadoInput.classList.add("text-success");
+                progressBar.classList.add("bg-success");
             } else if (progreso > 0 && progreso < 100) {
                 estadoInput.value = "En progreso";
                 estadoInput.classList.add("text-warning");
+                progressBar.classList.add("bg-warning");
             } else {
                 estadoInput.value = "Pendiente";
                 estadoInput.classList.add("text-info");
+                progressBar.classList.add("bg-danger");
             }
+
+            progressBar.style.width = progreso + "%";
         };
 
         actualizarEstado(input.value);

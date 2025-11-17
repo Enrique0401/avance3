@@ -13,12 +13,12 @@
 
 <body class="bg-light">
 
-    <div th:replace="~{reusables :: header-admin}"></div>
+    <div th:replace="~{reusables :: header-visor}"></div>
 
     <div class="container-fluid">
         <div class="row my-4">
 
-            <div th:replace="~{reusables :: sidebar-admin}"></div>
+            <div th:replace="~{reusables :: sidebar-visor}"></div>
 
             <main class="col-md-10 p-4" style="min-height: 100vh; background-color: #f8fafc;">
 
@@ -26,7 +26,7 @@
                     <h2 class="fw-bold text-success mb-0">
                         <i class="bi bi-people-fill me-2"></i> Gestión de Clientes
                     </h2>
-                    <a th:href="@{/admin/dashboard}" class="btn btn-outline-secondary btn-sm">
+                    <a th:href="@{/supervisor/dashboard}" class="btn btn-outline-secondary btn-sm">
                         <i class="bi bi-arrow-left"></i> Volver
                     </a>
                 </div>
@@ -53,7 +53,7 @@
                                         <th scope="col">Fecha Registro</th>
                                     </tr>
                                 </thead>
-                                <tbody class="text-center">
+                                <tbody>
                                     <tr th:each="c : ${clientes}">
                                         <td th:text="${c.idCliente}">1</td>
                                         <td th:text="${c.nombreCliente}">Nombre</td>
@@ -63,8 +63,8 @@
                                         <td th:text="${c.direccionCliente}">Av. Ejemplo 123</td>
                                         <td>
                                             <span
-                                                th:classappend="${c.rol == 'ROLE_ADMIN'} ? 'badge bg-danger' : 'badge bg-success'"
-                                                th:text="${c.rol == 'ROLE_ADMIN'} ? 'ADMIN' : 'USUARIO'">
+                                                th:classappend="${c.rol == 'ROLE_VISOR'} ? 'badge bg-danger' : 'badge bg-success'"
+                                                th:text="${c.rol == 'ROLE_VISOR'} ? 'VISOR' : 'USER'">
                                                 USER
                                             </span>
                                         </td>
@@ -89,7 +89,7 @@
     </div>
 
 
-    <footer th:replace="~{reusables :: footer-admin}"></footer>
+    <footer th:replace="~{reusables :: footer-visor}"></footer>
 
     <div th:replace="~{reusables :: flechita}"></div>
 

@@ -82,29 +82,53 @@ public class SupervisorController {
             RedirectAttributes redirectAttributes,
             Model model) {
 
-        // Obtener el cliente existente por el email actual
+        // Obtener el cliente autenticado según su email actual
         Cliente clienteExistente = clienteRepositorio.findByEmailCliente(user.getUsername())
                 .orElseThrow(() -> new IllegalStateException("Cliente no encontrado"));
 
-        // Actualizamos solo los campos que pueden editarse
+        // ===============================
+        // 🔹 1. Actualizar datos editables
+        // ===============================
+
         clienteExistente.setNombreCliente(clienteForm.getNombreCliente());
         clienteExistente.setTelefonoCliente(clienteForm.getTelefonoCliente());
         clienteExistente.setDireccionCliente(clienteForm.getDireccionCliente());
-        clienteExistente.setEmailCliente(clienteForm.getEmailCliente());
 
-        // Si el usuario escribió una nueva contraseña (opcional)
+        // ===============================
+        // 🔹 2. Validación y cambio de email
+        // ===============================
+        String nuevoEmail = clienteForm.getEmailCliente();
+
+        if (nuevoEmail != null && !nuevoEmail.isBlank()
+                && !nuevoEmail.equals(clienteExistente.getEmailCliente())) {
+
+            if (clienteRepositorio.existsByEmailCliente(nuevoEmail)) {
+                redirectAttributes.addFlashAttribute("errorEmail", "❌ El correo ya está en uso.");
+                return "redirect:/supervisor/perfil";
+            }
+
+            clienteExistente.setEmailCliente(nuevoEmail);
+        }
+
+        // ===============================
+        // 🔹 3. Cambiar contraseña solo si se ingresó una nueva
+        // ===============================
         if (clienteForm.getContrasenaCliente() != null && !clienteForm.getContrasenaCliente().isBlank()) {
             clienteExistente.setContrasenaCliente(passwordEncoder.encode(clienteForm.getContrasenaCliente()));
         }
 
-        // Mantener los campos que no aparecen en el formulario
+        // ===============================
+        // 🔹 4. Mantener campos internos que no deben cambiar
+        // ===============================
         if (clienteExistente.getRol() == null) {
-            clienteExistente.setRol("ROLE_VISOR"); // o ROLE_USER si corresponde
-        }
-        if (clienteExistente.getRucCliente() == null) {
-            clienteExistente.setRucCliente("00000000000"); // Evita error de null si no aplica
+            clienteExistente.setRol("ROLE_VISOR"); // asegura que no quede en null
         }
 
+        // Ya NO usas RUC, así que eliminamos esa parte
+
+        // ===============================
+        // 🔹 5. Guardar cambios
+        // ===============================
         clienteRepositorio.save(clienteExistente);
 
         redirectAttributes.addFlashAttribute("mensajeExito", "✅ Perfil actualizado correctamente.");

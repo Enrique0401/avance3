@@ -52,6 +52,18 @@
                                 <input type="text" th:field="*{nombreCliente}" class="form-control" required>
                             </div>
 
+                            <!-- Tipo de documento (readonly) -->
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Tipo de documento</label>
+                                <input type="text" th:field="*{tipoDocumento}" class="form-control" readonly>
+                            </div>
+
+                            <!-- Número de documento (readonly) -->
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Número de documento</label>
+                                <input type="text" th:field="*{numDocumento}" class="form-control" readonly>
+                            </div>
+
                             <!-- Email -->
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">Correo electrónico</label>

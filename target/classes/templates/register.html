@@ -39,14 +39,28 @@
                     <div class="text-danger" th:errors="*{nombreCliente}"></div>
                 </div>
 
-                <!-- RUC -->
+                <!-- Tipo de documento -->
                 <div class="mb-3">
-                    <label for="rucCliente" class="form-label">RUC</label>
-                    <input type="text" class="form-control" id="rucCliente" th:field="*{rucCliente}"
-                        placeholder="12345678901" maxlength="11" pattern="[0-9]{11}" title="Debe tener 11 dígitos"
-                        required>
-                    <div class="text-danger" th:errors="*{rucCliente}"></div>
+                    <label for="tipoDocumento" class="form-label">Tipo de documento</label>
+                    <select class="form-select" id="tipoDocumento" th:field="*{tipoDocumento}">
+                        <option value="DNI">DNI</option>
+                        <option value="RUC">RUC</option>
+                    </select>
                 </div>
+
+                <!-- Número de documento -->
+                <div class="mb-3">
+                    <label for="docCliente" class="form-label">
+                        Número de documento
+                        (<span th:text="*{tipoDocumento}"></span>)
+                    </label>
+
+                    <input type="text" class="form-control" id="docCliente" th:field="*{numDocumento}"
+                        th:placeholder="*{tipoDocumento} == 'RUC' ? 'Ingrese su RUC' : 'Ingrese su DNI'" required>
+
+                    <div class="text-danger" th:errors="*{numDocumento}"></div>
+                </div>
+
 
                 <!-- Teléfono -->
                 <div class="mb-3">

@@ -43,6 +43,19 @@
                         </h5>
 
                         <ul class="list-group list-group-flush">
+
+                            <li class="list-group-item">
+                                <i class="bi bi-card-text text-primary"></i>
+                                <strong>Tipo de documento:</strong>
+                                <span th:text="${cliente.tipoDocumento}">RUC</span>
+                            </li>
+
+                            <li class="list-group-item">
+                                <i class="bi bi-file-earmark-text text-primary"></i>
+                                <strong>Número de documento:</strong>
+                                <span th:text="${cliente.numDocumento}">12345678</span>
+                            </li>
+
                             <li class="list-group-item">
                                 <i class="bi bi-envelope text-primary"></i>
                                 <strong>Email:</strong>
@@ -68,6 +81,7 @@
                                     01/01/2025
                                 </span>
                             </li>
+
                         </ul>
 
 

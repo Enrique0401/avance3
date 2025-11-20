@@ -25,26 +25,51 @@
 
             <input type="hidden" th:field="*{idCliente}" />
 
+            <!-- Nombre -->
             <div class="mb-3">
                 <label class="form-label">Nombre</label>
                 <input type="text" th:field="*{nombreCliente}" class="form-control" required>
             </div>
 
+            <!-- Tipo de documento (NO editable) -->
             <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" th:field="*{emailCliente}" class="form-control" required readonly>
+                <label class="form-label">Tipo de documento</label>
+                <input type="text" class="form-control" th:value="*{tipoDocumento}" readonly>
+
+                <!-- Para enviar el valor al backend (campo oculto) -->
+                <input type="hidden" th:field="*{tipoDocumento}">
             </div>
 
+            <!-- Número de documento (NO editable) -->
+            <div class="mb-3">
+                <label class="form-label">
+                    Número de documento (<span th:text="*{tipoDocumento}"></span>)
+                </label>
+
+                <input type="text" class="form-control" th:field="*{numDocumento}" readonly>
+
+                <!-- No se necesita placeholder porque no se puede editar -->
+                <div class="text-danger" th:errors="*{numDocumento}"></div>
+            </div>
+
+            <!-- Email (editable) -->
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" th:field="*{emailCliente}" class="form-control" required>
+            </div>
+            <!-- Teléfono -->
             <div class="mb-3">
                 <label class="form-label">Teléfono</label>
                 <input type="text" th:field="*{telefonoCliente}" class="form-control" required>
             </div>
 
+            <!-- Dirección -->
             <div class="mb-3">
                 <label class="form-label">Dirección</label>
                 <input type="text" th:field="*{direccionCliente}" class="form-control" required>
             </div>
 
+            <!-- Contraseña -->
             <div class="mb-3">
                 <label class="form-label">Contraseña (opcional)</label>
                 <input type="password" th:field="*{contrasenaCliente}" class="form-control"

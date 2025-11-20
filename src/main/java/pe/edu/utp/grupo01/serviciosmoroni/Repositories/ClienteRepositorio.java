@@ -10,23 +10,20 @@ import java.util.Optional;
 @Repository
 public interface ClienteRepositorio extends JpaRepository<Cliente, Integer> {
 
-    // 🔍 Buscar cliente por correo electrónico
+    // 🔍 Buscar cliente por correo
     Optional<Cliente> findByEmailCliente(String emailCliente);
 
-    // 🔐 Buscar cliente por correo y contraseña (solo si no usas BCrypt
-    // directamente)
+    // 🔐 Buscar por correo y contraseña (solo si no usas BCrypt)
     Optional<Cliente> findByEmailClienteAndContrasenaCliente(String emailCliente, String contrasenaCliente);
 
-    // ⚙️ Verificar si ya existe un cliente con el correo indicado
+    // ⚙️ Validaciones de duplicados
     boolean existsByEmailCliente(String emailCliente);
 
-    // ⚙️ Verificar si ya existe un cliente con el RUC indicado
-    boolean existsByRucCliente(String rucCliente);
+    // 🔹 Cliente tiene numDocumento (DNI o RUC), no existe rucCliente
+    boolean existsByNumDocumento(String numDocumento);
 
-    // ⚙️ Verificar si ya existe un cliente con el teléfono indicado
     boolean existsByTelefonoCliente(String telefonoCliente);
 
-    // 👥 Buscar todos los clientes que tengan un rol específico (por ejemplo: USER
-    // o ADMIN)
+    // 👥 Buscar por rol
     List<Cliente> findByRol(String rol);
 }

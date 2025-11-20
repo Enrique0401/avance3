@@ -81,33 +81,43 @@ public class AdminController {
             RedirectAttributes redirectAttributes,
             Model model) {
 
-        // Obtener el cliente existente por el email actual
+        // Obtener cliente existente desde la base
         Cliente clienteExistente = clienteRepositorio.findByEmailCliente(user.getUsername())
                 .orElseThrow(() -> new IllegalStateException("Cliente no encontrado"));
 
-        // Actualizamos solo los campos que pueden editarse
+        // Actualizar campos permitidos del perfil
         clienteExistente.setNombreCliente(clienteForm.getNombreCliente());
         clienteExistente.setTelefonoCliente(clienteForm.getTelefonoCliente());
         clienteExistente.setDireccionCliente(clienteForm.getDireccionCliente());
-        clienteExistente.setEmailCliente(clienteForm.getEmailCliente());
 
-        // Si el usuario escribió una nueva contraseña (opcional)
-        if (clienteForm.getContrasenaCliente() != null && !clienteForm.getContrasenaCliente().isBlank()) {
-            clienteExistente.setContrasenaCliente(passwordEncoder.encode(clienteForm.getContrasenaCliente()));
+        // Permitir cambiar email solo si es distinto y no está ocupado
+        String nuevoEmail = clienteForm.getEmailCliente();
+        if (nuevoEmail != null && !nuevoEmail.isBlank()
+                && !nuevoEmail.equals(clienteExistente.getEmailCliente())) {
+            if (clienteRepositorio.existsByEmailCliente(nuevoEmail)) {
+                redirectAttributes.addFlashAttribute("errorEmail", "El correo ya está en uso.");
+                return "redirect:/clientes/perfil"; // o la ruta correcta según tu vista
+            }
+            clienteExistente.setEmailCliente(nuevoEmail);
         }
 
-        // Mantener los campos que no aparecen en el formulario
-        if (clienteExistente.getRol() == null) {
-            clienteExistente.setRol("ROLE_ADMIN"); // o ROLE_USER si corresponde
-        }
-        if (clienteExistente.getRucCliente() == null) {
-            clienteExistente.setRucCliente("00000000000"); // Evita error de null si no aplica
+        // Si el usuario ingresa una nueva contraseña, la encriptamos
+        String nuevaPass = clienteForm.getContrasenaCliente();
+        if (nuevaPass != null && !nuevaPass.isBlank()) {
+            clienteExistente.setContrasenaCliente(passwordEncoder.encode(nuevaPass));
         }
 
+        // No permitimos cambiar el tipoDocumento o el numDocumento desde este
+        // formulario
+        // (asumiendo que solo se registra una vez y no se puede modificar después)
+        // clienteExistente.setTipoDocumento(...); // NO lo hagas aquí
+        // clienteExistente.setNumDocumento(...); // NO lo hagas aquí
+
+        // Guardar cambios
         clienteRepositorio.save(clienteExistente);
 
-        redirectAttributes.addFlashAttribute("mensajeExito", "✅ Perfil actualizado correctamente.");
-        return "redirect:/admin/dashboard";
+        redirectAttributes.addFlashAttribute("mensajeExito", "Perfil actualizado correctamente.");
+        return "redirect:/clientes/perfil"; // ajustar según la página a la que quieras volver
     }
 
     // ==========================

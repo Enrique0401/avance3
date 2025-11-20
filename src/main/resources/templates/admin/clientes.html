@@ -45,7 +45,8 @@
                                     <tr>
                                         <th scope="col">ID</th>
                                         <th scope="col">Nombre</th>
-                                        <th scope="col">RUC</th>
+                                        <th scope="col">Tipo Documento</th>
+                                        <th scope="col">Número Documento</th>
                                         <th scope="col">Correo</th>
                                         <th scope="col">Teléfono</th>
                                         <th scope="col">Dirección</th>
@@ -53,27 +54,22 @@
                                         <th scope="col">Fecha Registro</th>
                                     </tr>
                                 </thead>
+
                                 <tbody class="text-center">
                                     <tr th:each="c : ${clientes}">
                                         <td th:text="${c.idCliente}">1</td>
                                         <td th:text="${c.nombreCliente}">Nombre</td>
-                                        <td th:text="${c.rucCliente}">12345678901</td>
-                                        <td th:text="${c.emailCliente}">correo@ejemplo.com</td>
-                                        <td th:text="${c.telefonoCliente}">999888777</td>
-                                        <td th:text="${c.direccionCliente}">Av. Ejemplo 123</td>
-                                        <td>
-                                            <span
-                                                th:classappend="${c.rol == 'ROLE_ADMIN'} ? 'badge bg-danger' : 'badge bg-success'"
-                                                th:text="${c.rol == 'ROLE_ADMIN'} ? 'ADMIN' : 'USUARIO'">
-                                                USER
-                                            </span>
-                                        </td>
-                                        <td th:text="${#temporals.format(c.fechaRegistro, 'dd/MM/yyyy')}">
-                                            01/01/2025
-                                        </td>
+                                        <td th:text="${c.tipoDocumento}">Tipo</td>
+                                        <td th:text="${c.numDocumento}">Documento</td>
+                                        <td th:text="${c.emailCliente}">Correo</td>
+                                        <td th:text="${c.telefonoCliente}">Teléfono</td>
+                                        <td th:text="${c.direccionCliente}">Dirección</td>
+                                        <td th:text="${c.rol}">Rol</td>
+                                        <td th:text="${c.fechaRegistro}">Fecha</td>
                                     </tr>
                                 </tbody>
                             </table>
+
 
                             <!-- Si no hay clientes -->
                             <div class="text-center text-muted py-4" th:if="${#lists.isEmpty(clientes)}">

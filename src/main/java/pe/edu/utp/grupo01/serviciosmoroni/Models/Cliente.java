@@ -27,7 +27,7 @@ public class Cliente {
     @Column(name = "nombre_cliente", nullable = false, length = 100)
     private String nombreCliente;
 
-    // 🔹 Tipo de documento (DNI o RUC)
+    // 🔹 Tipo de documento (DNI o RUC )
     @NotBlank(message = "Debe seleccionar un tipo de documento")
     @Pattern(regexp = "DNI|RUC", message = "Tipo de documento inválido")
     @Column(name = "tipo_documento", nullable = false, length = 10)

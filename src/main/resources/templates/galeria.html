@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería - Servicios Moroni SCRL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="../img/logo.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+</head>
+
+<body>
+
+    <div th:replace="~{reusables :: header_general}"></div>
+
+    <section class="bg-primary text-white py-5">
+        <div class="container text-center">
+            <h1 class="display-5 fw-bold">Nuestra Galería de Proyectos</h1>
+            <p class="lead">Conoce algunos de nuestros trabajos realizados para clientes satisfechos</p>
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container">
+
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-primary mb-3">Proyectos de Limpieza Profesional</h2>
+                <p class="text-muted">Servicios especializados para instituciones públicas y privadas</p>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div id="carouselProyectos" class="carousel slide shadow-sm" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active text-center">
+                                <img src="../img/Galeria/Limpieza.png" class="d-block w-100 rounded"
+                                    alt="Limpieza de oficinas" height="500px" data-aos="zoom-in">
+                                <div class="mt-3">
+                                    <h5 class="fw-bold">Limpieza Corporativa</h5>
+                                    <p>
+                                        <strong>Desafío:</strong> Espacios con alto tráfico.<br>
+                                        <strong>Solución:</strong> Limpieza profunda.<br>
+                                        <strong>Resultado:</strong> Ambientes impecables.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="carousel-item text-center">
+                                <img src="../img/Galeria/Limpienza2.png" class="d-block w-100 rounded"
+                                    alt="Resultado limpieza" height="500px" data-aos="fade-up">
+                                <div class="mt-3">
+                                    <h5 class="fw-bold">Limpieza Corporativa</h5>
+                                    <p>
+                                        <strong>Desafío:</strong> Espacios con alto tráfico.<br>
+                                        <strong>Solución:</strong> Limpieza profunda.<br>
+                                        <strong>Resultado:</strong> Ambientes impecables.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="carousel-item text-center">
+                                <img src="../img/Galeria/Alfombra.png" class="d-block w-100 rounded"
+                                    alt="Limpieza de alfombras" height="500px" data-aos="fade-up">
+                                <div class="mt-3">
+                                    <h5 class="fw-bold">Limpieza de Alfombras</h5>
+                                    <p>
+                                        <strong>Desafío:</strong> Alfombras manchadas.<br>
+                                        <strong>Solución:</strong> Limpieza con vapor.<br>
+                                        <strong>Resultado:</strong> Alfombras renovadas.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselProyectos"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselProyectos"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-danger mb-3">Proyectos de Mantenimiento</h2>
+                <p class="text-muted">Mantenimiento preventivo y correctivo para instalaciones</p>
+            </div>
+
+            <div class="row justify-content-center mb-5">
+                <div class="col-md-8">
+                    <div id="carouselMantenimiento" class="carousel slide shadow-sm" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active text-center">
+                                <img src="../img/Galeria/Mantenimiento.png" class="d-block w-100 rounded"
+                                    alt="Mantenimiento preventivo" height="500px" data-aos="fade-right">
+                                <div class="mt-3">
+                                    <h5 class="fw-bold">Mantenimiento Preventivo</h5>
+                                    <p>
+                                        <strong>Desafío:</strong> Fallas en instalaciones.<br>
+                                        <strong>Solución:</strong> Programa de mantenimiento.<br>
+                                        <strong>Resultado:</strong> Menos averías inesperadas.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="carousel-item text-center">
+                                <img src="../img/Galeria/MantenimientoVerdes.png" class="d-block w-100 rounded"
+                                    alt="Mantenimiento áreas verdes" height="500px" data-aos="fade-left">
+                                <div class="mt-3">
+                                    <h5 class="fw-bold">Mantenimiento de Áreas Verdes</h5>
+                                    <p>
+                                        <strong>Desafío:</strong> Jardines descuidados.<br>
+                                        <strong>Solución:</strong> Paisajismo y mantenimiento.<br>
+                                        <strong>Resultado:</strong> Espacios cuidados.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselMantenimiento"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselMantenimiento"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transformaciones -->
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-primary mb-3">Transformaciones: Antes y Después</h2>
+                <p class="text-muted">Resultados visibles de nuestro trabajo</p>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div id="carouselTransformaciones" class="carousel slide shadow-sm" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active text-center">
+                                <img src="../img/Galeria/TransformacionesDespues.png" class="d-block w-100 rounded"
+                                    alt="Después de la limpieza" height="500px" data-aos="flip-left">
+                                <div class="mt-3">
+                                    <h5 class="fw-bold">Transformación de Espacios</h5>
+                                    <p>
+                                        <strong>Desafío:</strong> Área descuidada.<br>
+                                        <strong>Solución:</strong> Limpieza intensiva.<br>
+                                        <strong>Resultado:</strong> Espacio funcional.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="carousel-item text-center">
+                                <img src="../img/Galeria/Transformaciones.png" class="d-block w-100 rounded"
+                                    alt="Antes de la limpieza" height="500px" data-aos="flip-left">
+                                <div class="mt-3">
+                                    <h5 class="fw-bold">Transformación de Espacios</h5>
+                                    <p>
+                                        <strong>Desafío:</strong> Área descuidada.<br>
+                                        <strong>Solución:</strong> Limpieza intensiva.<br>
+                                        <strong>Resultado:</strong> Espacio funcional.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="carousel-item text-center">
+                                <img src="../img/Galeria/renovacion antes.png" class="d-block w-100 rounded"
+                                    alt="Antes del mantenimiento" height="500px" data-aos="flip-right">
+                                <div class="mt-3">
+                                    <h5 class="fw-bold">Renovación de Instalaciones</h5>
+                                    <p>
+                                        <strong>Desafío:</strong> Espacio desgastado.<br>
+                                        <strong>Solución:</strong> Reparación y pintura.<br>
+                                        <strong>Resultado:</strong> Área renovada.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="carousel-item text-center">
+                                <img src="../img/Galeria/Renovacion.png" class="d-block w-100 rounded"
+                                    alt="Después del mantenimiento" height="500px" data-aos="flip-right">
+                                <div class="mt-3">
+                                    <h5 class="fw-bold">Renovación de Instalaciones</h5>
+                                    <p>
+                                        <strong>Desafío:</strong> Espacio desgastado.<br>
+                                        <strong>Solución:</strong> Reparación y pintura.<br>
+                                        <strong>Resultado:</strong> Área renovada.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselTransformaciones"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselTransformaciones"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 text-center">
+        <div class="container">
+            <h2 class="fw-bold mb-4" data-aos="fade-up" data-aos-delay="100">
+                ¿Interesado en nuestros servicios?
+            </h2>
+            <p class="lead mb-4" data-aos="fade-up" data-aos-delay="200">
+                Contáctenos para una cotización personalizada según sus necesidades
+            </p>
+            <a th:href="@{/contacto}" class="btn btn-danger btn-lg me-2" data-aos="zoom-in" data-aos-delay="300">
+                Solicitar Cotización
+            </a>
+            <a th:href="@{/servicios}" class="btn btn-outline-primary btn-lg" data-aos="zoom-in" data-aos-delay="400">
+                Ver Servicios
+            </a>
+        </div>
+    </section>
+
+
+    <div th:replace="reusables :: flechita"></div>
+
+    <div th:replace="reusables :: footer_general"></div>
+
+    <script src="../js/main.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+
+    <script th:src="@{/js/aos-init.js}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil - Panel Supervisor</title>
+    <link rel="icon" th:href="@{/img/logo.png}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+
+<body class="bg-light">
+    <!-- 🔹 Header -->
+    <div th:replace="~{reusables :: header-visor}"></div>
+
+    <div class="container-fluid">
+        <div class="row my-4">
+
+            <!-- 🔹 Sidebar -->
+            <aside th:replace="~{reusables :: sidebar-visor}" class="sidebar-container custom-sidebar"></aside>
+
+            <!-- 🔹 Contenido principal -->
+            <main class="col-md-10 mt-4">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <h2 class="text-primary fw-bold">
+                        <i class="bi bi-person-circle"></i> Editar Perfil del Supervisor
+                    </h2>
+                    <a th:href="@{/supervisor/dashboard}" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-arrow-left"></i> Volver
+                    </a>
+                </div>
+
+                <!-- ✅ Mensaje de éxito -->
+                <div th:if="${mensajeExito}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <span th:text="${mensajeExito}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <!-- 🔹 Formulario -->
+                <div class="card shadow-sm border-0 rounded-4">
+                    <div class="card-body p-4">
+
+                        <form id="editarPerfilForm" th:action="@{/supervisor/perfil}" th:object="${cliente}"
+                            method="post" novalidate>
+                            <input type="hidden" th:field="*{idCliente}">
+
+                            <!-- Nombre -->
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Nombre completo</label>
+                                <input type="text" th:field="*{nombreCliente}" class="form-control" required>
+                            </div>
+
+                            <!-- Tipo de documento (readonly) -->
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Tipo de documento</label>
+                                <input type="text" th:field="*{tipoDocumento}" class="form-control" readonly>
+                            </div>
+
+                            <!-- Número de documento (readonly) -->
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Número de documento</label>
+                                <input type="text" th:field="*{numDocumento}" class="form-control" readonly>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Correo electrónico</label>
+                                <input type="email" th:field="*{emailCliente}" class="form-control" required>
+                            </div>
+
+                            <!-- Teléfono -->
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Teléfono</label>
+                                <input type="text" th:field="*{telefonoCliente}" class="form-control" maxlength="9"
+                                    required>
+                            </div>
+
+                            <!-- Dirección -->
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Dirección</label>
+                                <input type="text" th:field="*{direccionCliente}" class="form-control" required>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <div class="mb-3 position-relative">
+                                <label class="form-label fw-semibold">Nueva contraseña (opcional)</label>
+                                <div class="input-group">
+                                    <input type="password" th:field="*{contrasenaCliente}" id="contrasenaCliente"
+                                        class="form-control" minlength="8"
+                                        placeholder="Deje en blanco si no desea cambiarla">
+                                    <span class="input-group-text bg-white border-start-0">
+                                        <i class="bi bi-eye" id="toggleContrasena" style="cursor: pointer;"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Botones -->
+                            <div class="mt-4 d-flex">
+                                <button type="submit" class="btn btn-primary me-2">
+                                    <i class="bi bi-save"></i> Guardar Cambios
+                                </button>
+                                <a th:href="@{/supervisor/dashboard}" class="btn btn-outline-secondary">
+                                    <i class="bi bi-x-circle"></i> Cancelar
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 🔹 Footer y scripts -->
+    <footer th:replace="~{reusables :: footer-visor}"></footer>
+    <div th:replace="~{reusables :: flechita}"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script th:src="@{/js/perfil.js}"></script>
+</body>
+
+</html>

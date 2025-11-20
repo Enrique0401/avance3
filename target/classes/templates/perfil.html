@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Servicios Moroni SCRL</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" th:href="@{/img/logo.png}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+
+<body class="bg-light">
+
+    <div th:replace="~{reusables :: header-usuario}"></div>
+
+
+    <div class="container mt-5 my-4">
+        <h2 class="mb-4 text-primary fw-bold">
+            <i class="bi bi-person-circle"></i> Mi Perfil
+        </h2>
+
+        <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body p-4">
+                <div class="row align-items-center">
+
+
+                    <div class="col-md-3 text-center mb-4 mb-md-0">
+                        <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png"
+                            class="img-fluid rounded-circle mb-3 shadow-sm" alt="Foto de perfil"
+                            style="max-width: 150px;">
+                        <h5 class="fw-bold text-dark" th:text="${cliente.nombreCliente}">Nombre del cliente</h5>
+                        <span class="badge bg-secondary">Cliente</span>
+                    </div>
+
+
+                    <div class="col-md-9">
+                        <h5 class="fw-bold text-secondary mb-3">
+                            <i class="bi bi-person-lines-fill"></i> Información Personal
+                        </h5>
+
+                        <ul class="list-group list-group-flush">
+
+                            <li class="list-group-item">
+                                <i class="bi bi-card-text text-primary"></i>
+                                <strong>Tipo de documento:</strong>
+                                <span th:text="${cliente.tipoDocumento}">RUC</span>
+                            </li>
+
+                            <li class="list-group-item">
+                                <i class="bi bi-file-earmark-text text-primary"></i>
+                                <strong>Número de documento:</strong>
+                                <span th:text="${cliente.numDocumento}">12345678</span>
+                            </li>
+
+                            <li class="list-group-item">
+                                <i class="bi bi-envelope text-primary"></i>
+                                <strong>Email:</strong>
+                                <span th:text="${cliente.emailCliente}">correo@ejemplo.com</span>
+                            </li>
+
+                            <li class="list-group-item">
+                                <i class="bi bi-telephone text-primary"></i>
+                                <strong>Teléfono:</strong>
+                                <span th:text="${cliente.telefonoCliente}">+51 987 654 321</span>
+                            </li>
+
+                            <li class="list-group-item">
+                                <i class="bi bi-geo-alt text-primary"></i>
+                                <strong>Dirección:</strong>
+                                <span th:text="${cliente.direccionCliente}">Dirección no registrada</span>
+                            </li>
+
+                            <li class="list-group-item">
+                                <i class="bi bi-calendar-check text-primary"></i>
+                                <strong>Miembro desde:</strong>
+                                <span th:text="${#temporals.format(cliente.fechaRegistro, 'dd/MM/yyyy')}">
+                                    01/01/2025
+                                </span>
+                            </li>
+
+                        </ul>
+
+
+                        <div class="mt-4">
+                            <sec:authorize access="isAuthenticated()">
+                                <a th:href="@{/clientes/editarPerfil}" class="btn btn-outline-primary me-2">
+                                    <i class="bi bi-pencil-square"></i> Editar Perfil
+                                </a>
+                            </sec:authorize>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{reusables :: flechita}"></div>
+
+    <div th:replace="~{reusables :: footer_usuario}"></div>
+
+    <script th:src="@{/js/main.js}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

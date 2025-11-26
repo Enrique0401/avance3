@@ -53,15 +53,13 @@
                                         <th scope="col">Fecha Registro</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="text-center">
                                     <tr th:each="c : ${clientes}">
                                         <td th:text="${c.idCliente}">1</td>
                                         <td th:text="${c.nombreCliente}">Nombre</td>
 
-                                        <!-- TIPO (DNI o RUC) -->
                                         <td th:text="${c.tipoDocumento}">DNI</td>
 
-                                        <!-- NUMERO (8 o 11 dígitos) -->
                                         <td th:text="${c.numDocumento}">12345678</td>
 
                                         <td th:text="${c.emailCliente}">correo@ejemplo.com</td>
@@ -71,7 +69,7 @@
                                         <td>
                                             <span
                                                 th:classappend="${c.rol == 'ROLE_VISOR'} ? 'badge bg-danger' : 'badge bg-success'"
-                                                th:text="${c.rol == 'ROLE_VISOR'} ? 'VISOR' : 'USER'">
+                                                th:text="${c.rol == 'ROLE_VISOR'} ? 'VISOR' : 'USUARIO'">
                                                 USER
                                             </span>
                                         </td>

@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrarse - Servicios Moroni SCRL</title>
 
-    <!-- Estilos -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="icon" th:href="@{/img/logo.png}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
@@ -16,10 +15,8 @@
 
 <body class="bg-light">
 
-    <!-- Header -->
     <div th:replace="~{reusables :: header_general}"></div>
 
-    <!-- Sección principal -->
     <section class="d-flex align-items-center justify-content-center my-4">
         <div class="card shadow-lg border-0 p-4" style="max-width: 450px; width: 100%;">
             <div class="text-center mb-4">
@@ -28,10 +25,8 @@
                 <p class="text-muted">Complete el formulario para registrarse</p>
             </div>
 
-            <!-- Formulario de registro -->
             <form th:action="@{/clientes/register}" th:object="${usuario}" method="post" novalidate>
 
-                <!-- Nombre -->
                 <div class="mb-3">
                     <label for="nombreCliente" class="form-label">Nombre completo</label>
                     <input type="text" class="form-control" id="nombreCliente" th:field="*{nombreCliente}"
@@ -39,7 +34,6 @@
                     <div class="text-danger" th:errors="*{nombreCliente}"></div>
                 </div>
 
-                <!-- Tipo de documento -->
                 <div class="mb-3">
                     <label for="tipoDocumento" class="form-label">Tipo de documento</label>
                     <select class="form-select" id="tipoDocumento" th:field="*{tipoDocumento}">
@@ -48,11 +42,9 @@
                     </select>
                 </div>
 
-                <!-- Número de documento -->
                 <div class="mb-3">
                     <label for="docCliente" class="form-label">
-                        Número de documento
-                        (<span th:text="*{tipoDocumento}"></span>)
+                        Número de documento (<span id="tipoDocLabel">DNI</span>)
                     </label>
 
                     <input type="text" class="form-control" id="docCliente" th:field="*{numDocumento}"
@@ -61,8 +53,6 @@
                     <div class="text-danger" th:errors="*{numDocumento}"></div>
                 </div>
 
-
-                <!-- Teléfono -->
                 <div class="mb-3">
                     <label for="telefonoCliente" class="form-label">Teléfono</label>
                     <input type="text" class="form-control" id="telefonoCliente" th:field="*{telefonoCliente}"
@@ -71,7 +61,6 @@
                     <div class="text-danger" th:errors="*{telefonoCliente}"></div>
                 </div>
 
-                <!-- Correo -->
                 <div class="mb-3">
                     <label for="emailCliente" class="form-label">Correo electrónico</label>
                     <input type="email" class="form-control" id="emailCliente" th:field="*{emailCliente}"
@@ -79,7 +68,6 @@
                     <div class="text-danger" th:errors="*{emailCliente}"></div>
                 </div>
 
-                <!-- Dirección -->
                 <div class="mb-3">
                     <label for="direccionCliente" class="form-label">Dirección</label>
                     <input type="text" class="form-control" id="direccionCliente" th:field="*{direccionCliente}"
@@ -87,7 +75,6 @@
                     <div class="text-danger" th:errors="*{direccionCliente}"></div>
                 </div>
 
-                <!-- Contraseña -->
                 <div class="mb-3">
                     <label for="contrasenaCliente" class="form-label">Contraseña</label>
                     <div class="input-group">
@@ -102,7 +89,6 @@
                     <div class="text-danger" th:errors="*{contrasenaCliente}"></div>
                 </div>
 
-                <!-- Confirmar contraseña -->
                 <div class="mb-3">
                     <label for="confirmPassword" class="form-label">Confirmar contraseña</label>
                     <div class="input-group">
@@ -117,7 +103,6 @@
                     <div class="text-danger" th:errors="*{confirmPassword}"></div>
                 </div>
 
-                <!-- Errores globales -->
                 <div th:if="${error}" class="alert alert-danger">
                     Ya existe un usuario con este email, RUC o teléfono.
                 </div>
@@ -125,11 +110,9 @@
                     <span th:text="${passwordError}"></span>
                 </div>
 
-                <!-- Botón -->
                 <button type="submit" class="btn btn-primary w-100">Registrarse</button>
             </form>
 
-            <!-- Enlaces -->
             <a th:href="@{/inicio}" class="btn btn-link w-100 mt-3 enlace">
                 <i class="bi bi-arrow-left"></i> Volver al inicio
             </a>
@@ -143,11 +126,9 @@
         </div>
     </section>
 
-    <!-- Elementos reutilizables -->
     <div th:replace="~{reusables :: flechita}"></div>
     <div th:replace="~{reusables :: footer_general}"></div>
 
-    <!-- Scripts -->
     <script th:src="@{/js/main.js}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

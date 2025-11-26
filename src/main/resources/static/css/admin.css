@@ -17,19 +17,20 @@ body {
     background-color: var(--bs-light);
 }
 
-
 .admin-layout {
     flex: 1;
     display: flex;
     min-height: calc(100vh - 120px);
     /* Header + footer */
+    margin-top: 5px !important;
+    /* 🔹 Reducción de espacio arriba */
+    margin-bottom: 5px !important;
+    /* 🔹 Reducción de espacio abajo */
 }
-
 
 .text-primary {
     color: var(--bs-primary) !important;
 }
-
 
 .sidebar-container,
 aside.sidebar-admin {
@@ -49,7 +50,8 @@ aside.sidebar-admin {
 .main-content {
     flex-grow: 1;
     background-color: #f8f9fa;
-    padding: 2rem;
+    padding: 10px 20px !important;
+    /* 🔹 Mucho menos espacio */
     overflow-x: hidden;
     min-width: 0;
 }
@@ -59,7 +61,7 @@ footer {
     color: var(--bs-light);
     text-align: center;
     margin-top: auto;
-    padding: 1.5rem 0;
+    padding: 1.2rem 0;
 }
 
 /* ========== 🔹 NAVBAR Y ENLACES ========== */
@@ -120,7 +122,7 @@ footer {
 
 .table-responsive {
     position: relative;
-    overflow-x: auto;
+    overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
     border-radius: 8px;
     background: var(--bs-light);
@@ -153,7 +155,7 @@ footer {
     border-radius: 0.4rem;
 }
 
-/* Texto de aviso de scroll en móviles */
+/* Texto de aviso de scroll */
 .table-responsive::before {
     content: "👉 Desliza horizontalmente para ver toda la tabla";
     position: absolute;
@@ -226,7 +228,6 @@ footer .d-flex a {
     font-size: 1.5rem;
 }
 
-
 .scroll-hint {
     display: none;
     background: var(--bs-primary);
@@ -244,13 +245,15 @@ footer .d-flex a {
     width: 220px !important;
 }
 
-
 /* ========== 🔹 RESPONSIVIDAD ========== */
 
 @media (max-width: 991px) {
+
     .admin-layout {
         flex-direction: column;
         align-items: center;
+        margin-top: -200px !important;
+        margin-bottom: -200px !important;
     }
 
     .sidebar-container {
@@ -263,7 +266,7 @@ footer .d-flex a {
     }
 
     .main-content {
-        padding: 1rem;
+        padding: 10px !important;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -276,8 +279,8 @@ footer .d-flex a {
     }
 }
 
-
 @media (max-width: 768px) {
+
     .navbar {
         display: flex;
         flex-direction: column;
@@ -314,7 +317,83 @@ footer .d-flex a {
     footer .d-flex {
         justify-content: center;
     }
+
+    .scroll-hint {
+        display: block;
+    }
 }
+
+/* 🔵 AJUSTES GENERALES PARA FORMULARIOS EN MOVILES */
+@media (max-width: 576px) {
+
+    /* Reduce espacio entre header y contenido */
+    .main-content {
+        padding: 1rem !important;
+        margin-top: 0.5rem;
+    }
+
+    /* Card más compacta */
+    .card {
+        margin-top: 1rem !important;
+        margin-bottom: 1rem !important;
+    }
+
+    .card-body {
+        padding: 1.2rem !important;
+    }
+
+    /* Título y botón alineados sin dejar huecos grandes */
+    .page-header {
+        margin-bottom: 1.2rem !important;
+    }
+
+    .page-header h2 {
+        font-size: 1.3rem !important;
+        line-height: 1.2;
+    }
+
+    .page-header a {
+        padding: 0.35rem 0.7rem !important;
+        font-size: 0.85rem;
+    }
+
+    /* Formularios más compactos */
+    form .form-label {
+        margin-bottom: 0.25rem !important;
+        font-size: 0.9rem;
+    }
+
+    form .form-control {
+        padding: 0.55rem 0.75rem !important;
+        font-size: 0.9rem !important;
+    }
+
+    /* Reduce separación entre inputs */
+    form .row .col-12,
+    form .row .col-md-6 {
+        margin-bottom: 0.6rem !important;
+    }
+
+    /* HR más pequeño */
+    hr {
+        margin: 1rem 0 !important;
+    }
+
+    /* Botones más compactos y con mejor ajuste */
+    .btn {
+        padding: 0.55rem 0.9rem !important;
+        font-size: 0.9rem !important;
+    }
+
+    .btn i {
+        font-size: 1rem !important;
+    }
+
+    .gap-2 {
+        gap: 0.5rem !important;
+    }
+}
+
 
 @keyframes slideIn {
     0% {
@@ -336,12 +415,5 @@ footer .d-flex a {
     100% {
         opacity: 0;
         display: none;
-    }
-}
-
-
-@media (max-width: 768px) {
-    .scroll-hint {
-        display: block;
     }
 }

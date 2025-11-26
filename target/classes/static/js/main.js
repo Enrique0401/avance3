@@ -16,6 +16,17 @@ function togglePassword(inputId, iconId) {
 // --- Todo el código bajo un único DOMContentLoaded ---
 document.addEventListener("DOMContentLoaded", () => {
 
+    const tipoDocSelect = document.getElementById("tipoDocumento");
+    const tipoDocLabel = document.getElementById("tipoDocLabel");
+
+    const actualizarLabelDocumento = () => {
+        const tipo = tipoDocSelect.value.toUpperCase();
+        tipoDocLabel.textContent = tipo;
+    };
+
+    tipoDocSelect.addEventListener("change", actualizarLabelDocumento);
+    actualizarLabelDocumento(); // Inicializa al cargar
+
     /* =======================================================
        VALIDACIÓN FORMULARIO REGISTRO (RUC / DNI)
     ======================================================= */
@@ -51,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- Actualizar placeholder y validaciones dinámicamente ---
     const actualizarValidacionDocumento = () => {
         const doc = campos.doc;
-        const tipo = campos.tipoDoc.value;
+        const tipo = campos.tipoDoc.value.toLowerCase(); // ✔ Normalizamos
 
         if (tipo === "ruc") {
             doc.maxLength = 11;
@@ -68,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     campos.tipoDoc?.addEventListener("change", actualizarValidacionDocumento);
-    actualizarValidacionDocumento();
+    actualizarValidacionDocumento(); // ✔ Ejecutar al cargar
 
     soloNumeros(campos.doc, 11);
     soloNumeros(campos.telefono, 9);
@@ -77,38 +88,47 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener("submit", e => {
         let valido = true;
 
+        // Trim
         Object.values(campos).forEach(campo => {
             if (campo?.tagName === "INPUT") campo.value = campo.value.trim();
         });
 
+        // Nombre y dirección
         ["nombre", "direccion"].forEach(id => {
             const ok = campos[id].value.length > 0;
             marcarError(campos[id], ok);
             if (!ok) valido = false;
         });
 
+        // Validación DNI/RUC
         const patrones = {
             ruc: /^\d{11}$/,
             dni: /^\d{8}$/
         };
 
-        if (!patrones[campos.tipoDoc.value].test(campos.doc.value)) {
+        const tipo = campos.tipoDoc.value.toLowerCase(); // ✔ Normalizado
+
+        if (!patrones[tipo].test(campos.doc.value)) {
             marcarError(campos.doc, false);
             valido = false;
         } else marcarError(campos.doc, true);
 
+        // Teléfono
         const telOK = /^9\d{8}$/.test(campos.telefono.value);
         marcarError(campos.telefono, telOK);
         if (!telOK) valido = false;
 
+        // Email
         const emailOK = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(campos.email.value);
         marcarError(campos.email, emailOK);
         if (!emailOK) valido = false;
 
+        // Contraseña
         const passOK = campos.pass.value.length >= 6;
         marcarError(campos.pass, passOK);
         if (!passOK) valido = false;
 
+        // Confirmación
         const confirmOK = campos.pass.value === campos.confirm.value;
         marcarError(campos.confirm, confirmOK);
         campos.confirm.setCustomValidity(confirmOK ? "" : "Las contraseñas no coinciden");
@@ -120,6 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
 
 /* =======================================================
        ESTADO DE PROGRESO EN TABLAS CON COLOR DINÁMICO

@@ -13,84 +13,99 @@
 </head>
 
 <body class="bg-light">
+
+    <!-- NAVBAR -->
     <div th:replace="~{reusables :: header-admin}"></div>
 
-    <div class="container-fluid">
-        <div class="row my-4">
+    <!-- 🔹 LAYOUT PRINCIPAL (CORREGIDO) -->
+    <div class="admin-layout">
 
-            <aside th:replace="~{reusables :: sidebar-admin}" class="sidebar-container custom-sidebar"></aside>
+        <!-- 🔹 SIDEBAR (SIN ROW, SIN CONTAINER, SIN CLASE EXTRA) -->
+        <aside class="sidebar-container"
+               th:replace="~{reusables :: sidebar-admin}"></aside>
 
-            <main class="col-md-10 p-4" style="min-height: 100vh; background-color: #f8fafc;">
-                <div class="d-flex align-items-center justify-content-between mb-4">
-                    <h2 class="fw-bold text-info mb-0">
-                        <i class="bi bi-clipboard2-data-fill me-2"></i> Gestión de Seguimientos
-                    </h2>
-                    <a th:href="@{/admin/dashboard}" class="btn btn-outline-secondary btn-sm">
-                        <i class="bi bi-arrow-left"></i> Volver
-                    </a>
+        <!-- 🔹 CONTENIDO PRINCIPAL -->
+        <main class="main-content">
+
+            <!-- TÍTULO + BOTÓN VOLVER -->
+            <div class="d-flex flex-wrap align-items-center justify-content-between mb-4 page-header">
+                <h2 class="fw-bold text-info mb-2 mb-md-0">
+                    <i class="bi bi-clipboard2-data-fill me-2"></i> Gestión de Seguimientos
+                </h2>
+
+                <a th:href="@{/admin/dashboard}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-arrow-left"></i> Volver
+                </a>
+            </div>
+
+            <!-- CARD -->
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-header bg-secondary text-white fw-semibold">
+                    <i class="bi bi-list-ul"></i> Listado de Seguimientos
                 </div>
 
-                <div class="card border-0 shadow-sm rounded-4">
-                    <div class="card-header bg-secondary text-white fw-semibold">
-                        <i class="bi bi-list-ul"></i> Listado de Seguimientos
+                <div class="card-body">
+
+                    <div class="scroll-hint mb-2">
+                        👉 Desliza la tabla para ver toda la información
                     </div>
-                    <div class="card-body">
 
-                        <div class="scroll-hint mb-2">
-                            👉 Desliza la tabla para ver toda la información
-                        </div>
+                    <!-- TABLA -->
+                    <div class="table-responsive mt-3">
+                        <table class="table table-hover align-middle text-center">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Proyecto</th>
+                                    <th>Fecha del Avance</th>
+                                    <th>Descripción</th>
+                                    <th>Porcentaje</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
+                                <tr th:each="s : ${seguimientos}">
+                                    <td th:text="${s.proyecto.nombre}"></td>
+                                    <td th:text="${#temporals.format(s.fechaAvance, 'dd/MM/yyyy')}"></td>
+                                    <td th:text="${s.descripcion}"></td>
 
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle text-center">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Proyecto</th>
-                                        <th>Fecha del Avance</th>
-                                        <th>Descripción</th>
-                                        <th>Porcentaje</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr th:each="s : ${seguimientos}">
-                                        <td th:text="${s.proyecto.nombre}"></td>
-                                        <td th:text="${#temporals.format(s.fechaAvance, 'dd/MM/yyyy')}"></td>
-                                        <td th:text="${s.descripcion}"></td>
-                                        <td style="width: 180px;">
-                                            <div class="progress" style="height: 20px;">
-                                                <div class="progress-bar" role="progressbar"
-                                                    th:style="'width:' + ${s.porcentajeAvance} + '%'"
-                                                    th:text="${s.porcentajeAvance + '%'}">
-                                                </div>
+                                    <!-- Barra de progreso -->
+                                    <td style="width: 180px;">
+                                        <div class="progress" style="height: 20px;">
+                                            <div class="progress-bar"
+                                                 role="progressbar"
+                                                 th:style="'width:' + ${s.porcentajeAvance} + '%' "
+                                                 th:text="${s.porcentajeAvance + '%'}">
                                             </div>
-                                        </td>
-                                    </tr>
+                                        </div>
+                                    </td>
+                                </tr>
 
-                                    <tr th:if="${#lists.isEmpty(seguimientos)}">
-                                        <td colspan="4" class="text-center text-muted py-4">
-                                            <i class="bi bi-exclamation-circle"></i>
-                                            No hay seguimientos registrados.
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                <!-- Si no hay registros -->
+                                <tr th:if="${#lists.isEmpty(seguimientos)}">
+                                    <td colspan="4" class="text-center text-muted py-4">
+                                        <i class="bi bi-exclamation-circle"></i>
+                                        No hay seguimientos registrados.
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
                     </div>
-                </div>
 
-            </main>
-        </div>
+                </div>
+            </div>
+
+        </main>
+
     </div>
 
+    <!-- FOOTER -->
     <footer th:replace="~{reusables :: footer-admin}"></footer>
-
     <div th:replace="~{reusables :: flechita}"></div>
 
     <script th:src="@{/js/main.js}"></script>
-
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 
 </body>
 

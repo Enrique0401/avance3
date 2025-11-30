@@ -179,6 +179,43 @@ document.querySelectorAll(".progreso-input").forEach(input => {
 });
 
 /* =======================================================
+       ESTADO DE PROGRESO EN TABLAS (SOLO INFORMATIVO)
+======================================================= */
+document.querySelectorAll(".progreso-input").forEach(input => {
+    const fila = input.closest("tr");
+    const estadoSpan = fila?.querySelector(".estado-input");
+    const progressBar = fila?.querySelector(".progress-bar");
+
+    if (!estadoSpan || !progressBar) return;
+
+    const actualizarEstado = (valor) => {
+        const progreso = parseInt(valor) || 0;
+
+        // Quitar estilos previos
+        estadoSpan.classList.remove("text-success", "text-warning", "text-info");
+        progressBar.classList.remove("bg-danger", "bg-warning", "bg-success", "bg-secondary");
+
+        if (progreso === 100) {
+            estadoSpan.textContent = "Finalizado";
+            estadoSpan.classList.add("text-success");
+            progressBar.classList.add("bg-success");
+        } else if (progreso > 0 && progreso < 100) {
+            estadoSpan.textContent = "En progreso";
+            estadoSpan.classList.add("text-warning");
+            progressBar.classList.add("bg-warning");
+        } else {
+            estadoSpan.textContent = "Pendiente";
+            estadoSpan.classList.add("text-info");
+            progressBar.classList.add("bg-danger");
+        }
+
+        progressBar.style.width = progreso + "%";
+    };
+
+    actualizarEstado(input.value);
+});
+
+/* =======================================================
    COLORES DINÁMICOS EN BARRAS DE PROGRESO
 ======================================================= */
 document.querySelectorAll(".progress-bar").forEach(barra => {

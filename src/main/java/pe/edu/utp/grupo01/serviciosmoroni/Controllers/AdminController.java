@@ -117,7 +117,7 @@ public class AdminController {
         clienteRepositorio.save(clienteExistente);
 
         redirectAttributes.addFlashAttribute("mensajeExito", "Perfil actualizado correctamente.");
-        return "redirect:/clientes/perfil"; // ajustar según la página a la que quieras volver
+        return "redirect:/admin/dashboard"; // ajustar según la página a la que quieras volver
     }
 
     // ==========================
@@ -196,58 +196,39 @@ public class AdminController {
     }
 
     @GetMapping("/incidencias")
-    public String listarIncidencias(@RequestParam(required = false) Integer proyectoId, Model model) {
-        List<Proyecto> proyectos = proyectoRepositorio.findAll();
-        List<Incidencia> incidencias;
+    public String listarIncidencias(
+            @RequestParam(required = false) Integer proyectoId,
+            @RequestParam(required = false) String estado,
+            Model model) {
 
+        List<Proyecto> proyectos = proyectoRepositorio.findAll();
+        List<Incidencia> incidencias = incidenciaRepositorio.findAll();
+
+        // Filtrar por proyecto
         if (proyectoId != null) {
-            incidencias = incidenciaRepositorio.findByProyectoId(proyectoId);
-        } else {
-            incidencias = incidenciaRepositorio.findAll();
+            incidencias = incidencias.stream()
+                    .filter(i -> i.getProyecto() != null && i.getProyecto().getId().equals(proyectoId))
+                    .collect(Collectors.toList());
+        }
+
+        // Filtrar por estado
+        if (estado != null && !estado.isBlank()) {
+            incidencias = incidencias.stream()
+                    .filter(i -> i.getEstado() != null && i.getEstado().equals(estado))
+                    .collect(Collectors.toList());
         }
 
         model.addAttribute("titulo", "Gestión de Incidencias");
         model.addAttribute("proyectos", proyectos);
         model.addAttribute("incidencias", incidencias);
+
+        // Para que Thymeleaf marque la opción seleccionada
         model.addAttribute("proyectoSeleccionado", proyectoId);
+        model.addAttribute("estadoSeleccionado", estado);
+
         model.addAttribute("currentPage", "incidencias");
+
         return "admin/incidencias";
     }
 
-    @GetMapping("/incidencias/nueva")
-    public String nuevaIncidencia(Model model) {
-        model.addAttribute("incidencia", new Incidencia());
-        model.addAttribute("proyectos", proyectoRepositorio.findAll());
-        model.addAttribute("titulo", "Registrar Incidencia");
-        return "admin/formIncidencia";
-    }
-
-    @GetMapping("/incidencias/editar/{id}")
-    public String editarIncidencia(@PathVariable Integer id, Model model) {
-        Incidencia incidencia = incidenciaRepositorio.findById(id)
-                .orElseThrow(() -> new IllegalStateException("Incidencia no encontrada"));
-
-        // 🔹 Formatea la fecha (por si necesitas asegurar formato)
-        // aunque realmente no es necesario si usas LocalDate
-        model.addAttribute("fechaFormateada", incidencia.getFecha().toString());
-
-        model.addAttribute("incidencia", incidencia);
-        model.addAttribute("proyectos", proyectoRepositorio.findAll());
-        model.addAttribute("titulo", "Editar Incidencia");
-
-        return "admin/formIncidencia";
-    }
-
-    @PostMapping("/incidencias/guardar")
-    public String guardarIncidencia(@Valid @ModelAttribute Incidencia incidencia, BindingResult result) {
-        if (result.hasErrors()) {
-            return "admin/formIncidencia";
-        }
-
-        if (incidencia.getFecha() == null) {
-            incidencia.setFecha(LocalDate.now());
-        }
-        incidenciaRepositorio.save(incidencia);
-        return "redirect:/admin/incidencias";
-    }
 }

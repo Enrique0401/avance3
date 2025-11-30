@@ -211,21 +211,38 @@ public class SupervisorController {
     }
 
     @GetMapping("/incidencias")
-    public String listarIncidencias(@RequestParam(required = false) Integer proyectoId, Model model) {
-        List<Proyecto> proyectos = proyectoRepositorio.findAll();
-        List<Incidencia> incidencias;
+    public String listarIncidencias(
+            @RequestParam(required = false) Integer proyectoId,
+            @RequestParam(required = false) String estado,
+            Model model) {
 
+        List<Proyecto> proyectos = proyectoRepositorio.findAll();
+        List<Incidencia> incidencias = incidenciaRepositorio.findAll();
+
+        // Filtrar por proyecto
         if (proyectoId != null) {
-            incidencias = incidenciaRepositorio.findByProyectoId(proyectoId);
-        } else {
-            incidencias = incidenciaRepositorio.findAll();
+            incidencias = incidencias.stream()
+                    .filter(i -> i.getProyecto() != null && i.getProyecto().getId().equals(proyectoId))
+                    .collect(Collectors.toList());
+        }
+
+        // Filtrar por estado
+        if (estado != null && !estado.isBlank()) {
+            incidencias = incidencias.stream()
+                    .filter(i -> i.getEstado() != null && i.getEstado().equals(estado))
+                    .collect(Collectors.toList());
         }
 
         model.addAttribute("titulo", "Gestión de Incidencias");
         model.addAttribute("proyectos", proyectos);
         model.addAttribute("incidencias", incidencias);
+
+        // Para que Thymeleaf marque la opción seleccionada
         model.addAttribute("proyectoSeleccionado", proyectoId);
+        model.addAttribute("estadoSeleccionado", estado);
+
         model.addAttribute("currentPage", "incidencias");
+
         return "supervisor/incidencias";
     }
 

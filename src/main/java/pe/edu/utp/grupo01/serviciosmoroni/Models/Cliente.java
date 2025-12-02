@@ -8,8 +8,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-@Entity
-@Table(name = "cliente")
+@Entity // Indica que esta clase es una entidad mapeada a una tabla en la BD
+@Table(name = "cliente") // Nombre de la tabla en la BD
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,23 +17,23 @@ import lombok.*;
 @Builder
 public class Cliente {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id // Indica que este campo es la clave primaria
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Autoincremento
     @Column(name = "id_cliente")
     private Integer idCliente;
 
-    @NotBlank(message = "El nombre es obligatorio")
+    @NotBlank(message = "El nombre es obligatorio") // Validación: no puede estar vacío
     @Size(max = 100, message = "El nombre no debe superar los 100 caracteres")
     @Column(name = "nombre_cliente", nullable = false, length = 100)
     private String nombreCliente;
 
-    // 🔹 Tipo de documento (DNI o RUC )
+    // Tipo de documento (solo DNI o RUC)
     @NotBlank(message = "Debe seleccionar un tipo de documento")
     @Pattern(regexp = "DNI|RUC", message = "Tipo de documento inválido")
     @Column(name = "tipo_documento", nullable = false, length = 10)
     private String tipoDocumento;
 
-    // 🔹 Documento: puede ser DNI (8) o RUC (11)
+    // Documento del cliente: acepta DNI (8 dígitos) o RUC (11 dígitos)
     @NotBlank(message = "El documento es obligatorio")
     @Pattern(regexp = "\\d{8}|\\d{11}", message = "El documento debe tener 8 dígitos (DNI) o 11 dígitos (RUC)")
     @Column(name = "num_documento", nullable = false, unique = true, length = 11)
@@ -60,20 +60,25 @@ public class Cliente {
     @Column(name = "contrasena_cliente", nullable = false, length = 255)
     private String contrasenaCliente;
 
+    // Rol del usuario (usuario por defecto)
     @Column(name = "rol", nullable = false, length = 20)
     private String rol = "ROLE_USER";
 
+    // Campo temporal para confirmar la contraseña, no se guarda en la BD
     @Transient
     private String confirmPassword;
 
+    // Fecha en la que se registró el cliente
     @Column(name = "fecha_registro", nullable = false, updatable = false)
     private LocalDateTime fechaRegistro;
 
+    // Se ejecuta antes de insertar un nuevo registro
     @PrePersist
     public void prePersist() {
-        this.fechaRegistro = LocalDateTime.now();
+        this.fechaRegistro = LocalDateTime.now(); // Establece la fecha actual
     }
 
+    // Relación uno a muchos: un cliente puede tener varios proyectos
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Proyecto> proyectos = new ArrayList<>();
 }

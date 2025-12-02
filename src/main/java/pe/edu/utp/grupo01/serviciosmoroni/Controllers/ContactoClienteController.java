@@ -18,57 +18,69 @@ import pe.edu.utp.grupo01.serviciosmoroni.Models.Contacto;
 import pe.edu.utp.grupo01.serviciosmoroni.Repositories.ClienteRepositorio;
 import pe.edu.utp.grupo01.serviciosmoroni.Servicios.ContactoClienteService;
 
-@Controller
-@RequestMapping("/contactoCliente")
+@Controller // Marca la clase como un controlador MVC
+@RequestMapping("/contactoCliente") // Ruta base para todos los endpoints del controlador
 public class ContactoClienteController {
 
     @Autowired
-    private ContactoClienteService contactoClienteService;
+    private ContactoClienteService contactoClienteService; // Servicio que gestiona contacto de clientes
 
     @Autowired
-    private ClienteRepositorio clienteRepositorio;
+    private ClienteRepositorio clienteRepositorio; // Repositorio para consultar datos del cliente
 
-    // ✅ Mostrar formulario de contacto
+    // ===============================
+    // ✔️ MOSTRAR FORMULARIO
+    // ===============================
     @GetMapping
     public String mostrarFormulario(Model model, @AuthenticationPrincipal User user) {
+        // Guarda qué página está activa
         model.addAttribute("currentPage", "contactoCliente");
+
+        // Agrega un objeto vacío para llenar el formulario
         model.addAttribute("contactoCliente", new Contacto());
 
+        // Si el usuario está autenticado, buscamos datos del cliente
         if (user != null) {
             Cliente cliente = clienteRepositorio.findByEmailCliente(user.getUsername()).orElse(null);
+
             if (cliente != null) {
                 model.addAttribute("cliente", cliente);
                 System.out.println("👤 Cliente logeado: " + cliente.getNombreCliente());
             } else {
                 System.out.println("⚠️ Usuario autenticado pero cliente no encontrado.");
             }
+
         } else {
             System.out.println("⚠️ No hay cliente logeado, mostrando formulario general...");
         }
 
-        return "contactoCliente"; // HTML que te pasé antes
+        // Carga la vista contactoCliente.html
+        return "contactoCliente";
     }
 
-    // ✅ Enviar formulario (desde HTML o JS)
+    // ===============================
+    // ✔️ RECIBIR Y PROCESAR FORMULARIO
+    // ===============================
     @PostMapping("/enviar")
-    @ResponseBody
+    @ResponseBody // Devuelve JSON en vez de recargar la vista
     public ResponseEntity<Map<String, String>> enviarFormulario(
-            @Valid @RequestBody Contacto contactoCliente,
-            BindingResult result,
-            @AuthenticationPrincipal User user) {
+            @Valid @RequestBody Contacto contactoCliente, // Recibe los datos en JSON
+            BindingResult result, // Resultado de validaciones
+            @AuthenticationPrincipal User user) { // Usuario autenticado
 
         Map<String, String> response = new HashMap<>();
 
-        // 🧩 Validar campos del formulario
+        // ❗ Si hay errores en la validación del formulario
         if (result.hasErrors()) {
             response.put("mensaje", "❌ Algunos campos son inválidos. Revise los datos e intente nuevamente.");
             return ResponseEntity.badRequest().body(response);
         }
 
         try {
-            // 🧠 Si el usuario está logueado, rellenamos automáticamente sus datos
+            // Si el usuario está logueado, completamos automáticamente sus datos
             if (user != null) {
-                Cliente cliente = clienteRepositorio.findByEmailCliente(user.getUsername())
+                Cliente cliente = clienteRepositorio
+                        .findByEmailCliente(user.getUsername())
                         .orElseThrow(() -> new IllegalStateException("Cliente no encontrado"));
 
                 contactoCliente.setNombre(cliente.getNombreCliente());
@@ -76,14 +88,17 @@ public class ContactoClienteController {
                 contactoCliente.setTelefono(cliente.getTelefonoCliente());
             }
 
-            // 💾 Guardar en base de datos
+            // 💾 Guardamos el mensaje en la base de datos
             contactoClienteService.guardar(contactoCliente);
 
+            // Respuesta exitosa en JSON
             response.put("mensaje", "✅ ¡Mensaje enviado correctamente! Gracias por contactarnos.");
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             e.printStackTrace();
+
+            // Si algo explota, respondemos error 500
             response.put("mensaje", "❌ Ocurrió un error al enviar el mensaje. Intente nuevamente.");
             return ResponseEntity.status(500).body(response);
         }

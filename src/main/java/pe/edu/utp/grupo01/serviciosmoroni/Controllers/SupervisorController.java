@@ -30,8 +30,10 @@ import pe.edu.utp.grupo01.serviciosmoroni.Repositories.ProyectoRepositorio;
 import pe.edu.utp.grupo01.serviciosmoroni.Repositories.SeguimientoRepository;
 
 @Controller
-@RequestMapping("/supervisor")
+@RequestMapping("/supervisor") // Ruta base del módulo supervisor
 public class SupervisorController {
+
+    // Inyecciones de dependencias (Repositorios y utilidades)
     @Autowired
     private ClienteRepositorio clienteRepositorio;
 
@@ -47,34 +49,58 @@ public class SupervisorController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    // ============================================================
+    // PANEL PRINCIPAL
+    // ============================================================
     @GetMapping("/dashboard")
     public String mostrarPanelAdmin(Model model,
             @ModelAttribute("mensajeExito") String mensajeExito) {
+
+        // Título y mensaje de bienvenida
         model.addAttribute("titulo", "Panel de Administración");
         model.addAttribute("mensaje", "Bienvenido al panel del administrador de Servicios Moroni S.C.R.L.");
+
+        // Si hay mensaje de éxito desde un redirect, mostrarlo
         if (mensajeExito != null && !mensajeExito.isEmpty()) {
             model.addAttribute("mensajeExito", mensajeExito);
         }
+
         return "supervisor/dashboard";
     }
 
+    // ============================================================
+    // LISTAR CLIENTES
+    // ============================================================
     @GetMapping("/clientes")
     public String listarClientes(Model model) {
+
+        // Se muestran solo los clientes con rol "ROLE_USER"
         model.addAttribute("titulo", "Gestión de Clientes");
         model.addAttribute("currentPage", "clientes");
         model.addAttribute("clientes", clienteRepositorio.findByRol("ROLE_USER"));
+
         return "supervisor/clientes";
     }
 
+    // ============================================================
+    // MOSTRAR PERFIL DEL SUPERVISOR
+    // ============================================================
     @GetMapping("/perfil")
     public String mostrarPerfil(@AuthenticationPrincipal User user, Model model) {
+
+        // Buscar supervisor por email del usuario autenticado
         Cliente cliente = clienteRepositorio.findByEmailCliente(user.getUsername())
                 .orElseThrow(() -> new IllegalStateException("Cliente no encontrado"));
+
         model.addAttribute("cliente", cliente);
         model.addAttribute("titulo", "Editar Perfil");
+
         return "supervisor/editarPerfil";
     }
 
+    // ============================================================
+    // EDITAR PERFIL DEL SUPERVISOR
+    // ============================================================
     @PostMapping("/perfil")
     public String editarPerfil(
             @AuthenticationPrincipal User user,
@@ -82,21 +108,16 @@ public class SupervisorController {
             RedirectAttributes redirectAttributes,
             Model model) {
 
-        // Obtener el cliente autenticado según su email actual
+        // Obtener supervisor actual mediante su correo
         Cliente clienteExistente = clienteRepositorio.findByEmailCliente(user.getUsername())
                 .orElseThrow(() -> new IllegalStateException("Cliente no encontrado"));
 
-        // ===============================
-        // 🔹 1. Actualizar datos editables
-        // ===============================
-
+        // --- 1. Actualizar datos básicos ---
         clienteExistente.setNombreCliente(clienteForm.getNombreCliente());
         clienteExistente.setTelefonoCliente(clienteForm.getTelefonoCliente());
         clienteExistente.setDireccionCliente(clienteForm.getDireccionCliente());
 
-        // ===============================
-        // 🔹 2. Validación y cambio de email
-        // ===============================
+        // --- 2. Validar y cambiar email ---
         String nuevoEmail = clienteForm.getEmailCliente();
 
         if (nuevoEmail != null && !nuevoEmail.isBlank()
@@ -110,43 +131,43 @@ public class SupervisorController {
             clienteExistente.setEmailCliente(nuevoEmail);
         }
 
-        // ===============================
-        // 🔹 3. Cambiar contraseña solo si se ingresó una nueva
-        // ===============================
-        if (clienteForm.getContrasenaCliente() != null && !clienteForm.getContrasenaCliente().isBlank()) {
-            clienteExistente.setContrasenaCliente(passwordEncoder.encode(clienteForm.getContrasenaCliente()));
+        // --- 3. Cambiar contraseña solo si se ingresó ---
+        if (clienteForm.getContrasenaCliente() != null
+                && !clienteForm.getContrasenaCliente().isBlank()) {
+
+            clienteExistente.setContrasenaCliente(
+                    passwordEncoder.encode(clienteForm.getContrasenaCliente()));
         }
 
-        // ===============================
-        // 🔹 4. Mantener campos internos que no deben cambiar
-        // ===============================
+        // --- 4. Asegurar que el rol no se elimine ---
         if (clienteExistente.getRol() == null) {
-            clienteExistente.setRol("ROLE_VISOR"); // asegura que no quede en null
+            clienteExistente.setRol("ROLE_VISOR");
         }
 
-        // Ya NO usas RUC, así que eliminamos esa parte
-
-        // ===============================
-        // 🔹 5. Guardar cambios
-        // ===============================
+        // --- 5. Guardar cambios ---
         clienteRepositorio.save(clienteExistente);
 
         redirectAttributes.addFlashAttribute("mensajeExito", "✅ Perfil actualizado correctamente.");
         return "redirect:/supervisor/dashboard";
     }
 
-    // ==========================
-    // Resto de métodos sin cambios
-    // ==========================
-
+    // ============================================================
+    // LISTAR PROYECTOS
+    // ============================================================
     @GetMapping("/proyectos")
     public String listarProyectos(@RequestParam(required = false) Integer clienteId, Model model) {
+
+        // Lista de clientes regulares
         List<Cliente> clientesUser = clienteRepositorio.findByRol("ROLE_USER");
+
         List<Proyecto> proyectos;
 
+        // Si se filtra por cliente
         if (clienteId != null) {
             proyectos = proyectoRepositorio.findByCliente_IdCliente(clienteId);
+
         } else {
+            // Mostrar todos los proyectos de clientes ROLE_USER
             proyectos = proyectoRepositorio.findAll()
                     .stream()
                     .filter(p -> p.getCliente() != null && "ROLE_USER".equals(p.getCliente().getRol()))
@@ -162,13 +183,17 @@ public class SupervisorController {
         return "supervisor/proyectos";
     }
 
+    // ============================================================
+    // ACTUALIZAR PROYECTO (nombre, estado, progreso)
+    // ============================================================
     @PostMapping("/proyectos/actualizar")
     public String actualizarProyecto(@ModelAttribute Proyecto proyecto, RedirectAttributes redirectAttributes) {
-        // Buscar el proyecto existente
+
+        // Buscar proyecto existente
         Proyecto existente = proyectoRepositorio.findById(proyecto.getId())
                 .orElseThrow(() -> new IllegalStateException("Proyecto no encontrado"));
 
-        // Actualizar solo los campos editables desde la vista
+        // Actualizar datos editables
         existente.setNombre(proyecto.getNombre());
         existente.setEstado(proyecto.getEstado());
         existente.setProgreso(proyecto.getProgreso());
@@ -179,15 +204,25 @@ public class SupervisorController {
         return "redirect:/supervisor/proyectos";
     }
 
+    // ============================================================
+    // LISTAR TODOS LOS SEGUIMIENTOS
+    // ============================================================
     @GetMapping("/seguimientos")
     public String listarSeguimientos(Model model) {
+
         model.addAttribute("titulo", "Seguimientos de Proyectos");
         model.addAttribute("currentPage", "seguimientos");
+
+        // Enviar todos los proyectos y seguimientos
         model.addAttribute("proyectos", proyectoRepositorio.findAll());
         model.addAttribute("seguimientos", seguimientoRepositorio.findAll());
+
         return "supervisor/seguimientos";
     }
 
+    // ============================================================
+    // GUARDAR SEGUIMIENTO NUEVO
+    // ============================================================
     @PostMapping("/seguimientos")
     public String guardarSeguimiento(
             @RequestParam("proyectoId") Integer proyectoId,
@@ -195,12 +230,16 @@ public class SupervisorController {
             @RequestParam("porcentajeAvance") Integer porcentajeAvance,
             RedirectAttributes redirectAttributes) {
 
+        // Buscar proyecto asociado
         Proyecto proyecto = proyectoRepositorio.findById(proyectoId)
                 .orElseThrow(() -> new IllegalStateException("Proyecto no encontrado"));
 
+        // Crear objeto seguimiento
         Seguimiento seguimiento = new Seguimiento();
         seguimiento.setProyecto(proyecto);
         seguimiento.setDescripcion(descripcion);
+
+        // asegurar valor entre 0 y 100
         seguimiento.setPorcentajeAvance(Math.max(0, Math.min(100, porcentajeAvance)));
         seguimiento.setFechaAvance(LocalDate.now());
 
@@ -210,6 +249,9 @@ public class SupervisorController {
         return "redirect:/supervisor/seguimientos";
     }
 
+    // ============================================================
+    // LISTAR INCIDENCIAS CON FILTROS
+    // ============================================================
     @GetMapping("/incidencias")
     public String listarIncidencias(
             @RequestParam(required = false) Integer proyectoId,
@@ -219,14 +261,14 @@ public class SupervisorController {
         List<Proyecto> proyectos = proyectoRepositorio.findAll();
         List<Incidencia> incidencias = incidenciaRepositorio.findAll();
 
-        // Filtrar por proyecto
+        // Filtro por proyecto
         if (proyectoId != null) {
             incidencias = incidencias.stream()
                     .filter(i -> i.getProyecto() != null && i.getProyecto().getId().equals(proyectoId))
                     .collect(Collectors.toList());
         }
 
-        // Filtrar por estado
+        // Filtro por estado
         if (estado != null && !estado.isBlank()) {
             incidencias = incidencias.stream()
                     .filter(i -> i.getEstado() != null && i.getEstado().equals(estado))
@@ -237,30 +279,38 @@ public class SupervisorController {
         model.addAttribute("proyectos", proyectos);
         model.addAttribute("incidencias", incidencias);
 
-        // Para que Thymeleaf marque la opción seleccionada
+        // Para mantener filtros en la vista
         model.addAttribute("proyectoSeleccionado", proyectoId);
         model.addAttribute("estadoSeleccionado", estado);
-
         model.addAttribute("currentPage", "incidencias");
 
         return "supervisor/incidencias";
     }
 
+    // ============================================================
+    // FORMULARIO NUEVA INCIDENCIA
+    // ============================================================
     @GetMapping("/incidencias/nueva")
     public String nuevaIncidencia(Model model) {
+
         model.addAttribute("incidencia", new Incidencia());
         model.addAttribute("proyectos", proyectoRepositorio.findAll());
         model.addAttribute("titulo", "Registrar Incidencia");
+
         return "supervisor/formIncidencia";
     }
 
+    // ============================================================
+    // FORMULARIO EDITAR INCIDENCIA
+    // ============================================================
     @GetMapping("/incidencias/editar/{id}")
     public String editarIncidencia(@PathVariable Integer id, Model model) {
+
+        // Buscar incidencia
         Incidencia incidencia = incidenciaRepositorio.findById(id)
                 .orElseThrow(() -> new IllegalStateException("Incidencia no encontrada"));
 
-        // 🔹 Formatea la fecha (por si necesitas asegurar formato)
-        // aunque realmente no es necesario si usas LocalDate
+        // Enviar fecha formateada por si se usa en el input date
         model.addAttribute("fechaFormateada", incidencia.getFecha().toString());
 
         model.addAttribute("incidencia", incidencia);
@@ -270,16 +320,24 @@ public class SupervisorController {
         return "supervisor/formIncidencia";
     }
 
+    // ============================================================
+    // GUARDAR INCIDENCIA (NUEVA O EDITADA)
+    // ============================================================
     @PostMapping("/incidencias/guardar")
     public String guardarIncidencia(@Valid @ModelAttribute Incidencia incidencia, BindingResult result) {
+
+        // Validaciones de campos
         if (result.hasErrors()) {
             return "supervisor/formIncidencia";
         }
 
+        // Si no se envía fecha, colocar fecha actual
         if (incidencia.getFecha() == null) {
             incidencia.setFecha(LocalDate.now());
         }
+
         incidenciaRepositorio.save(incidencia);
+
         return "redirect:/supervisor/incidencias";
     }
 }

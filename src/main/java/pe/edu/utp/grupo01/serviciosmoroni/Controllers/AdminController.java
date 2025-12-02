@@ -38,17 +38,21 @@ public class AdminController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    // Muestra el panel principal del administrador
     @GetMapping("/dashboard")
     public String mostrarPanelAdmin(Model model,
             @ModelAttribute("mensajeExito") String mensajeExito) {
         model.addAttribute("titulo", "Panel de Administración");
         model.addAttribute("mensaje", "Bienvenido al panel del administrador de Servicios Moroni S.C.R.L.");
+
+        // Si hay mensaje de éxito lo envía a la vista
         if (mensajeExito != null && !mensajeExito.isEmpty()) {
             model.addAttribute("mensajeExito", mensajeExito);
         }
         return "admin/dashboard";
     }
 
+    // Lista clientes con rol USER
     @GetMapping("/clientes")
     public String listarClientes(Model model) {
         model.addAttribute("titulo", "Gestión de Clientes");
@@ -57,6 +61,7 @@ public class AdminController {
         return "admin/clientes";
     }
 
+    // Lista supervisores con rol VISOR
     @GetMapping("/supervisores")
     public String listarSupervisores(Model model) {
         model.addAttribute("titulo", "Gestión de Clientes");
@@ -65,6 +70,7 @@ public class AdminController {
         return "admin/supervisores";
     }
 
+    // Muestra los datos del perfil del admin logueado
     @GetMapping("/perfil")
     public String mostrarPerfil(@AuthenticationPrincipal User user, Model model) {
         Cliente cliente = clienteRepositorio.findByEmailCliente(user.getUsername())
@@ -74,6 +80,7 @@ public class AdminController {
         return "admin/editarPerfil";
     }
 
+    // Actualiza el perfil del administrador
     @PostMapping("/perfil")
     public String editarPerfil(
             @AuthenticationPrincipal User user,
@@ -81,57 +88,52 @@ public class AdminController {
             RedirectAttributes redirectAttributes,
             Model model) {
 
-        // Obtener cliente existente desde la base
+        // Obtiene el cliente actual
         Cliente clienteExistente = clienteRepositorio.findByEmailCliente(user.getUsername())
                 .orElseThrow(() -> new IllegalStateException("Cliente no encontrado"));
 
-        // Actualizar campos permitidos del perfil
+        // Actualiza datos básicos
         clienteExistente.setNombreCliente(clienteForm.getNombreCliente());
         clienteExistente.setTelefonoCliente(clienteForm.getTelefonoCliente());
         clienteExistente.setDireccionCliente(clienteForm.getDireccionCliente());
 
-        // Permitir cambiar email solo si es distinto y no está ocupado
+        // Cambia email si es diferente y no está repetido
         String nuevoEmail = clienteForm.getEmailCliente();
         if (nuevoEmail != null && !nuevoEmail.isBlank()
                 && !nuevoEmail.equals(clienteExistente.getEmailCliente())) {
+
             if (clienteRepositorio.existsByEmailCliente(nuevoEmail)) {
                 redirectAttributes.addFlashAttribute("errorEmail", "El correo ya está en uso.");
-                return "redirect:/clientes/perfil"; // o la ruta correcta según tu vista
+                return "redirect:/clientes/perfil";
             }
+
             clienteExistente.setEmailCliente(nuevoEmail);
         }
 
-        // Si el usuario ingresa una nueva contraseña, la encriptamos
+        // Cambia contraseña si el usuario ingresó una nueva
         String nuevaPass = clienteForm.getContrasenaCliente();
         if (nuevaPass != null && !nuevaPass.isBlank()) {
             clienteExistente.setContrasenaCliente(passwordEncoder.encode(nuevaPass));
         }
 
-        // No permitimos cambiar el tipoDocumento o el numDocumento desde este
-        // formulario
-        // (asumiendo que solo se registra una vez y no se puede modificar después)
-        // clienteExistente.setTipoDocumento(...); // NO lo hagas aquí
-        // clienteExistente.setNumDocumento(...); // NO lo hagas aquí
-
-        // Guardar cambios
+        // Guarda cambios
         clienteRepositorio.save(clienteExistente);
 
         redirectAttributes.addFlashAttribute("mensajeExito", "Perfil actualizado correctamente.");
-        return "redirect:/admin/dashboard"; // ajustar según la página a la que quieras volver
+        return "redirect:/admin/dashboard";
     }
 
-    // ==========================
-    // Resto de métodos sin cambios
-    // ==========================
-
+    // Lista proyectos y permite filtrar por cliente
     @GetMapping("/proyectos")
     public String listarProyectos(@RequestParam(required = false) Integer clienteId, Model model) {
         List<Cliente> clientesUser = clienteRepositorio.findByRol("ROLE_USER");
         List<Proyecto> proyectos;
 
+        // Filtra por cliente si envían el parámetro
         if (clienteId != null) {
             proyectos = proyectoRepositorio.findByCliente_IdCliente(clienteId);
         } else {
+            // Muestra todos los proyectos de clientes con rol USER
             proyectos = proyectoRepositorio.findAll()
                     .stream()
                     .filter(p -> p.getCliente() != null && "ROLE_USER".equals(p.getCliente().getRol()))
@@ -147,13 +149,15 @@ public class AdminController {
         return "admin/proyectos";
     }
 
+    // Actualiza datos principales del proyecto
     @PostMapping("/proyectos/actualizar")
     public String actualizarProyecto(@ModelAttribute Proyecto proyecto, RedirectAttributes redirectAttributes) {
-        // Buscar el proyecto existente
+
+        // Busca proyecto existente
         Proyecto existente = proyectoRepositorio.findById(proyecto.getId())
                 .orElseThrow(() -> new IllegalStateException("Proyecto no encontrado"));
 
-        // Actualizar solo los campos editables desde la vista
+        // Actualiza los datos editables
         existente.setNombre(proyecto.getNombre());
         existente.setEstado(proyecto.getEstado());
         existente.setProgreso(proyecto.getProgreso());
@@ -164,6 +168,7 @@ public class AdminController {
         return "redirect:/admin/proyectos";
     }
 
+    // Lista todos los seguimientos
     @GetMapping("/seguimientos")
     public String listarSeguimientos(Model model) {
         model.addAttribute("titulo", "Seguimientos de Proyectos");
@@ -173,6 +178,7 @@ public class AdminController {
         return "admin/seguimientos";
     }
 
+    // Guarda un nuevo seguimiento
     @PostMapping("/seguimientos")
     public String guardarSeguimiento(
             @RequestParam("proyectoId") Integer proyectoId,
@@ -184,6 +190,8 @@ public class AdminController {
                 .orElseThrow(() -> new IllegalStateException("Proyecto no encontrado"));
 
         Seguimiento seguimiento = new Seguimiento();
+
+        // Asocia datos del seguimiento
         seguimiento.setProyecto(proyecto);
         seguimiento.setDescripcion(descripcion);
         seguimiento.setPorcentajeAvance(Math.max(0, Math.min(100, porcentajeAvance)));
@@ -195,6 +203,7 @@ public class AdminController {
         return "redirect:/admin/seguimientos";
     }
 
+    // Lista incidencias y permite filtrar por proyecto y estado
     @GetMapping("/incidencias")
     public String listarIncidencias(
             @RequestParam(required = false) Integer proyectoId,
@@ -204,14 +213,14 @@ public class AdminController {
         List<Proyecto> proyectos = proyectoRepositorio.findAll();
         List<Incidencia> incidencias = incidenciaRepositorio.findAll();
 
-        // Filtrar por proyecto
+        // Filtra por proyecto
         if (proyectoId != null) {
             incidencias = incidencias.stream()
                     .filter(i -> i.getProyecto() != null && i.getProyecto().getId().equals(proyectoId))
                     .collect(Collectors.toList());
         }
 
-        // Filtrar por estado
+        // Filtra por estado
         if (estado != null && !estado.isBlank()) {
             incidencias = incidencias.stream()
                     .filter(i -> i.getEstado() != null && i.getEstado().equals(estado))
@@ -222,7 +231,6 @@ public class AdminController {
         model.addAttribute("proyectos", proyectos);
         model.addAttribute("incidencias", incidencias);
 
-        // Para que Thymeleaf marque la opción seleccionada
         model.addAttribute("proyectoSeleccionado", proyectoId);
         model.addAttribute("estadoSeleccionado", estado);
 

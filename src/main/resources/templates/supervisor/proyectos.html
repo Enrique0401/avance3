@@ -141,7 +141,7 @@
                       <td>
                         <input
                           type="text"
-                          class="form-control form-control-sm text-center"
+                          class="form-control form-control-sm text-center estado-input"
                           name="estado"
                           th:value="${p.estado}"
                           readonly
@@ -154,7 +154,7 @@
                           <div class="d-flex align-items-center gap-2 mb-1">
                             <input
                               type="number"
-                              class="form-control form-control-sm text-center"
+                              class="form-control form-control-sm text-center progreso-input"
                               name="progreso"
                               min="0"
                               max="100"
@@ -166,9 +166,9 @@
 
                           <div class="progress w-100" style="height: 6px">
                             <div
-                              class="progress-bar bg-secondary"
+                              class="progress-bar"
                               role="progressbar"
-                              th:style="'width:' + ${p.progreso} + '%'"
+                              th:style="'width:' + ${p.progreso} + '%;'"
                             ></div>
                           </div>
                         </div>

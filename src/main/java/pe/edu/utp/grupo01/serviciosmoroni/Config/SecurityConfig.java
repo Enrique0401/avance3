@@ -37,8 +37,7 @@ public class SecurityConfig {
                                                                 "/proyectos/**")
                                                 .permitAll() // Estas rutas son libres
                                                 .requestMatchers("/admin/**").hasRole("ADMIN") // Solo admin
-                                                .requestMatchers("/supervisor/**").hasRole("VISOR") // Solo el
-                                                                                                    // supervisor
+                                                .requestMatchers("/supervisor/**").hasRole("VISOR") // Solo el supervisor
                                                 .requestMatchers("/clientes/**").hasAnyRole("USER", "ADMIN", "VISOR")
                                                 // Usuarios ,admin o supervisor
                                                 .anyRequest().authenticated() // Todo lo demás necesita login

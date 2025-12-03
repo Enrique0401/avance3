@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
+
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
 
@@ -28,16 +29,16 @@ public class ClienteController {
     private BCryptPasswordEncoder passwordEncoder;
 
     // ------------------------------------------------------------
-    // Muestra el formulario de registro
+    // Mostrar formulario de registro
     // ------------------------------------------------------------
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
-        model.addAttribute("usuario", new Cliente()); // Objeto vacío para el form
+        model.addAttribute("usuario", new Cliente());
         return "register";
     }
 
     // ------------------------------------------------------------
-    // Registrar cliente nuevo
+    // Registrar cliente
     // ------------------------------------------------------------
     @PostMapping("/register")
     public String registerCliente(
@@ -45,75 +46,78 @@ public class ClienteController {
             BindingResult result,
             Model model) {
 
-        // Si hay errores en el formulario
+        // 1) Validación de contraseña manual
+        if (!cliente.getContrasenaCliente().equals(cliente.getConfirmPassword())) {
+            result.rejectValue("confirmPassword",
+                    "password.no.match",
+                    "Las contraseñas no coinciden");
+        }
+
+        // 2) Validaciones automáticas de @Valid
         if (result.hasErrors()) {
             return "register";
         }
 
-        // Validar que las contraseñas coincidan
-        if (!cliente.getContrasenaCliente().equals(cliente.getConfirmPassword())) {
-            model.addAttribute("passwordError", "Las contraseñas no coinciden");
-            return "register";
-        }
-
-        // Documento único
+        // 3) Validación de unicidad
         if (clienteRepositorio.existsByNumDocumento(cliente.getNumDocumento())) {
-            model.addAttribute("errorDocumento",
-                    "El " + cliente.getTipoDocumento() + " ya está registrado");
+            result.rejectValue("numDocumento", "document.exists",
+                    "Este número de documento ya está registrado");
             return "register";
         }
 
-        // Email único
         if (clienteRepositorio.existsByEmailCliente(cliente.getEmailCliente())) {
-            model.addAttribute("errorEmail", "El correo ya está registrado");
+            result.rejectValue("emailCliente", "email.exists",
+                    "Este correo ya está registrado");
             return "register";
         }
 
-        // Teléfono único
         if (clienteRepositorio.existsByTelefonoCliente(cliente.getTelefonoCliente())) {
-            model.addAttribute("errorTelefono", "El teléfono ya está registrado");
+            result.rejectValue("telefonoCliente", "phone.exists",
+                    "Este teléfono ya está registrado");
             return "register";
         }
 
-        // Encriptar contraseña
-        cliente.setContrasenaCliente(passwordEncoder.encode(cliente.getContrasenaCliente()));
+        // 4) Encriptar contraseña
+        cliente.setContrasenaCliente(
+                passwordEncoder.encode(cliente.getContrasenaCliente()));
 
-        // Asignar rol por defecto
+        // 5) Rol por defecto
         if (cliente.getRol() == null) {
             cliente.setRol("ROLE_USER");
         }
 
-        clienteRepositorio.save(cliente); // Guardar cliente
+        // 6) Guardar usuario
+        clienteRepositorio.save(cliente);
 
-        return "redirect:/login?registrado"; // Redirigir al login
+        return "redirect:/login?registrado";
     }
 
     // ------------------------------------------------------------
-    // Mostrar perfil del cliente logueado
+    // Perfil del usuario logueado
     // ------------------------------------------------------------
     @GetMapping("/perfil")
     public String verMiPerfil(@AuthenticationPrincipal User user, Model model) {
 
-        // Buscar cliente por email
         Cliente cliente = clienteRepositorio.findByEmailCliente(user.getUsername())
                 .orElseThrow(() -> new IllegalStateException("Cliente no encontrado"));
 
         model.addAttribute("cliente", cliente);
         model.addAttribute("currentPage", "perfil");
+
         return "perfil";
     }
 
     // ------------------------------------------------------------
-    // Mostrar lista de proyectos del cliente
+    // Proyectos del cliente
     // ------------------------------------------------------------
     @GetMapping("/mis-proyectos")
-    public String mostrarMisProyectos(@AuthenticationPrincipal User user, Model model) {
+    public String mostrarMisProyectos(
+            @AuthenticationPrincipal User user,
+            Model model) {
 
-        // Buscar cliente actual
         Cliente cliente = clienteRepositorio.findByEmailCliente(user.getUsername())
                 .orElseThrow(() -> new IllegalStateException("Cliente no encontrado"));
 
-        // Obtener proyectos del cliente
         model.addAttribute("proyectos",
                 proyectoRepositorio.findByCliente_IdCliente(cliente.getIdCliente()));
 
@@ -121,13 +125,13 @@ public class ClienteController {
     }
 
     // ------------------------------------------------------------
-    // Mostrar formulario para editar perfil
+    // Mostrar formulario para editar
     // ------------------------------------------------------------
     @GetMapping("/editarPerfil")
     public String mostrarFormularioEditarPerfil(
-            @AuthenticationPrincipal User user, Model model) {
+            @AuthenticationPrincipal User user,
+            Model model) {
 
-        // Obtener cliente logueado
         Cliente cliente = clienteRepositorio.findByEmailCliente(user.getUsername())
                 .orElseThrow(() -> new IllegalStateException("Cliente no encontrado"));
 
@@ -138,19 +142,16 @@ public class ClienteController {
     }
 
     // ------------------------------------------------------------
-    // Actualizar perfil del cliente
+    // Actualizar perfil
     // ------------------------------------------------------------
     @PostMapping("/editarPerfil")
     public String actualizarPerfil(
             @AuthenticationPrincipal User user,
-            @ModelAttribute("cliente") Cliente clienteForm,
-            Model model) {
+            @ModelAttribute("cliente") Cliente clienteForm) {
 
-        // Obtener datos actuales del cliente
         Cliente clienteExistente = clienteRepositorio.findByEmailCliente(user.getUsername())
                 .orElseThrow(() -> new IllegalStateException("Cliente no encontrado"));
 
-        // Actualizar campos básicos
         clienteExistente.setNombreCliente(clienteForm.getNombreCliente());
         clienteExistente.setTelefonoCliente(clienteForm.getTelefonoCliente());
         clienteExistente.setDireccionCliente(clienteForm.getDireccionCliente());
@@ -163,9 +164,8 @@ public class ClienteController {
                     passwordEncoder.encode(clienteForm.getContrasenaCliente()));
         }
 
-        clienteRepositorio.save(clienteExistente); // Guardar cambios
+        clienteRepositorio.save(clienteExistente);
 
         return "redirect:/clientes/perfil?actualizado=true";
     }
-
 }

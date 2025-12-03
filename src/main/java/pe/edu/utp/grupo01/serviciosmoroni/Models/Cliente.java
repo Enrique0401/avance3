@@ -51,10 +51,10 @@ public class Cliente {
 
     @NotBlank(message = "El correo es obligatorio")
     @Email(message = "Debe ingresar un correo electrónico válido")
+    @Pattern(regexp = "^[A-Za-z0-9\\.]+@[A-Za-z0-9\\.]+\\.com$", message = "El correo solo puede contener letras, números y puntos, y debe terminar en .com")
     @Size(max = 100, message = "El correo no debe superar los 100 caracteres")
     @Column(name = "email_cliente", nullable = false, unique = true, length = 100)
     private String emailCliente;
-
     @NotBlank(message = "La contraseña es obligatoria")
     @Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres")
     @Column(name = "contrasena_cliente", nullable = false, length = 255)

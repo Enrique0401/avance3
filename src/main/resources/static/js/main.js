@@ -266,6 +266,19 @@ if (mobileSidebar) {
   });
 }
 
+// Inicializar tooltip de Bootstrap
+document.addEventListener("DOMContentLoaded", () => {
+  const tooltipTriggerList = [].slice.call(
+    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  );
+  tooltipTriggerList.forEach((el) => {
+    // Solo inicializa si Bootstrap está disponible
+    if (typeof bootstrap !== "undefined" && bootstrap.Tooltip) {
+      new bootstrap.Tooltip(el);
+    }
+  });
+});
+
 /* =======================================================
    BOTÓN "VOLVER ARRIBA"
 ======================================================= */

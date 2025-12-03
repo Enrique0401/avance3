@@ -117,6 +117,13 @@ html {
     scrollbar-color: var(--bs-primary) var(--bs-light);
 }
 
+.invalid-feedback {
+    font-size: 0.85rem;
+    margin-top: 3px;
+}
+.is-invalid {
+    box-shadow: none !important;
+}
 
 @media (max-width: 767px) {
     .navbar {
